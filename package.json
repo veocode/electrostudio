@@ -1,0 +1,19 @@
+{
+  "name": "electrostudio",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "electron .",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^11.3.0",
+    "electron-builder": "^22.9.1"
+  },
+  "dependencies": {}
+}
