@@ -3,7 +3,6 @@ const Loader = require('./classes/loader')
 
 app.whenReady().then(() => {
 
-    global.rootDir = __dirname;
     global.load = new Loader();
     global.config = load.config();
     global.app = app;

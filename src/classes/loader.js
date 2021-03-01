@@ -25,6 +25,10 @@ class Loader {
         return result;
     }
 
+    path(file) {
+        return `${this.rootDir}/${file}`;
+    }
+
     file(name) {
         return require(`${this.rootDir}/${name}`);
     }

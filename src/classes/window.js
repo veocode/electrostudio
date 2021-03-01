@@ -32,7 +32,7 @@ class Window {
             webPreferences: {
                 webSecurity: true,
                 contextIsolation: true,
-                preload: `${rootDir}/windows/base/base-preload.js`
+                preload: load.path('windows/base/base-preload.js')
             }
         };
 
@@ -49,16 +49,16 @@ class Window {
             this.#handle.setMenu(null);
         }
 
-        await this.#handle.loadFile(`${rootDir}/windows/base/base-window.html`, {
-            query: {
-                name: this.name,
-                options: JSON.stringify(this.options),
-            }
-        });
+        const baseViewPath = load.path('windows/base/base-window.html');
+        const baseViewQuery = {
+            name: this.name,
+            options: JSON.stringify(this.options),
+        };
 
+        await this.#handle.loadFile(baseViewPath, { query: baseViewQuery });
         this.#handle.show();
 
-        if ('isDebug' in this.options && this.options.isDebug) {
+        if (this.#isDebug()) {
             this.#handle.webContents.openDevTools();
         }
     }
@@ -80,6 +80,10 @@ class Window {
         return { width, height };
     }
 
+    #isDebug() {
+        return 'isDebug' in this.options && this.options.isDebug;
+    }
+
     show() {
         if (!this.#handle) {
             this.#create();
@@ -88,14 +92,14 @@ class Window {
         this.#handle.show();
     }
 
-    getViewPath() {
-        return `windows/${this.name}/${this.name}-window.html`;
+    static getViewPath(windowName) {
+        return load.path(`windows/${windowName}/${windowName}-window.html`);
     }
 
     static getViewHTML(windowName) {
         const fs = require('fs');
         const path = require('path');
-        return fs.readFileSync(path.resolve(__dirname, `../windows/${windowName}/${windowName}-window.html`), { encoding: 'utf8' });
+        return fs.readFileSync(Window.getViewPath(windowName), { encoding: 'utf8' });
     }
 
 }
