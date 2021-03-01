@@ -1,4 +1,4 @@
-const { screen } = require('electron')
+const { screen } = load.node('electron')
 
 module.exports = {
     appTitle: 'Electron Studio',

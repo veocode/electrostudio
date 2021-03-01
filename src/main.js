@@ -4,11 +4,9 @@ const Loader = require('./classes/loader')
 app.whenReady().then(() => {
 
     global.rootDir = __dirname;
-    global.load = new Loader(rootDir);
+    global.load = new Loader();
     global.config = load.config();
     global.app = app;
-
-    console.log(config.screenSize);
 
     const mainController = load.controller(config.mainControllerName);
     mainController.run();

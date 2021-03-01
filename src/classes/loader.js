@@ -5,8 +5,8 @@ class Loader {
 
     rootDir;
 
-    constructor(rootDir) {
-        this.rootDir = rootDir;
+    constructor() {
+        this.rootDir = path.resolve(__dirname, '..');
     }
 
     node(module) {

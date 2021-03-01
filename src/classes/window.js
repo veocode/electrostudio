@@ -6,7 +6,10 @@ class Window {
         title: config.appTitle,
         width: 400,
         height: 400,
-        menu: true
+        menu: null,
+        resizable: true,
+        maximizable: true,
+        minimizable: true,
     }
 
     constructor(name, options) {
@@ -14,7 +17,7 @@ class Window {
         this.options = Object.assign({}, this.#defaultOptions, options);
     }
 
-    #create() {
+    async #create() {
         const { BrowserWindow } = require('electron');
 
         const size = this.#calculateSize();
@@ -23,6 +26,9 @@ class Window {
             show: false,
             width: size.width,
             height: size.height,
+            resizable: this.options.resizable,
+            maximizable: this.options.maximizable,
+            minimizable: this.options.minimizable,
             webPreferences: {
                 webSecurity: true,
                 contextIsolation: true,
@@ -43,17 +49,18 @@ class Window {
             this.#handle.setMenu(null);
         }
 
-        this.#handle.loadFile(`${rootDir}/windows/base/base-window.html`, {
+        await this.#handle.loadFile(`${rootDir}/windows/base/base-window.html`, {
             query: {
                 name: this.name,
                 options: JSON.stringify(this.options),
             }
-        }).then(() => {
-            this.#handle.show()
-            if ('isDebug' in this.options && this.options.isDebug) {
-                this.#handle.webContents.openDevTools();
-            }
         });
+
+        this.#handle.show();
+
+        if ('isDebug' in this.options && this.options.isDebug) {
+            this.#handle.webContents.openDevTools();
+        }
     }
 
     #calculateSize() {

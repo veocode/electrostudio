@@ -1,0 +1,31 @@
+@font-face {
+    font-family: 'Ubuntu';
+    src: url('../fonts/Ubuntu-R.ttf')  format('truetype');
+    font-style: normal;
+    font-weight: 400;
+}
+@font-face {
+    font-family: 'Ubuntu';
+    src: url('../fonts/Ubuntu-B.ttf')  format('truetype');
+    font-style: bold;
+    font-weight: 700;
+}
+@font-face {
+    font-family: 'Ubuntu';
+    src: url('../fonts/Ubuntu-L.ttf')  format('truetype');
+    font-style: lighter;
+    font-weight: 200;
+}
+
+@font-face {
+    font-family: 'Ubuntu Mono';
+    src: url('../fonts/UbuntuMono-R.ttf')  format('truetype');
+    font-style: normal;
+    font-weight: 400;    
+}
+@font-face {
+    font-family: 'Ubuntu Mono';
+    src: url('../fonts/UbuntuMono-B.ttf')  format('truetype');
+    font-style: bold;
+    font-weight: 700;    
+}

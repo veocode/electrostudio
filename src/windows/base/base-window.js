@@ -1,11 +1,18 @@
 $(() => {
 
-    const $title = $('head > title');
-    const $body = $('.view-window');
     const $head = $('head');
+    const $title = $head.children('title');
+    const $body = $('.view-window');
 
-    $title.html(window.meta.title);
-    $body.html(window.view.getHTML());
-    $head.append(`<link rel="stylesheet" href="../${window.meta.name}/${window.meta.name}-window.css">`);
+    window.setTitle = title => $title.html(title);
+    window.setContent = content => $body.html(content);
+    window.addCSS = url => $head.append(`<link rel="stylesheet" href="${url}">`);
+    window.addJS = url => $body.append(`<script src="${url}"></script>`);
+
+    window.addCSS(window.view.getStylesURL());
+    window.addJS(window.view.getScriptURL());
+
+    window.setTitle(window.meta.title);
+    window.setContent(window.view.getHTML());
 
 })

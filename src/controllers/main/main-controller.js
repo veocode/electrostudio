@@ -7,7 +7,7 @@ class MainController extends Controller {
         x: 0,
         y: 0,
         width: '100%',
-        height: 100,
+        height: 120,
         resizable: false,
         maximizable: false,
         menu: null,
