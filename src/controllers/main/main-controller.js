@@ -15,11 +15,18 @@ class MainController extends Controller {
     });
 
     boot() {
-        console.log('BOOT MAIN CONTROLLER');
+
     }
 
     start() {
-        console.log('START MAIN CONTROLLER');
+        const Components = load.components();
+        const panel = new Components.Panel();
+        const button = new Components.Button();
+        button.label = 'Click Me!';
+        panel.alignment = 'client';
+        panel.addChildren(button);
+        const html = panel.getRenderedHTML();
+        console.log(html);
     }
 
 }

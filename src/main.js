@@ -1,10 +1,14 @@
 const { app, screen } = require('electron')
 const Loader = require('./classes/loader')
+const unhandled = require('electron-unhandled');
+
+unhandled();
 
 app.whenReady().then(() => {
 
     global.load = new Loader();
     global.config = load.config();
+    global.errors = load.model('errors/exceptions');
     global.app = app;
 
     const mainController = load.controller(config.mainControllerName);

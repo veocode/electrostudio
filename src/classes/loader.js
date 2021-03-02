@@ -45,6 +45,10 @@ class Loader {
         return new (this.file(`controllers/${name}/${name}-controller`))();
     }
 
+    model(file) {
+        return this.file(`models/${file}`);
+    }
+
     config() {
         return this.file('config');
     }
@@ -60,6 +64,15 @@ class Loader {
                 }
             });
         });
+    }
+
+    components() {
+        const componentsPath = `${this.rootDir}/models/components`;
+        let components = {};
+        fs.readdirSync(componentsPath).forEach(file => {
+            components = Object.assign({}, components, this.model(`components/${file.replace('.js', '')}`))
+        });
+        return components;
     }
 
 }
