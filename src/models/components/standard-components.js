@@ -31,7 +31,7 @@ module.exports = {
         }
         getRenderedHTML() {
             const attributes = this.getTraitsAttributes({ class: ['component', 'button'] });
-            return Component.HTMLBuilder.make('button', attributes);
+            return Component.HTMLBuilder.make('button', attributes, this.label);
         }
     }
 
