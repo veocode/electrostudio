@@ -1,6 +1,4 @@
-class BaseException {
-
-}
+const BaseException = load.class('exception');
 
 module.exports = {
 

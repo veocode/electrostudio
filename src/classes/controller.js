@@ -2,12 +2,13 @@ class Controller {
 
     window = null;
 
-    constructor() {
-
+    boot() {
+        // Override in children
     }
 
-    boot() { }
-    start() { }
+    start() {
+        // Override in children
+    }
 
     run() {
         this.boot();

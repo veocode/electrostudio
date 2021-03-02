@@ -13,7 +13,9 @@ module.exports = {
             ]
         }
         getRenderedHTML() {
-            return `<div class="component panel">${this.getRenderedChildrenHTML()}</div>`;
+            const attributes = this.getTraitsAttributes({ class: ['component', 'panel'] });
+            const content = this.getRenderedChildrenHTML();
+            return Component.HTMLBuilder.make('div', attributes, content);
         }
     },
 
@@ -28,7 +30,8 @@ module.exports = {
             ]
         }
         getRenderedHTML() {
-            return `<button class="component button">${this.label}</button>`;
+            const attributes = this.getTraitsAttributes({ class: ['component', 'button'] });
+            return Component.HTMLBuilder.make('button', attributes);
         }
     }
 

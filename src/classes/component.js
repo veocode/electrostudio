@@ -1,6 +1,8 @@
+const AttributesList = load.class('attributes');
+
 class Component {
 
-    static htmlBuilder = load.node('html-creator');
+    static HTMLBuilder = load.instance('htmlbuilder');
 
     properties = {};
     propertyValues = {};
@@ -20,6 +22,7 @@ class Component {
             set(target, name, value) {
                 if (name in target) {
                     target[name] = value;
+                    return;
                 }
                 target.setPropertyValue(name, value);
                 return true;
@@ -29,6 +32,14 @@ class Component {
 
     getTraits() {
         return [];
+    }
+
+    getTraitsAttributes(startingAttributes = {}) {
+        let attributes = new AttributesList(startingAttributes);
+        for (let trait of this.getTraits()) {
+            trait.appendAttributes(attributes, this.propertyValues);
+        }
+        return attributes;
     }
 
     addTrait(trait) {

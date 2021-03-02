@@ -1,24 +1,4 @@
-class Property {
-
-    name;
-    isRequired;
-    defaultValue = null;
-
-    constructor(name, defaultValue = null, isRequired = true) {
-        this.name = name;
-        this.isRequired = isRequired;
-        this.defaultValue = defaultValue;
-    }
-
-    sanitize(value) {
-        return value;
-    }
-
-    validate(value) {
-        return true;
-    }
-
-}
+const Property = load.class('property');
 
 module.exports = {
 
@@ -46,8 +26,8 @@ module.exports = {
         items = [];
 
         constructor(name, items, defaultValue = null, isRequired = true) {
-            super(name, defaultValue, isRequired)
-            this.items = items
+            super(name, defaultValue, isRequired);
+            this.items = items;
         }
 
         validate(value) {

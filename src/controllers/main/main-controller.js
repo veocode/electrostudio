@@ -22,7 +22,11 @@ class MainController extends Controller {
         const Components = load.components();
         const panel = new Components.Panel();
         const button = new Components.Button();
+        button.name = 'Button1';
         button.label = 'Click Me!';
+        panel.name = 'Panel1';
+        panel.width = 200;
+        panel.height = 100;
         panel.alignment = 'client';
         panel.addChildren(button);
         const html = panel.getRenderedHTML();

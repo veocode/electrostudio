@@ -56,7 +56,6 @@ class Window {
         };
 
         await this.#handle.loadFile(baseViewPath, { query: baseViewQuery });
-        this.#handle.show();
 
         if (this.#isDebug()) {
             this.#handle.webContents.openDevTools();
@@ -87,9 +86,14 @@ class Window {
     show() {
         if (!this.#handle) {
             this.#create();
-            return;
         }
         this.#handle.show();
+    }
+
+    hide() {
+        if (this.#handle) {
+            this.#handle.hide();
+        }
     }
 
     static getViewPath(windowName) {

@@ -16,7 +16,6 @@
     "electron-builder": "^22.9.1"
   },
   "dependencies": {
-    "electron-unhandled": "^3.0.2",
-    "html-creator": "^0.4.4"
+    "electron-unhandled": "^3.0.2"
   }
 }
