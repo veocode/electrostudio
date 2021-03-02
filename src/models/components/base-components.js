@@ -1,5 +1,6 @@
+const Studio = load.singleton('studio');
 const { Component, ContainerComponent } = load.class('component');
-const Traits = load.model('traits/component-traits');
+const Traits = load.models.traits();
 
 module.exports = {
 
@@ -11,6 +12,10 @@ module.exports = {
                 new Traits.PositionTrait(),
                 new Traits.SizeTrait(),
             ]
+        }
+        setDefaults() {
+            this.name = Studio.getNextComponentName('Panel');
+            this.width = this.height = 200;
         }
         getRenderedHTML() {
             const attributes = this.getTraitsAttributes({ class: ['component', 'panel'] });
@@ -28,6 +33,12 @@ module.exports = {
                 new Traits.PositionTrait(),
                 new Traits.SizeTrait(),
             ]
+        }
+        setDefaults() {
+            this.name = Studio.getNextComponentName('Button');
+            this.width = 130;
+            this.height = 35;
+            this.label = t('Click Me');
         }
         getRenderedHTML() {
             const attributes = this.getTraitsAttributes({ class: ['component', 'button'] });

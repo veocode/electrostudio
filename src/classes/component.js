@@ -12,7 +12,7 @@ class Component {
             this.addTrait(trait);
         }
 
-        return new Proxy(this, {
+        const componentProxy = new Proxy(this, {
             get(target, name) {
                 if (name in target) {
                     return target[name];
@@ -28,10 +28,18 @@ class Component {
                 return true;
             }
         })
+
+        componentProxy.setDefaults();
+
+        return componentProxy;
     }
 
     getTraits() {
         return [];
+    }
+
+    setDefaults() {
+        // Override in children to set default property values
     }
 
     getTraitsAttributes(startingAttributes = {}) {

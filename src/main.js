@@ -11,6 +11,8 @@ app.whenReady().then(() => {
     global.errors = load.model('errors/exceptions');
     global.app = app;
 
+    global.t = (text) => text; // future i18n placeholder
+
     const mainController = load.controller(config.mainControllerName);
     mainController.run();
 

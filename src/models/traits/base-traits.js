@@ -1,5 +1,5 @@
-const Props = load.model('traits/properties');
 const ComponentTrait = load.class('trait');
+const Props = load.models.properties();
 
 module.exports = {
 

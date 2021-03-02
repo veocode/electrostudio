@@ -1,4 +1,5 @@
-const Controller = load.class('controller')
+const Studio = load.singleton('studio');
+const Controller = load.class('controller');
 const Window = load.class('window');
 
 class MainController extends Controller {
@@ -19,18 +20,13 @@ class MainController extends Controller {
     }
 
     start() {
-        const Components = load.components();
-        const panel = new Components.Panel();
-        const button = new Components.Button();
-        button.name = 'Button1';
-        button.label = 'Click Me!';
-        panel.name = 'Panel1';
-        panel.width = 200;
-        panel.height = 100;
+        const panel = Studio.createComponent('Panel');
+        const button = Studio.createComponent('Button');
+
         panel.alignment = 'client';
         panel.addChildren(button);
-        const html = panel.getRenderedHTML();
-        console.log(html);
+
+        console.log(panel.getRenderedHTML());
     }
 
 }
