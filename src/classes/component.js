@@ -1,5 +1,3 @@
-const Loader = require("./loader");
-
 class Component {
 
     static htmlBuilder = load.node('html-creator');
@@ -133,4 +131,3 @@ class ContainerComponent extends Component {
 }
 
 module.exports = { Component, ContainerComponent };
-
