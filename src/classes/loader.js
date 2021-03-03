@@ -40,18 +40,26 @@ class Loader {
     }
 
     instance(name, ...constructorArgs) {
-        return new (this.class(name))(...constructorArgs);
+        return new (this.file(name))(...constructorArgs);
     }
 
     singleton(name, ...constructorArgs) {
         if (name in this.#singletons) {
             return this.#singletons[name];
         }
-        return this.#singletons[name] = this.instance(name, ...constructorArgs);
+        return this.#singletons[name] = this.instance(`classes/${name}`, ...constructorArgs);
     }
 
-    controller(name) {
-        return new (this.file(`controllers/${name}/${name}-controller`))();
+    controller(name, ...constructorArgs) {
+        return this.instance(`controllers/${name}/${name}-controller`, ...constructorArgs);
+    }
+
+    form(name, ...constructorArgs) {
+        return this.instance(`forms/${name}-form`, ...constructorArgs);
+    }
+
+    clientWindow(name, ...constructorArgs) {
+        return this.instance(`windows/${name}/${name}-window`, ...constructorArgs);
     }
 
     model(file) {

@@ -2,7 +2,7 @@ const AttributesList = load.class('attributes');
 
 class Component {
 
-    static HTMLBuilder = load.instance('htmlbuilder');
+    static HTMLBuilder = load.instance('classes/htmlbuilder');
 
     properties = {};
     propertyValues = {};

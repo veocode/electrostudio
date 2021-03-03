@@ -17,4 +17,11 @@ module.exports = {
         }
     },
 
+    WindowFormRequiredException: class extends BaseException {
+        constructor(windowName) {
+            super();
+            this.windowName = windowName;
+        }
+    },
+
 }

@@ -3,6 +3,7 @@ class Window {
     #handle
 
     #defaultOptions = {
+        formName: null,
         title: config.appTitle,
         width: 400,
         height: 400,
@@ -18,6 +19,10 @@ class Window {
     }
 
     async #create() {
+        if (!this.options.formName) {
+            throw new errors.WindowFormRequiredException(this.name);
+        }
+
         const { BrowserWindow } = require('electron');
 
         const size = this.#calculateSize();

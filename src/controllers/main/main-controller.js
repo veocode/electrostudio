@@ -5,6 +5,7 @@ const Window = load.class('window');
 class MainController extends Controller {
 
     window = new Window('main', {
+        formName: 'main',
         x: 0,
         y: 0,
         width: '100%',
