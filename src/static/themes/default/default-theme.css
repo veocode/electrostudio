@@ -14,7 +14,74 @@ html, body, .view-window {
 }
 
 /*
-* Alignment
+* Window, Title and Frame
+*/
+
+.window {
+    overflow: hidden;
+}
+
+.window > .window-title {
+    height: 30px;
+    line-height: 30px;
+    width: 100%;
+    position: absolute;
+    padding-left: 10px;
+    background: #323233;
+    color: #8E8E8E;
+    display:flex;
+    flex-direction: row;
+    z-index: 1;
+    -webkit-app-region: drag;
+}
+
+.window > .window-title > .title {
+    font-size:14px;
+}
+
+.window > .window-title > span {
+    display:flex;
+}
+
+.window > .window-title > .spacer {
+    flex: 1;
+}
+
+.window > .window-title > .buttons > button {
+    background:none;
+    border:none;
+    box-shadow: none;
+    text-shadow: none;
+    color: #8E8E8E;
+    cursor: pointer;
+    outline: none !important;
+    -webkit-app-region: no-drag;
+}
+
+.window > .window-title > .buttons > button:hover {
+    color: #555555;
+}
+
+.window > .window-frame {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    position: absolute;
+    z-index: 0;
+    padding-top: 30px;
+    top: 0;
+}
+
+.window > .window-frame > .window-view {
+    overflow: auto;
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+
+/*
+* Components Alignment
 */
 
 .align-client,
@@ -50,8 +117,9 @@ html, body, .view-window {
     height:100% !important;
 }
 
+
 /*
-* ToolPanel
+* Component: ToolPanel
 */
 
 .toolpanel{

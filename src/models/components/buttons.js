@@ -1,4 +1,4 @@
-const { Component, ContainerComponent } = load.class('component');
+const { Component } = load.class('component');
 const Traits = load.models.traits();
 
 class Button extends Component {
@@ -20,6 +20,10 @@ class Button extends Component {
     getRenderedHTML() {
         const attributes = this.getTraitsAttributes({ class: ['component', 'button'] });
         return Component.HTMLBuilder.make('button', attributes, '<i class="fa fa-download"></i> ' + this.label);
+    }
+
+    bindEvents($dom) {
+        $dom.on('click', e => this.callEvent('click', e));
     }
 }
 

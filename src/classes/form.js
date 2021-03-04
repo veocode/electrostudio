@@ -1,34 +1,30 @@
 class Form {
 
-    #rootComponent
-
     static Components = load.models.components();
+
+    #formComponent;
 
     #componentsCountByClass = {};
 
     constructor() {
-        this.build();
+        this.#formComponent = this.buildForm();
+        this.buildComponents();
     }
 
-    build() {
+    buildForm() {
+        return new Form.Components.Form();
+    }
+
+    buildComponents() {
+        // Override in children
+    }
+
+    createWindow() {
 
     }
 
-    buildFromSchema(schema) {
-
-    }
-
-    setRootComponent(component) {
-        this.#rootComponent = component;
-    }
-
-    getRootComponent() {
-        return this.#rootComponent;
-    }
-
-    createRootComponent(className, ...createComponentArgs) {
-        this.#rootComponent = this.createComponent(className, ...createComponentArgs)
-        return this.#rootComponent;
+    addChildren(...components) {
+        this.#formComponent.addChildren(...components);
     }
 
     createComponent(className, ...componentArgs) {
@@ -54,7 +50,7 @@ class Form {
     }
 
     getRenderedHTML() {
-        return this.#rootComponent ? this.#rootComponent.getRenderedHTML() : '';
+        return this.#formComponent ? this.#formComponent.getRenderedHTML() : '';
     }
 
 }

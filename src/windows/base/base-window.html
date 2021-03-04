@@ -1,17 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
 
-    <head>
-        <title></title>
-        <meta http-equiv="Content-Security-Policy" content="script-src 'self';">
-        <script src="../../static/assets/js/jquery.js"></script>
-        <script src="base-window.js"></script>
-        <link rel="stylesheet" href="../../static/themes/default/default-theme.css">
-        <link rel="stylesheet" href="base-window.css">
-    </head>
+<head>
+    <title></title>
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self';">
+    <script src="../../static/assets/js/jquery.js"></script>
+    <script src="base-window.js"></script>
+    <link rel="stylesheet" href="../../static/themes/default/default-theme.css">
+    <link rel="stylesheet" href="base-window.css">
+</head>
 
-    <body>
-        <div class="view-window"></div>
-    </body>
+<body>
+    <div class="window">
+        <div class="window-title">
+            <span class="title"></span>
+            <span class="spacer"></span>
+            <span class="buttons">
+                <button class="minimize">
+                    <i class="fa fa-window-minimize"></i>
+                </button>
+                <button class="maximize">
+                    <i class="fa fa-window-maximize"></i>
+                </button>
+                <button class="close">
+                    <i class="fa fa-times"></i>
+                </button>
+            </span>
+        </div>
+        <div class="window-frame">
+            <div class="window-view"></div>
+        </div>
+    </div>
+</body>
 
 </html>

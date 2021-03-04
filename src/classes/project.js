@@ -1,5 +1,3 @@
-const { TouchBarScrubber } = require("electron")
-
 class Project {
 
     meta = {
@@ -17,3 +15,5 @@ class Project {
     }
 
 }
+
+module.exports = Project

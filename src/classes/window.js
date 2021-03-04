@@ -34,6 +34,7 @@ class Window {
             resizable: this.options.resizable,
             maximizable: this.options.maximizable,
             minimizable: this.options.minimizable,
+            frame: false,
             webPreferences: {
                 webSecurity: true,
                 contextIsolation: true,
@@ -62,7 +63,7 @@ class Window {
 
         await this.#handle.loadFile(baseViewPath, { query: baseViewQuery });
 
-        if (this.#isDebug()) {
+        if (config.isDebug) {
             this.#handle.webContents.openDevTools();
         }
     }
@@ -92,13 +93,9 @@ class Window {
         return { width, height };
     }
 
-    #isDebug() {
-        return 'isDebug' in this.options && this.options.isDebug;
-    }
-
-    show() {
+    async show() {
         if (!this.#handle) {
-            this.#create();
+            await this.#create();
         }
         this.#handle.show();
     }

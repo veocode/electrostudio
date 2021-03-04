@@ -1,5 +1,3 @@
-const { TouchBarScrubber } = require("electron");
-
 const { Component, ContainerComponent } = load.class('component');
 const Traits = load.models.traits();
 

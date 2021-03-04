@@ -1,6 +1,6 @@
 class Controller {
 
-    window = null;
+    form = null;
 
     boot() {
         // Override in children
@@ -12,8 +12,8 @@ class Controller {
 
     run() {
         this.boot();
-        if (this.window) {
-            this.window.show();
+        if (this.form) {
+            this.form.createWindow();
         }
         this.start();
     }

@@ -2,6 +2,16 @@ const Property = load.class('property');
 
 module.exports = {
 
+    BooleanProperty: class extends Property {
+        defaultValue = true;
+
+        sanitize(value) {
+            if (value === 'true') { return true; }
+            if (value === 'false') { return false; }
+            return Boolean(value);
+        }
+    },
+
     IntegerProperty: class extends Property {
         defaultValue = 0;
 

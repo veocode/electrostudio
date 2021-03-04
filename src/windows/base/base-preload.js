@@ -17,3 +17,12 @@ contextBridge.exposeInMainWorld("handler", {
         return clientWindowHandler.getFormRenderedHTML();
     }
 });
+
+contextBridge.exposeInMainWorld("size", {
+    minimize() {
+        console.log('minimize');
+    },
+    maximize() {
+        console.log('maximize');
+    }
+});
