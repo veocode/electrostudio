@@ -107,6 +107,18 @@ class Component {
         return false;
     }
 
+    getSchema() {
+        let schema = {
+            className: this.constructor.name,
+            properties: this.propertyValues,
+        }
+        return schema;
+    }
+
+    setSchema(schema) {
+
+    }
+
 }
 
 class ContainerComponent extends Component {
@@ -145,6 +157,24 @@ class ContainerComponent extends Component {
 
     hasChildren() {
         return this.children.length > 0;
+    }
+
+    getSchema() {
+        let childrenSchemas = [];
+
+        if (this.hasChildren()) {
+            for (let childrenComponent of this.getChildren()) {
+                childrenSchemas.push(childrenComponent.getSchema());
+            }
+        }
+
+        let schema = super.getSchema();
+
+        if (childrenSchemas.length > 0) {
+            schema.children = childrenSchemas;
+        }
+
+        return schema;
     }
 
 }

@@ -27,7 +27,7 @@ class MainController extends Controller {
         panel.alignment = 'client';
         panel.addChildren(button);
 
-        console.log(panel.getRenderedHTML());
+        console.log(panel.getSchema());
     }
 
 }

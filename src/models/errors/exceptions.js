@@ -24,4 +24,12 @@ module.exports = {
         }
     },
 
+    SchemaInvalidComponentClass: class extends BaseException {
+        constructor(requiredClass, passedClass) {
+            super();
+            this.requiredClass = requiredClass;
+            this.passedClass = passedClass;
+        }
+    }
+
 }
