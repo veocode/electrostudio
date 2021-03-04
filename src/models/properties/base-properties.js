@@ -33,6 +33,14 @@ module.exports = {
         validate(value) {
             return this.items.includes(value);
         }
-    }
+    },
+
+    ColorProperty: class extends Property {
+        defaultValue = '#FFFFFF';
+
+        validate(value) {
+            return (!this.isRequired || value.length > 0) && value.startsWith('#');
+        }
+    },
 
 }

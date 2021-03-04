@@ -1,0 +1,84 @@
+@import "../../assets/css/global.css";
+
+/*
+* Base Styles
+*/
+
+html, body, .view-window {
+    width:100%;
+    height:100%;
+    padding: 0;
+    margin: 0;
+    background:#FFF;
+    font-family: 'Ubuntu', sans-serif;
+}
+
+/*
+* Alignment
+*/
+
+.align-client,
+.align-top,
+.align-bottom,
+.align-left,
+.align-right {
+    position: absolute;
+}
+
+.align-client {
+    width:100% !important;
+    height:100% !important;
+}
+
+.align-top {
+    top:0;
+    width:100% !important;
+}
+
+.align-bottom {
+    bottom:0;
+    width:100% !important;
+}
+
+.align-left {
+    left:0;
+    height:100% !important;
+}
+
+.align-right {
+    right:0;
+    height:100% !important;
+}
+
+/*
+* ToolPanel
+*/
+
+.toolpanel{
+    padding:10px;
+}
+
+.toolpanel > button {
+    height:100% !important;
+    border: solid 1px #2B2B2B;
+    background: #333333;
+    color: #FFF;
+    cursor: pointer;
+}
+
+.toolpanel > button:hover {
+    background: #555555;
+}
+
+.toolpanel > button:first-child {
+    border-radius: 5px 0 0 5px;
+}
+
+.toolpanel > button:last-child {
+    border-radius: 0 5px 5px 0;
+}
+
+.toolpanel > button:not(:last-child) {
+    border-right: none;
+}
+

@@ -7,7 +7,7 @@ class Component {
     properties = {};
     propertyValues = {};
 
-    constructor() {
+    constructor(presetPropertyValues = null) {
         for (let trait of this.getTraits()) {
             this.addTrait(trait);
         }
@@ -30,6 +30,10 @@ class Component {
         })
 
         componentProxy.setDefaults();
+
+        if (presetPropertyValues) {
+            componentProxy.setPropertyValues(presetPropertyValues);
+        }
 
         return componentProxy;
     }
@@ -75,6 +79,14 @@ class Component {
 
     getPropertiesValues() {
         return this.propertyValues;
+    }
+
+    setPropertyValues(values) {
+        for (const [name, value] of Object.entries(values)) {
+            if (this.hasProperty(name)) {
+                this.setPropertyValue(name, value);
+            }
+        }
     }
 
     setPropertyValue(name, value) {
@@ -147,8 +159,10 @@ class ContainerComponent extends Component {
         return childrenHTML;
     }
 
-    addChildren(component) {
-        this.children.push(component);
+    addChildren(...components) {
+        for (let component of components) {
+            this.children.push(component);
+        }
     }
 
     getChildren() {

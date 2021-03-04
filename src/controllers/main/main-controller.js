@@ -9,7 +9,7 @@ class MainController extends Controller {
         x: 0,
         y: 0,
         width: '100%',
-        height: 120,
+        height: 100,
         resizable: false,
         maximizable: false,
         menu: null,
@@ -21,13 +21,7 @@ class MainController extends Controller {
     }
 
     start() {
-        const panel = Studio.createComponent('Panel');
-        const button = Studio.createComponent('Button');
 
-        panel.alignment = 'client';
-        panel.addChildren(button);
-
-        console.log(panel.getSchema());
     }
 
 }

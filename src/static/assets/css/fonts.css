@@ -1,0 +1,33 @@
+@import "../fonts/awesome/css/font-awesome.min.css";
+
+@font-face {
+    font-family: 'Ubuntu';
+    src: url('../fonts/ubuntu/Ubuntu-R.ttf')  format('truetype');
+    font-style: normal;
+    font-weight: 400;
+}
+@font-face {
+    font-family: 'Ubuntu';
+    src: url('../fonts/ubuntu/Ubuntu-B.ttf')  format('truetype');
+    font-style: bold;
+    font-weight: 700;
+}
+@font-face {
+    font-family: 'Ubuntu';
+    src: url('../fonts/ubuntu/Ubuntu-L.ttf')  format('truetype');
+    font-style: lighter;
+    font-weight: 200;
+}
+
+@font-face {
+    font-family: 'Ubuntu Mono';
+    src: url('../fonts/ubuntu/UbuntuMono-R.ttf')  format('truetype');
+    font-style: normal;
+    font-weight: 400;
+}
+@font-face {
+    font-family: 'Ubuntu Mono';
+    src: url('../fonts/ubuntu/UbuntuMono-B.ttf')  format('truetype');
+    font-style: bold;
+    font-weight: 700;
+}

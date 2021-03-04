@@ -1,5 +1,4 @@
-const Loader = require('../../classes/loader');
-global.load = new Loader();
+require('../../bootstrap')();
 
 const path = load.node('path');
 const { contextBridge, ipcRenderer } = load.node("electron");

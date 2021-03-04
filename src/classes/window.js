@@ -71,14 +71,22 @@ class Window {
         let width = this.options.width;
         let height = this.options.height;
 
-        if (typeof (width) == 'string' && width.includes('%')) {
-            let percent = parseInt(width);
-            width = Math.round((percent * global.config.screenSize.width) / 100);
-        }
+        const isRelativeWidth = (typeof (width) == 'string' && width.includes('%'));
+        const isRelativeHeight = (typeof (height) == 'string' && height.includes('%'));
 
-        if (typeof (height) == 'string' && height.includes('%')) {
-            let percent = parseInt(height);
-            height = Math.round((percent * global.config.screenSize.height) / 100);
+        if (isRelativeWidth || isRelativeHeight) {
+            const { screen } = require('electron');
+            const screenSize = screen.getPrimaryDisplay().workAreaSize;
+
+            if (isRelativeWidth) {
+                let percent = parseInt(width);
+                width = Math.round((percent * screenSize.width) / 100);
+            }
+
+            if (isRelativeHeight) {
+                let percent = parseInt(height);
+                height = Math.round((percent * screenSize.height) / 100);
+            }
         }
 
         return { width, height };
