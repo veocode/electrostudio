@@ -4,12 +4,27 @@ class Component {
 
     static HTMLBuilder = load.instance('classes/htmlbuilder');
 
+    static EventNames = {
+        Focus: ['focus', 'blur'],
+        Mouse: ['click', 'dblclick', 'mousedown', 'mouseup', 'mouseenter', 'mouseleave', 'mousemove', 'mouseover']
+    };
+
+    events = load.instance('classes/events');
+
     properties = {};
     propertyValues = {};
 
-    constructor(presetPropertyValues = null) {
+    eventNames = [];
+    eventHandlerNames = {};
+
+    constructor(presetPropertyValues = null, presetEventHandlers = null) {
         for (let trait of this.getTraits()) {
             this.addTrait(trait);
+        }
+
+        for (let eventName of this.getEventNames()) {
+            this.addEventName(eventName);
+            this.setEventHandler(eventName, null);
         }
 
         const componentProxy = new Proxy(this, {
@@ -35,7 +50,35 @@ class Component {
             componentProxy.setPropertyValues(presetPropertyValues);
         }
 
+        if (presetEventHandlers) {
+            componentProxy.setEventHandlers(presetEventHandlers);
+        }
+
         return componentProxy;
+    }
+
+    getEventNames() {
+        return [];
+    }
+
+    addEventName(eventName) {
+        this.eventNames.push(eventName);
+    }
+
+    hasEvent(eventName) {
+        return this.eventNames.includes(eventName);
+    }
+
+    setEventHandler(eventName, handler) {
+        this.eventHandlerNames[eventName] = handler;
+    }
+
+    setEventHandlers(handlers) {
+        for (const [eventName, handlerName] of Object.entries(handlers)) {
+            if (this.hasEvent(eventName)) {
+                this.setEventHandler(eventName, handlerName);
+            }
+        }
     }
 
     getTraits() {
@@ -167,6 +210,28 @@ class ContainerComponent extends Component {
 
     getChildren() {
         return this.children;
+    }
+
+    getRecursiveChildrenList() {
+        let childrenList = [];
+        for (let childrenComponent of this.children) {
+            childrenList.push(childrenComponent);
+            if (childrenComponent.hasChildren()) {
+                childrenList = childrenList.concat(childrenComponent.getRecursiveChildrenList());
+            }
+        }
+        return childrenList;
+    }
+
+    getChildrenNames() {
+        let names = [];
+        for (let childrenComponent of this.children) {
+            names.push(childrenComponent.name);
+            if (childrenComponent.hasChildren()) {
+                names = names.concat(childrenComponent.getChildrenNames());
+            }
+        }
+        return names;
     }
 
     hasChildren() {

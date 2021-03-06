@@ -132,10 +132,15 @@ html, body, .view-window {
     background: #333333;
     color: #FFF;
     cursor: pointer;
+    outline: none !important;
 }
 
 .toolpanel > button:hover {
     background: #555555;
+}
+
+.toolpanel > button:active {
+    background: #777;
 }
 
 .toolpanel > button:first-child {

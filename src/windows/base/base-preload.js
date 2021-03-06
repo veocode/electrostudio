@@ -11,10 +11,14 @@ const windowOptions = JSON.parse(urlParams.get('options'));
 const windowMeta = Object.assign({ name: windowName }, windowOptions);
 contextBridge.exposeInMainWorld("meta", windowMeta);
 
-const clientWindowHandler = load.clientWindow(windowName, load.form(windowMeta.formName));
+const clientWindowForm = load.form(windowName);
+const clientWindowHandler = load.clientWindow(windowName, clientWindowForm);
 contextBridge.exposeInMainWorld("handler", {
     getHTML() {
         return clientWindowHandler.getFormRenderedHTML();
+    },
+    onFormEvent(event, callback) {
+        return clientWindowForm.events.on(event, callback);
     }
 });
 

@@ -4,10 +4,10 @@ class MainForm extends Form {
 
     buildForm() {
         return this.createComponent('Form', {
-            name: 'MainForm',
+            name: 'main',
             title: config.appTitle,
-            x: 0,
-            y: 0,
+            left: 0,
+            top: 0,
             width: '100%',
             height: 90,
             resizable: false,
@@ -15,7 +15,7 @@ class MainForm extends Form {
         });
     }
 
-    build() {
+    buildComponents() {
         const panel = this.createComponent('ToolPanel', {
             alignment: 'client'
         });

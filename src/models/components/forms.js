@@ -1,4 +1,5 @@
-const { ContainerComponent } = load.class('component');
+const { Component, ContainerComponent } = load.class('component');
+const AttributesList = load.class('attributes');
 const Traits = load.models.traits();
 
 class Form extends ContainerComponent {
@@ -17,8 +18,9 @@ class Form extends ContainerComponent {
         this.label = t('Form');
     }
     getRenderedHTML() {
-        const attributes = this.getTraitsAttributes({ class: ['component', 'button'] });
-        return Component.HTMLBuilder.make('button', attributes, '<i class="fa fa-download"></i> ' + this.label);
+        const attributes = new AttributesList({ 'class': ['form-body'] });
+        const content = this.getRenderedChildrenHTML();
+        return Component.HTMLBuilder.make('div', attributes, content);
     }
 }
 

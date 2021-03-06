@@ -10,10 +10,10 @@ class Controller {
         // Override in children
     }
 
-    run() {
+    async run() {
         this.boot();
         if (this.form) {
-            this.form.createWindow();
+            await this.form.createWindow();
         }
         this.start();
     }

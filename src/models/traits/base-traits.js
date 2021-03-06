@@ -19,8 +19,8 @@ module.exports = {
     SizeTrait: class extends ComponentTrait {
         getProps() {
             return [
-                new Props.IntegerProperty('width'),
-                new Props.IntegerProperty('height'),
+                new Props.RelativeIntegerProperty('width'),
+                new Props.RelativeIntegerProperty('height'),
             ]
         }
         appendAttributes(attributes, values) {

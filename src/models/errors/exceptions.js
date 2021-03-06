@@ -17,13 +17,6 @@ module.exports = {
         }
     },
 
-    WindowFormRequiredException: class extends BaseException {
-        constructor(windowName) {
-            super();
-            this.windowName = windowName;
-        }
-    },
-
     SchemaInvalidComponentClass: class extends BaseException {
         constructor(requiredClass, passedClass) {
             super();

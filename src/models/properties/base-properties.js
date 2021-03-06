@@ -20,7 +20,26 @@ module.exports = {
         }
 
         validate(value) {
-            return Number.isInteger(value) && (!this.isRequired || value != 0);
+            return Number.isInteger(value);
+        }
+    },
+
+    RelativeIntegerProperty: class extends Property {
+        defaultValue = 0;
+
+        isPercents(value) {
+            return value.match(/^[0-9]+%$/);
+        }
+
+        sanitize(value) {
+            if (typeof (value) == 'string' && this.isPercents(value)) {
+                return value;
+            }
+            return parseInt(value);
+        }
+
+        validate(value) {
+            return (Number.isInteger(value) || this.isPercents(value)) && (!this.isRequired || value != 0);
         }
     },
 

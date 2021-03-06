@@ -17,13 +17,15 @@ class Button extends Component {
         this.height = 35;
         this.label = t('Click Me');
     }
+    getEventNames() {
+        return [].concat(
+            Component.EventNames.Mouse,
+            Component.EventNames.Focus,
+        )
+    }
     getRenderedHTML() {
         const attributes = this.getTraitsAttributes({ class: ['component', 'button'] });
         return Component.HTMLBuilder.make('button', attributes, '<i class="fa fa-download"></i> ' + this.label);
-    }
-
-    bindEvents($dom) {
-        $dom.on('click', e => this.callEvent('click', e));
     }
 }
 
