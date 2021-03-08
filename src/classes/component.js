@@ -17,6 +17,8 @@ class Component {
     eventNames = [];
     eventHandlerNames = {};
 
+    $dom;
+
     constructor(presetPropertyValues = null, presetEventHandlers = null) {
         for (let trait of this.getTraits()) {
             this.addTrait(trait);
@@ -37,7 +39,7 @@ class Component {
             set(target, name, value) {
                 if (name in target) {
                     target[name] = value;
-                    return;
+                    return true;
                 }
                 target.setPropertyValue(name, value);
                 return true;
@@ -58,6 +60,7 @@ class Component {
     }
 
     getEventNames() {
+        // Override in children
         return [];
     }
 
@@ -137,6 +140,9 @@ class Component {
             throw new errors.PropertyInvalidException(name);
         }
 
+        const currentValue = this.getPropertyValue(name);
+        if (currentValue === value) { return; }
+
         value = this.properties[name].sanitize(value);
 
         if (!this.properties[name].validate(value)) {
@@ -144,10 +150,36 @@ class Component {
         }
 
         this.propertyValues[name] = value;
+
+        this.events.emit('update', this);
     }
 
     hasProperty(name) {
         return name in this.properties;
+    }
+
+    buildDOM($) {
+        // Override in children
+    }
+
+    buildTagDOM($, tag = 'div', startingAttributes = {}, ...$childrenDOM) {
+        let $dom = $(`<${tag}></${tag}>`);
+        $childrenDOM.forEach(($childDOM) => {
+            $dom.append($childDOM);
+        });
+
+        const attributes = this.getTraitsAttributes(startingAttributes);
+        attributes.add('id', this.name);
+        attributes.applyToDOM($dom);
+
+        return $dom;
+    }
+
+    getDOM($) {
+        if (!this.$dom) {
+            this.$dom = this.buildDOM($);
+        }
+        return this.$dom;
     }
 
     getRenderedHTML() {
@@ -254,6 +286,21 @@ class ContainerComponent extends Component {
         }
 
         return schema;
+    }
+
+    buildDOM($, ...$childrenDOM) {
+        // Override in children
+    }
+
+    getDOM($) {
+        if (!this.$dom) {
+            let $childrenDOM = [];
+            for (let childrenComponent of this.getChildren()) {
+                $childrenDOM.push(childrenComponent.getDOM($));
+            }
+            this.$dom = this.buildDOM($, ...$childrenDOM);
+        }
+        return this.$dom;
     }
 
 }

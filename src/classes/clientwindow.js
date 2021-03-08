@@ -12,10 +12,6 @@ class ClientWindow {
         // Override in children
     }
 
-    getFormRenderedHTML() {
-        return this.form.getRenderedHTML();
-    }
-
     registerComponents() {
         const components = this.form.getComponentsList();
         if (components.length == 0) { return; }

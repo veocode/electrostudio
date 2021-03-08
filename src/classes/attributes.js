@@ -27,6 +27,16 @@ class AttributesList {
         return attributesString.length ? ' ' + attributesString.join(' ') : '';
     }
 
+    applyToDOM($dom) {
+        for (let [name, value] of Object.entries(this.#attributes)) {
+            if (Array.isArray(value)) {
+                value = value.join(' ');
+            }
+            $dom.attr(name, value);
+        }
+        return $dom;
+    }
+
 }
 
 module.exports = AttributesList;

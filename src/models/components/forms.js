@@ -3,6 +3,7 @@ const AttributesList = load.class('attributes');
 const Traits = load.models.traits();
 
 class Form extends ContainerComponent {
+
     getTraits() {
         return super.getTraits().concat([
             new Traits.NameTrait(),
@@ -12,16 +13,23 @@ class Form extends ContainerComponent {
             new Traits.Forms.ResizableTrait()
         ]);
     }
+
     setDefaults() {
         this.width = 640;
         this.height = 480;
         this.label = t('Form');
     }
-    getRenderedHTML() {
-        const attributes = new AttributesList({ 'class': ['form-body'] });
-        const content = this.getRenderedChildrenHTML();
-        return Component.HTMLBuilder.make('div', attributes, content);
+
+    buildDOM($, ...$childrenDOM) {
+        const attributes = new AttributesList({ 'class': 'form-body' });
+        let $dom = $('<div></div>');
+        $childrenDOM.forEach(($childDOM) => {
+            $dom.append($childDOM);
+        });
+        attributes.applyToDOM($dom);
+        return $dom;
     }
+
 }
 
 module.exports = {

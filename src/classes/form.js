@@ -5,7 +5,7 @@ class Form {
     events = load.instance('classes/events');
 
     #formComponent;
-    #components;
+    #components = [];
     #windowHandle;
 
     #componentsCountByClass = {};
@@ -27,9 +27,35 @@ class Form {
         // Override in children
     }
 
+    getDOM($) {
+        return this.#formComponent ? this.#formComponent.getDOM($) : null;
+    }
+
     addChildren(...components) {
         this.#formComponent.addChildren(...components);
-        this.#components = this.#formComponent.getRecursiveChildrenList();
+
+        let childrenComponents = this.#formComponent.getRecursiveChildrenList();
+        let added = [];
+
+        for (let childrenComponent of childrenComponents) {
+            if (!this.#components.includes(childrenComponent)) {
+                added.push(childrenComponent);
+            }
+        }
+
+        this.registerChildren(...added);
+
+        this.#components = childrenComponents;
+    }
+
+    registerChildren(...components) {
+        for (let childrenComponent of components) {
+
+            childrenComponent.events.on('update', (sender, name, value) => {
+
+            });
+
+        }
     }
 
     getComponentNames() {
@@ -64,10 +90,6 @@ class Form {
         return `${className}${this.getComponentCountByClass(className) + 1}`;
     }
 
-    getRenderedHTML() {
-        return this.#formComponent ? this.#formComponent.getRenderedHTML() : '';
-    }
-
     async createWindow() {
         const { BrowserWindow } = require('electron');
 
@@ -84,8 +106,6 @@ class Form {
         const options = Object.assign({}, defaultOptions, this.#formComponent.getPropertiesValues());
         const size = this.#calculateWindowSize(options.width, options.height);
 
-        console.log(options);
-
         const settings = {
             show: false,
             width: size.width,
@@ -96,7 +116,8 @@ class Form {
             frame: false,
             webPreferences: {
                 webSecurity: true,
-                contextIsolation: true,
+                contextIsolation: false,
+                nodeIntegration: true,
                 preload: load.path(config.baseWindowPreloadScript)
             }
         };
@@ -130,7 +151,6 @@ class Form {
     }
 
     #calculateWindowSize(width, height) {
-        console.log('width', width);
         const isRelativeWidth = (typeof (width) == 'string' && width.includes('%'));
         const isRelativeHeight = (typeof (height) == 'string' && height.includes('%'));
 

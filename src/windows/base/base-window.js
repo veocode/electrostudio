@@ -11,12 +11,12 @@ $(() => {
 
     $btnMinimize && $btnMinimize.on('click', (event) => {
         event.preventDefault();
-        window.size.minimize();
+        window.minimize();
     });
 
     $btnMaximize && $btnMaximize.on('click', (event) => {
         event.preventDefault();
-        window.size.maximize();
+        window.maximize();
     });
 
     $btnClose && $btnClose.on('click', (event) => {
@@ -25,11 +25,13 @@ $(() => {
     });
 
     window.setTitle = title => $title.html(title) && $headTitle.html(title);
-    window.setContent = content => $body.html(content);
+    window.setDOM = $dom => $body.empty().append($dom);
     window.addCSS = url => $head.append(`<link rel="stylesheet" href="${url}">`);
     window.addJS = url => $body.append(`<script src="${url}"></script>`);
 
+    const $formDOM = window.form.getDOM($);
+
     window.setTitle(window.meta.title);
-    window.setContent(window.handler.getHTML());
+    window.setDOM($formDOM);
 
 })

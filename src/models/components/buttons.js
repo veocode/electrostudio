@@ -23,9 +23,8 @@ class Button extends Component {
             Component.EventNames.Focus,
         )
     }
-    getRenderedHTML() {
-        const attributes = this.getTraitsAttributes({ class: ['component', 'button'] });
-        return Component.HTMLBuilder.make('button', attributes, '<i class="fa fa-download"></i> ' + this.label);
+    buildDOM($) {
+        return this.buildTagDOM($, 'button', { class: ['component', 'button'] }, this.label);
     }
 }
 
@@ -40,10 +39,9 @@ class ToolButton extends Button {
         this.height = 48;
         this.label = '';
     }
-    getRenderedHTML() {
-        const attributes = this.getTraitsAttributes({ class: ['component', 'button'] });
+    buildDOM($) {
         const content = `<i class="fa fa-${this.icon}"></i>` + (this.label ? ` ${this.label}` : '');
-        return Component.HTMLBuilder.make('button', attributes, content);
+        return this.buildTagDOM($, 'button', { class: ['component', 'button', 'toolbutton'] }, content);
     }
 }
 

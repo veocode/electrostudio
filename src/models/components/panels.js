@@ -15,19 +15,14 @@ class Panel extends ContainerComponent {
         this.width = this.height = 200;
         this.backgroundColor = '#252525';
     }
-    getRenderedHTML() {
-        const attributes = this.getTraitsAttributes({ class: ['component', 'panel'] });
-        const content = this.getRenderedChildrenHTML();
-        return Component.HTMLBuilder.make('div', attributes, content);
+    buildDOM($, ...$childrenDOM) {
+        return this.buildTagDOM($, 'div', { class: ['component', 'panel'] }, ...$childrenDOM);
     }
 }
 
 class ToolPanel extends Panel {
-    getRenderedHTML() {
-        const attributes = this.getTraitsAttributes({ class: ['component', 'panel'] });
-        const content = this.getRenderedChildrenHTML();
-        attributes.add('class', 'toolpanel');
-        return Component.HTMLBuilder.make('div', attributes, content);
+    buildDOM($, ...$childrenDOM) {
+        return this.buildTagDOM($, 'div', { class: ['component', 'panel', 'toolpanel'] }, ...$childrenDOM);
     }
 }
 
