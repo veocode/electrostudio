@@ -24,6 +24,8 @@ class MainForm extends Form {
             name: 'btnNewProject',
             icon: 'file-o',
             hint: t('New Project')
+        }, {
+            click: 'onBtnNewProjectClick'
         }));
 
         panel.addChildren(this.createComponent('ToolButton', {

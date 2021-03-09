@@ -4,6 +4,11 @@ const Traits = load.models.traits();
 
 class Form extends ContainerComponent {
 
+    constructor(presetPropertyValues = null, presetEventHandlers = null) {
+        super(presetPropertyValues, presetEventHandlers);
+        this.events.disable();
+    }
+
     getTraits() {
         return super.getTraits().concat([
             new Traits.NameTrait(),

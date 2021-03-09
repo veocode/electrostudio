@@ -12,7 +12,6 @@ class Form {
 
     constructor() {
         this.#formComponent = this.buildForm();
-        this.buildComponents();
     }
 
     getName() {
@@ -51,8 +50,8 @@ class Form {
     registerChildren(...components) {
         for (let childrenComponent of components) {
 
-            childrenComponent.events.on('update', (sender, name, value) => {
-
+            childrenComponent.events.on('update', (component) => {
+                console.log('COMPONENT UPDATED', component);
             });
 
         }

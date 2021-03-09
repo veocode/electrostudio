@@ -6,6 +6,10 @@ class MainWindow extends ClientWindow {
         console.log(this.btnNewProject.hint);
     }
 
+    onBtnNewProjectClick(event, sender) {
+        this.btnSaveProject.icon = 'plus';
+    }
+
 }
 
 module.exports = MainWindow;

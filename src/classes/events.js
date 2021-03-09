@@ -2,13 +2,17 @@ class EventManager {
 
     #listeners = {};
 
+    #enabled = true;
+
     on(eventName, callback) {
+        if (!this.#enabled) { return; }
         const listeners = (eventName in this.#listeners) ? this.#listeners[eventName] : [];
         listeners.push(callback);
         this.#listeners[eventName] = listeners;
     }
 
     emit(eventName, ...params) {
+        if (!this.#enabled) { return; }
         if (!this.hasListeners(eventName)) {
             return;
         }
@@ -23,6 +27,14 @@ class EventManager {
 
     removeListeners(eventName) {
         this.#listeners[eventName] = [];
+    }
+
+    enable() {
+        this.#enabled = true;
+    }
+
+    disable() {
+        this.#enabled = false;
     }
 
 }

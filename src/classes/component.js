@@ -84,6 +84,10 @@ class Component {
         }
     }
 
+    getEventHandlerNames() {
+        return this.eventHandlerNames;
+    }
+
     getTraits() {
         return [];
     }
@@ -130,12 +134,12 @@ class Component {
     setPropertyValues(values) {
         for (const [name, value] of Object.entries(values)) {
             if (this.hasProperty(name)) {
-                this.setPropertyValue(name, value);
+                this.setPropertyValue(name, value, false);
             }
         }
     }
 
-    setPropertyValue(name, value) {
+    setPropertyValue(name, value, isEmitUpdateEvent = true) {
         if (!this.hasProperty(name)) {
             throw new errors.PropertyInvalidException(name);
         }
@@ -151,7 +155,10 @@ class Component {
 
         this.propertyValues[name] = value;
 
-        this.events.emit('update', this);
+        if (isEmitUpdateEvent) {
+            console.log('EMIT UPDATE', this, name, value);
+            this.events.emit('update', this);
+        }
     }
 
     hasProperty(name) {

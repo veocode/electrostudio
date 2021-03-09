@@ -17,6 +17,14 @@ module.exports = {
         }
     },
 
+    MethodNotExistsException: class extends BaseException {
+        constructor(windowName, methodName) {
+            super();
+            this.windowName = windowName;
+            this.methodName = methodName;
+        }
+    },
+
     SchemaInvalidComponentClass: class extends BaseException {
         constructor(requiredClass, passedClass) {
             super();
