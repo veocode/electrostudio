@@ -2,8 +2,8 @@ const Form = load.class('form');
 
 class MainForm extends Form {
 
-    buildForm() {
-        return this.createComponent('Form', {
+    getSchema() {
+        return {
             name: 'main',
             title: config.appTitle,
             left: 0,
@@ -12,7 +12,7 @@ class MainForm extends Form {
             height: 90,
             resizable: false,
             maximizable: false,
-        });
+        };
     }
 
     buildComponents() {
@@ -38,6 +38,8 @@ class MainForm extends Form {
             name: 'btnSaveProject',
             icon: 'floppy-o',
             hint: t('Save Project')
+        }, {
+            click: 'onBtnSaveProjectClick'
         }));
 
         this.addChildren(panel);

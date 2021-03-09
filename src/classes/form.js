@@ -9,17 +9,24 @@ class Form {
     #windowHandle;
 
     #componentsCountByClass = {};
-
-    constructor() {
-        this.#formComponent = this.buildForm();
-    }
+    #isListeningComponentEvents = false;
 
     getName() {
-        return this.#formComponent.name;
+        return this.getSchema().name;
+    }
+
+    getSchema() {
+        // Override in children
+    }
+
+    build() {
+        this.buildForm();
+        this.buildComponents();
+        this.#isListeningComponentEvents = true;
     }
 
     buildForm() {
-        return new Form.Components.Form();
+        this.#formComponent = new Form.Components.Form(this.getSchema());
     }
 
     buildComponents() {
@@ -50,8 +57,9 @@ class Form {
     registerChildren(...components) {
         for (let childrenComponent of components) {
 
-            childrenComponent.events.on('update', (component) => {
-                console.log('COMPONENT UPDATED', component);
+            childrenComponent.events.on('updated', (component) => {
+                if (!this.#isListeningComponentEvents) { return; }
+                this.events.emit('component-updated', component);
             });
 
         }
@@ -102,7 +110,7 @@ class Form {
             minimizable: true,
         }
 
-        const options = Object.assign({}, defaultOptions, this.#formComponent.getPropertiesValues());
+        const options = Object.assign({}, defaultOptions, this.getSchema());
         const size = this.#calculateWindowSize(options.width, options.height);
 
         const settings = {

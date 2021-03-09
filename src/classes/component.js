@@ -18,6 +18,7 @@ class Component {
     eventHandlerNames = {};
 
     $dom;
+    proxy;
 
     constructor(presetPropertyValues = null, presetEventHandlers = null) {
         for (let trait of this.getTraits()) {
@@ -29,7 +30,7 @@ class Component {
             this.setEventHandler(eventName, null);
         }
 
-        const componentProxy = new Proxy(this, {
+        this.proxy = new Proxy(this, {
             get(target, name) {
                 if (name in target) {
                     return target[name];
@@ -46,17 +47,17 @@ class Component {
             }
         })
 
-        componentProxy.setDefaults();
+        this.proxy.setDefaults();
 
         if (presetPropertyValues) {
-            componentProxy.setPropertyValues(presetPropertyValues);
+            this.proxy.setPropertyValues(presetPropertyValues);
         }
 
         if (presetEventHandlers) {
-            componentProxy.setEventHandlers(presetEventHandlers);
+            this.proxy.setEventHandlers(presetEventHandlers);
         }
 
-        return componentProxy;
+        return this.proxy;
     }
 
     getEventNames() {
@@ -134,12 +135,12 @@ class Component {
     setPropertyValues(values) {
         for (const [name, value] of Object.entries(values)) {
             if (this.hasProperty(name)) {
-                this.setPropertyValue(name, value, false);
+                this.setPropertyValue(name, value);
             }
         }
     }
 
-    setPropertyValue(name, value, isEmitUpdateEvent = true) {
+    setPropertyValue(name, value) {
         if (!this.hasProperty(name)) {
             throw new errors.PropertyInvalidException(name);
         }
@@ -154,11 +155,7 @@ class Component {
         }
 
         this.propertyValues[name] = value;
-
-        if (isEmitUpdateEvent) {
-            console.log('EMIT UPDATE', this, name, value);
-            this.events.emit('update', this);
-        }
+        this.events.emit('update', this.proxy);
     }
 
     hasProperty(name) {
@@ -182,9 +179,13 @@ class Component {
         return $dom;
     }
 
+    rebuildDOM($) {
+        this.$dom = this.buildDOM($);
+    }
+
     getDOM($) {
         if (!this.$dom) {
-            this.$dom = this.buildDOM($);
+            this.rebuildDOM($);
         }
         return this.$dom;
     }
@@ -299,13 +300,17 @@ class ContainerComponent extends Component {
         // Override in children
     }
 
+    rebuildDOM($) {
+        let $childrenDOM = [];
+        for (let childrenComponent of this.getChildren()) {
+            $childrenDOM.push(childrenComponent.getDOM($));
+        }
+        this.$dom = this.buildDOM($, ...$childrenDOM);
+    }
+
     getDOM($) {
         if (!this.$dom) {
-            let $childrenDOM = [];
-            for (let childrenComponent of this.getChildren()) {
-                $childrenDOM.push(childrenComponent.getDOM($));
-            }
-            this.$dom = this.buildDOM($, ...$childrenDOM);
+            this.rebuildDOM($);
         }
         return this.$dom;
     }

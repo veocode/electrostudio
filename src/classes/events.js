@@ -4,8 +4,9 @@ class EventManager {
 
     #enabled = true;
 
+    a = 1;
+
     on(eventName, callback) {
-        if (!this.#enabled) { return; }
         const listeners = (eventName in this.#listeners) ? this.#listeners[eventName] : [];
         listeners.push(callback);
         this.#listeners[eventName] = listeners;
@@ -22,7 +23,7 @@ class EventManager {
     }
 
     hasListeners(eventName) {
-        return eventName in this.#listeners && this.#listeners.length > 0;
+        return eventName in this.#listeners && this.#listeners[eventName].length > 0;
     }
 
     removeListeners(eventName) {

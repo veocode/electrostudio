@@ -13,12 +13,13 @@ class ClientWindow {
 
     boot() {
         this.registerDOM();
-        this.form.buildComponents();
+        this.form.build();
 
         this.setTitle(this.options.title);
         this.setContentDOM(this.form.getDOM($));
 
         this.registerComponents();
+        this.registerFormEvents();
 
         this.start();
     }
@@ -69,14 +70,20 @@ class ClientWindow {
 
         const $componentDOM = component.getDOM($);
         for (const [eventName, handlerName] of Object.entries(eventHandlerNames)) {
-
             if (handlerName == null) { continue; }
 
             $componentDOM.on(eventName, (event) => {
                 this.callMethod(handlerName, event, component);
             });
-
         }
+    }
+
+    registerFormEvents() {
+
+        this.form.events.on('component-updated', (component) => {
+            this.rebuildComponent(component);
+        });
+
     }
 
     setTitle(title) {
@@ -93,6 +100,13 @@ class ClientWindow {
             throw new errors.MethodNotExistsException(this.options.name, methodName);
         }
         return this[methodName]();
+    }
+
+    rebuildComponent(component) {
+        const $currentDOM = component.getDOM($);
+        component.rebuildDOM($);
+        $currentDOM.replaceWith(component.getDOM($));
+        this.registerComponentEvents(component);
     }
 
 }
