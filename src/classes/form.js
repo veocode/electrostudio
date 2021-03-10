@@ -1,6 +1,6 @@
 class Form {
 
-    static Components = load.models.components();
+    static Components = load.componentClasses();
 
     events = load.instance('classes/events');
 
@@ -50,19 +50,25 @@ class Form {
         }
 
         this.registerChildren(...added);
-
-        this.#components = childrenComponents;
     }
 
     registerChildren(...components) {
         for (let childrenComponent of components) {
 
+            childrenComponent.events.setListenCondition(() => this.#isListeningComponentEvents);
+
             childrenComponent.events.on('updated', (component) => {
-                if (!this.#isListeningComponentEvents) { return; }
                 this.events.emit('component-updated', component);
             });
 
+            childrenComponent.events.on('children-added', (component, ...addedChildren) => {
+                this.registerChildren(...addedChildren);
+                this.events.emit('component-children-added', component, ...addedChildren);
+            });
+
         }
+
+        this.#components = this.#components.concat(components);
     }
 
     getComponentNames() {
@@ -80,6 +86,10 @@ class Form {
             component.name = this.getNextComponentName(className);
         }
 
+        if (this.isComponentNameExists(component.name)) {
+            throw new errors.ComponentNameAlreadyExists(component.name, className);
+        }
+
         className in this.#componentsCountByClass ?
             this.#componentsCountByClass[className] += 1 :
             this.#componentsCountByClass[className] = 1;
@@ -93,8 +103,21 @@ class Form {
             0;
     }
 
+    isComponentNameExists(name) {
+        for (let existComponent of this.#components) {
+            if (existComponent.name == name) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     getNextComponentName(className) {
         return `${className}${this.getComponentCountByClass(className) + 1}`;
+    }
+
+    getWindow() {
+        return this.#windowHandle;
     }
 
     async createWindow() {
@@ -125,6 +148,7 @@ class Form {
                 webSecurity: true,
                 contextIsolation: false,
                 nodeIntegration: true,
+                enableRemoteModule: true,
                 preload: load.path(config.baseWindowPreloadScript)
             }
         };

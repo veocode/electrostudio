@@ -27,6 +27,9 @@ class ToolPanel extends Panel {
 }
 
 module.exports = {
-    Panel,
-    ToolPanel
+    groupName: t('Panels'),
+    classes: {
+        Panel,
+        ToolPanel
+    }
 }

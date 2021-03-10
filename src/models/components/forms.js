@@ -33,5 +33,8 @@ class Form extends ContainerComponent {
 }
 
 module.exports = {
-    Form
+    groupName: null,
+    classes: {
+        Form
+    }
 }

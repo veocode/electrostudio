@@ -1,10 +1,7 @@
 class EventManager {
 
     #listeners = {};
-
-    #enabled = true;
-
-    a = 1;
+    #listenCheckCallback = () => { return true; };
 
     on(eventName, callback) {
         const listeners = (eventName in this.#listeners) ? this.#listeners[eventName] : [];
@@ -13,10 +10,13 @@ class EventManager {
     }
 
     emit(eventName, ...params) {
-        if (!this.#enabled) { return; }
+        if (!this.#listenCheckCallback()) {
+            return;
+        }
         if (!this.hasListeners(eventName)) {
             return;
         }
+        console.log('EMIT', eventName, ...params);
         for (let callback of this.#listeners[eventName]) {
             callback(...params);
         }
@@ -30,12 +30,8 @@ class EventManager {
         this.#listeners[eventName] = [];
     }
 
-    enable() {
-        this.#enabled = true;
-    }
-
-    disable() {
-        this.#enabled = false;
+    setListenCondition(listenCheckCallback) {
+        this.#listenCheckCallback = listenCheckCallback;
     }
 
 }

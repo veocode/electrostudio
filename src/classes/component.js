@@ -9,6 +9,8 @@ class Component {
         Mouse: ['click', 'dblclick', 'mousedown', 'mouseup', 'mouseenter', 'mouseleave', 'mousemove', 'mouseover']
     };
 
+    isVirtual = false;
+
     events = load.instance('classes/events');
 
     properties = {};
@@ -155,7 +157,7 @@ class Component {
         }
 
         this.propertyValues[name] = value;
-        this.events.emit('update', this.proxy);
+        this.events.emit('updated', this.proxy);
     }
 
     hasProperty(name) {
@@ -246,6 +248,7 @@ class ContainerComponent extends Component {
         for (let component of components) {
             this.children.push(component);
         }
+        this.events.emit('children-added', this.proxy, ...components);
     }
 
     getChildren() {
@@ -303,6 +306,7 @@ class ContainerComponent extends Component {
     rebuildDOM($) {
         let $childrenDOM = [];
         for (let childrenComponent of this.getChildren()) {
+            if (childrenComponent.isVirtual) { continue; }
             $childrenDOM.push(childrenComponent.getDOM($));
         }
         this.$dom = this.buildDOM($, ...$childrenDOM);

@@ -46,6 +46,9 @@ class ToolButton extends Button {
 }
 
 module.exports = {
-    Button,
-    ToolButton
+    groupName: t('Buttons'),
+    classes: {
+        Button,
+        ToolButton
+    }
 }

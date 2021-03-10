@@ -8,12 +8,18 @@ module.exports = {
             this.propertyName = propertyName;
             this.value = value;
         }
+        getMessage() {
+            return t('Invalid Property Value');
+        }
     },
 
     PropertyInvalidException: class extends BaseException {
         constructor(propertyName) {
             super();
             this.propertyName = propertyName;
+        }
+        getMessage() {
+            return t('Property does not exists');
         }
     },
 
@@ -23,14 +29,20 @@ module.exports = {
             this.windowName = windowName;
             this.methodName = methodName;
         }
+        getMessage() {
+            return t('Method does not exists');
+        }
     },
 
-    SchemaInvalidComponentClass: class extends BaseException {
-        constructor(requiredClass, passedClass) {
+    ComponentNameAlreadyExists: class extends BaseException {
+        constructor(componentName, className) {
             super();
-            this.requiredClass = requiredClass;
-            this.passedClass = passedClass;
+            this.componentName = componentName;
+            this.className = className;
         }
-    }
+        getMessage() {
+            return t('Component Name already exists');
+        }
+    },
 
 }

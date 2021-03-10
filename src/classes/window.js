@@ -1,119 +1,143 @@
 class Window {
 
-    #handle
-
-    #defaultOptions = {
-        formName: null,
-        title: config.appTitle,
-        width: 400,
-        height: 400,
-        menu: null,
-        resizable: true,
-        maximizable: true,
-        minimizable: true,
-    }
+    name;
+    options;
+    form;
+    dom = {}
 
     constructor(name, options) {
-        this.name = name;
-        this.options = Object.assign({}, this.#defaultOptions, options);
+        this.form = load.form(name);
+        this.options = options;
     }
 
-    async #create() {
-        if (!this.options.formName) {
-            throw new errors.WindowFormRequiredException(this.name);
-        }
+    boot() {
+        this.registerDOM();
+        this.form.build();
 
-        const { BrowserWindow } = require('electron');
+        this.setTitle(this.options.title);
+        this.setContentDOM(this.form.getDOM($));
 
-        const size = this.#calculateSize();
+        this.registerComponents();
+        this.registerFormEvents();
 
-        const settings = {
-            show: false,
-            width: size.width,
-            height: size.height,
-            resizable: this.options.resizable,
-            maximizable: this.options.maximizable,
-            minimizable: this.options.minimizable,
-            frame: false,
-            webPreferences: {
-                webSecurity: true,
-                contextIsolation: true,
-                preload: load.path('windows/base/base-preload.js')
-            }
-        };
-
-        if ('x' in this.options && 'y' in this.options) {
-            settings.x = this.options.x;
-            settings.y = this.options.y;
-        } else {
-            settings.center = true;
-        }
-
-        this.#handle = new BrowserWindow(settings);
-
-        if (!this.options.menu) {
-            this.#handle.setMenu(null);
-        }
-
-        const baseViewPath = load.path('windows/base/base-window.html');
-        const baseViewQuery = {
-            name: this.name,
-            options: JSON.stringify(this.options),
-        };
-
-        await this.#handle.loadFile(baseViewPath, { query: baseViewQuery });
-
-        if (config.isDebug) {
-            this.#handle.webContents.openDevTools();
-        }
+        this.start();
     }
 
-    #calculateSize() {
-        let width = this.options.width;
-        let height = this.options.height;
-
-        const isRelativeWidth = (typeof (width) == 'string' && width.includes('%'));
-        const isRelativeHeight = (typeof (height) == 'string' && height.includes('%'));
-
-        if (isRelativeWidth || isRelativeHeight) {
-            const { screen } = require('electron');
-            const screenSize = screen.getPrimaryDisplay().workAreaSize;
-
-            if (isRelativeWidth) {
-                let percent = parseInt(width);
-                width = Math.round((percent * screenSize.width) / 100);
-            }
-
-            if (isRelativeHeight) {
-                let percent = parseInt(height);
-                height = Math.round((percent * screenSize.height) / 100);
-            }
-        }
-
-        return { width, height };
+    start() {
+        // Override in children
     }
 
-    async show() {
-        if (!this.#handle) {
-            await this.#create();
+    registerDOM() {
+        this.dom = {
+            $head: $('head'),
+            $headTitle: $('head > title'),
+            $body: $('.window-view'),
+            $title: $('.window-title > .title'),
+            $btnMinimize: $('.window-title button.minimize'),
+            $btnMaximize: $('.window-title button.maximize'),
+            $btnClose: $('.window-title button.close'),
         }
-        this.#handle.show();
+
+        this.dom.$btnMinimize && this.dom.$btnMinimize.on('click', (event) => {
+            event.preventDefault();
+            window.minimize();
+        });
+
+        this.dom.$btnMaximize && this.dom.$btnMaximize.on('click', (event) => {
+            event.preventDefault();
+            window.maximize();
+        });
+
+        this.dom.$btnClose && this.dom.$btnClose.on('click', (event) => {
+            event.preventDefault();
+            window.close();
+        });
     }
 
-    hide() {
-        if (this.#handle) {
-            this.#handle.hide();
+    registerComponents(...components) {
+        if (!components.length) {
+            components = this.form.getComponentsList();
+        }
+        if (components.length == 0) { return; }
+        for (let component of components) {
+            this[component.name] = component;
+            this.registerComponentEvents(component);
         }
     }
 
-    static getViewPath(windowName) {
-        return load.path(`windows/${windowName}/${windowName}-window.html`);
+    registerComponentEvents(component) {
+        const eventHandlerNames = component.getEventHandlerNames();
+        if (!eventHandlerNames) { return; }
+
+        const $componentDOM = component.getDOM($);
+        for (const [eventName, handlerName] of Object.entries(eventHandlerNames)) {
+            if (handlerName == null) { continue; }
+
+            $componentDOM.on(eventName, (event) => {
+                this.callMethod(handlerName, event, component);
+            });
+        }
     }
 
-    static getViewHTML(windowName) {
-        const fs = require('fs');
-        const path = require('path');
-        return fs.readFileSync(Window.getViewPath(windowName), { encoding: 'utf8' });
+    registerFormEvents() {
+
+        this.form.events.on('component-updated', (component) => {
+            this.rebuildComponent(component);
+        });
+
+        this.form.events.on('component-children-added', (component, ...addedChildren) => {
+            this.registerComponents(...addedChildren);
+            this.rebuildComponent(component);
+        });
+
+    }
+
+    setTitle(title) {
+        this.dom.$title.html(title);
+        this.dom.$headTitle.html(title);
+    }
+
+    setContentDOM($rootContentElement) {
+        this.dom.$body.empty().append($rootContentElement);
+    }
+
+    callMethod(methodName, ...methodArgs) {
+        if (!(methodName in this)) {
+            throw new errors.MethodNotExistsException(this.options.name, methodName);
+        }
+        return this[methodName](...methodArgs);
+    }
+
+    rebuildComponent(component) {
+        const $currentDOM = component.getDOM($);
+        component.rebuildDOM($);
+        $currentDOM.replaceWith(component.getDOM($));
+        this.registerComponentEvents(component);
+    }
+
+    onError(error) {
+
+        if (!(error.constructor.name in errors)) {
+            console.error(error);
+            alert([
+                t('An error occured during execution'),
+                t('Check console for details')
+            ].join('\n'));
+            return;
+        }
+
+        const message = [
+            t('An error occured during execution') + ':',
+            error.getMessage(),
+            '',
+            t('Error details:')
+        ];
+
+        for (let [prop, value] of Object.entries(error)) {
+            message.push(`  [${prop}] = ${value}`);
+        }
+
+        alert(message.join('\n'));
     }
 
 }

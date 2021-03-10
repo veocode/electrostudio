@@ -1,17 +1,30 @@
-const ClientWindow = load.class('clientwindow');
+const Window = load.class('window');
 
-class MainWindow extends ClientWindow {
+class MainWindow extends Window {
 
     start() {
         // TODO: add initialization logic
-    }
+        const btnDynamic = this.form.createComponent('ToolButton', {
+            name: 'btnDynamic',
+            icon: 'bolt',
+            hint: t('Dynamic Button')
+        }, {
+            click: 'onBtnDynamicClick'
+        });
 
-    onBtnSaveProjectClick(event, sender) {
-        console.log('SAVE PROJECT!');
+        this.ToolPanel1.addChildren(btnDynamic);
     }
 
     onBtnNewProjectClick(event, sender) {
-        this.btnSaveProject.icon = 'plus';
+        this.MessageDialog1.show('Hello World');
+    }
+
+    onBtnSaveProjectClick(event, sender) {
+
+    }
+
+    onBtnDynamicClick(event, sender) {
+        alert('Clicked: ' + sender.name);
     }
 
 }

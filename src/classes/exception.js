@@ -1,5 +1,9 @@
 class BaseException {
-    // veo: No parent logic required at the moment
+
+    getMessage() {
+        return t('Unexpected Error Occured');
+    }
+
 }
 
 module.exports = BaseException;

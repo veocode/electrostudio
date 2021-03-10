@@ -55,11 +55,11 @@ class Loader {
     }
 
     form(name, ...constructorArgs) {
-        return this.instance(`forms/${name}-form`, ...constructorArgs);
+        return this.instance(`forms/${name}/${name}-form`, ...constructorArgs);
     }
 
-    clientWindow(name, ...constructorArgs) {
-        return this.instance(`windows/${name}/${name}-window`, ...constructorArgs);
+    window(name, options) {
+        return this.instance(`windows/${name}/${name}-window`, name, options);
     }
 
     model(file) {
@@ -78,6 +78,16 @@ class Loader {
             }
         },
     });
+
+    componentClasses() {
+        const dirPath = `${Loader.rootDir}/models/components`;
+        let classesDictionary = {};
+        fs.readdirSync(dirPath).forEach(file => {
+            const model = load.model(`components/${file.replace('.js', '')}`);
+            classesDictionary = Object.assign({}, classesDictionary, model.classes);
+        });
+        return classesDictionary;
+    }
 
     config() {
         return this.file('config');
