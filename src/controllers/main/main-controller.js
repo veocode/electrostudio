@@ -2,7 +2,13 @@ const Controller = load.class('controller');
 
 class MainController extends Controller {
 
-    form = load.form('main');
+    boot() {
+        this.loadForm('main');
+    }
+
+    start() {
+        this.getForm('main').createWindow();
+    }
 
 }
 

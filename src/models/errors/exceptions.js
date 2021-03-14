@@ -23,6 +23,16 @@ module.exports = {
         }
     },
 
+    FormNotExistsException: class extends BaseException {
+        constructor(formName) {
+            super();
+            this.formName = formName;
+        }
+        getMessage() {
+            return t('Form does not exists');
+        }
+    },
+
     MethodNotExistsException: class extends BaseException {
         constructor(windowName, methodName) {
             super();

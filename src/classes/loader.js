@@ -62,6 +62,10 @@ class Loader {
         return this.instance(`windows/${name}/${name}-window`, name, options);
     }
 
+    service(name) {
+        return this.instance(`services/${name}`, name);
+    }
+
     model(file) {
         return this.file(`models/${file}`);
     }
