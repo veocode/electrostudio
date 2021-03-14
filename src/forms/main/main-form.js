@@ -46,7 +46,6 @@ class MainForm extends Form {
 
         this.addChildren(panel);
         this.addChildren(msgDialog);
-
     }
 
 }

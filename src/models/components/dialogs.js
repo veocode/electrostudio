@@ -8,17 +8,31 @@ class MessageDialog extends Component {
     getTraits() {
         return super.getTraits().concat([
             new Traits.NameTrait(),
-            new Traits.PositionTrait(),
+            new Traits.LabelTrait(),
+            new Traits.TextTrait(),
+            new Traits.Dialogs.TypeTrait(),
+            new Traits.Dialogs.ButtonsTrait(),
+            new Traits.PositionTrait()
         ]);
     }
 
-    show(message, type = 'info', buttons = [t('Ok')]) {
+    setDefaults() {
+        this.label = t('Message Dialog');
+        this.text = t('Message Text');
+        this.type = 'info';
+        this.buttons = `${t('Ok')},${t('Cancel')}`;
+    }
+
+    show() {
         const { dialog } = require('electron').remote;
-        return dialog.showMessageBox({
-            message,
-            type,
-            buttons
-        });
+        const params = {
+            title: this.label,
+            message: this.text,
+            type: this.type,
+            buttons: this.buttons.split(',')
+        };
+        console.log('params', params);
+        return dialog.showMessageBox(params);
     }
 
 }

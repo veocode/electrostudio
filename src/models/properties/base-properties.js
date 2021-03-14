@@ -68,7 +68,9 @@ module.exports = {
         defaultValue = '#FFFFFF';
 
         validate(value) {
-            return (!this.isRequired || value.length > 0) && value.startsWith('#');
+            // 4 - #FFF
+            // 7 - #FFFFFF
+            return (!this.isRequired || [4, 7].includes(value.length)) && value.startsWith('#');
         }
     },
 

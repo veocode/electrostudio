@@ -1,4 +1,4 @@
-const { Component, ContainerComponent } = load.class('component');
+const { ContainerComponent } = load.class('component');
 const AttributesList = load.class('attributes');
 const Traits = load.models.traits();
 

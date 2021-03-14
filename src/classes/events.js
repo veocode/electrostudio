@@ -16,7 +16,6 @@ class EventManager {
         if (!this.hasListeners(eventName)) {
             return;
         }
-        console.log('EMIT', eventName, ...params);
         for (let callback of this.#listeners[eventName]) {
             callback(...params);
         }

@@ -109,6 +109,9 @@ class Window {
     }
 
     rebuildComponent(component) {
+        if (component.isVirtual) {
+            return;
+        }
         const $currentDOM = component.getDOM($);
         component.rebuildDOM($);
         $currentDOM.replaceWith(component.getDOM($));

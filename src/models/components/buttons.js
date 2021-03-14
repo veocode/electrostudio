@@ -8,6 +8,7 @@ class Button extends Component {
             new Traits.LabelTrait(),
             new Traits.HintTrait(),
             new Traits.AlignmentTrait(),
+            new Traits.EnabledTrait(),
             new Traits.PositionTrait(),
             new Traits.SizeTrait(),
         ]);
@@ -35,6 +36,7 @@ class ToolButton extends Button {
         ]);
     }
     setDefaults() {
+        this.icon = 'bolt';
         this.width = 48;
         this.height = 48;
         this.label = '';

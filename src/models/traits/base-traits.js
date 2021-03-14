@@ -50,6 +50,14 @@ module.exports = {
         }
     },
 
+    TextTrait: class extends ComponentTrait {
+        getProps() {
+            return [
+                new Props.StringProperty('text', '', false),
+            ]
+        }
+    },
+
     HintTrait: class extends ComponentTrait {
         getProps() {
             return [
@@ -73,6 +81,17 @@ module.exports = {
             if (values.alignment != 'none') {
                 attributes.add('class', `align-${values.alignment}`);
             }
+        }
+    },
+
+    EnabledTrait: class extends ComponentTrait {
+        getProps() {
+            return [
+                new Props.BooleanProperty('enabled'),
+            ]
+        }
+        appendAttributes(attributes, values) {
+            values.enabled || attributes.add('disabled', 'disabled');
         }
     },
 

@@ -192,14 +192,6 @@ class Component {
         return this.$dom;
     }
 
-    getRenderedHTML() {
-        return '';
-    }
-
-    getRenderedEditorHTML() {
-        return this.getRenderedHTML();
-    }
-
     hasChildren() {
         return false;
     }
@@ -321,4 +313,7 @@ class ContainerComponent extends Component {
 
 }
 
-module.exports = { Component, ContainerComponent };
+module.exports = {
+    Component,
+    ContainerComponent
+};
