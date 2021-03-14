@@ -11,7 +11,7 @@ class Controller {
         // Override in children
     }
 
-    async run() {
+    run() {
         this.boot();
         this.registerIPCListeners();
         this.start();
