@@ -6,7 +6,6 @@ class ServiceClient {
     clientWindow;
 
     #callCount = 0;
-    #resultPromises = {}
 
     constructor(serviceName, clientWindow) {
         this.serviceName = serviceName;
@@ -23,21 +22,31 @@ class ServiceClient {
 
     callMethod(methodName, methodArgs) {
 
-        console.log('CALL SERVICE', this.serviceName, 'METHOD', methodName, 'ARGS', methodArgs);
-
         this.#callCount += 1;
-
-        ipc.send('service:call', {
-            callId: this.#callCount,
-            windowName: this.clientWindow.name,
-            serviceName: this.serviceName,
-            methodName,
-            methodArgs
-        });
 
         const resultPromise = new Promise(resolve => {
 
+            const callId = this.#callCount;
+
+            ipc.send('service:call', {
+                callId,
+                windowName: this.clientWindow.name,
+                serviceName: this.serviceName,
+                methodName,
+                methodArgs
+            });
+
+            ipc.once(`service:result:${callId}`, (event, result) => {
+                resolve(result);
+            });
+
+            if (this.#callCount >= Number.MAX_SAFE_INTEGER - 1) {
+                this.#callCount = 0;
+            }
+
         });
+
+        return resultPromise;
 
     }
 

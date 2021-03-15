@@ -21,10 +21,8 @@ class Controller {
 
     registerIPCListeners() {
         this.ipc.on('service:call', async (event, payload) => {
-            console.log('EVENT', event);
-            console.log('PAYLOAD', payload);
             const result = await this.callServiceMethod(payload.serviceName, payload.methodName, payload.methodArgs);
-            event.reply('service:result', result);
+            event.reply(`service:result:${payload.callId}`, result);
         });
     }
 
@@ -49,7 +47,6 @@ class Controller {
     async callServiceMethod(serviceName, methodName, methodArgs) {
         const service = this.getService(serviceName);
         const result = await service.callMethod(methodName, methodArgs);
-        console.log('SERVICE RESULT', result);
         return result;
     }
 

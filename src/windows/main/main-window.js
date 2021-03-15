@@ -6,22 +6,14 @@ class MainWindow extends Window {
         // TODO: add initialization logic
     }
 
-    onBtnNewProjectClick(event, sender) {
+    async onBtnNewProjectClick(event, sender) {
 
-        this.getService('dialogs').showMessageDialog('Hello world', 'My Dialog', 'info');
+        const dialogService = this.getService('dialogs');
 
-        // this.getService('dialogs').showMessageDialog({
-        //     type: 'info',
-        //     title: 'Message',
-        //     text: 'Hello world',
-        // });
+        const result = await dialogService.showMessageDialog('Hello world');
 
-        // this.MessageDialog1.label = 'My Message';
-        // this.MessageDialog1.text = 'Hello Beautiful World';
+        console.log('DIALOG RESULT:', result);
 
-        // this.MessageDialog1.show().then(
-        //     result => alert(`You clicked button #${result.response}`)
-        // );
     }
 
     onBtnSaveProjectClick(event, sender) {
