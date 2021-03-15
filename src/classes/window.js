@@ -3,9 +3,11 @@ class Window {
     name;
     options;
     form;
-    dom = {}
+    dom = {};
+    serviceClients = {};
 
     constructor(name, options) {
+        this.name = name;
         this.form = load.form(name);
         this.options = options;
     }
@@ -118,8 +120,14 @@ class Window {
         this.registerComponentEvents(component);
     }
 
-    onError(error) {
+    getService(serviceName) {
+        if (!(serviceName in this.serviceClients)) {
+            this.serviceClients[serviceName] = load.instance('classes/serviceclient', serviceName, this);
+        }
+        return this.serviceClients[serviceName];
+    }
 
+    onError(error) {
         if (!(error.constructor.name in errors)) {
             console.error(error);
             alert([

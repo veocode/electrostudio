@@ -31,7 +31,6 @@ class MessageDialog extends Component {
             type: this.type,
             buttons: this.buttons.split(',')
         };
-        console.log('params', params);
         return dialog.showMessageBox(params);
     }
 

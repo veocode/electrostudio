@@ -27,6 +27,10 @@ class Loader {
         return result;
     }
 
+    electron(apiName) {
+        return this.node('electron', apiName);
+    }
+
     path(file) {
         return `${Loader.rootDir}/${file}`;
     }

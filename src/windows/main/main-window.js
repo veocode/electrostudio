@@ -7,12 +7,21 @@ class MainWindow extends Window {
     }
 
     onBtnNewProjectClick(event, sender) {
-        this.MessageDialog1.label = 'My Message';
-        this.MessageDialog1.text = 'Hello Beautiful World';
 
-        this.MessageDialog1.show().then(
-            result => alert(`You clicked button #${result.response}`)
-        );
+        this.getService('dialogs').showMessageDialog('Hello world', 'My Dialog', 'info');
+
+        // this.getService('dialogs').showMessageDialog({
+        //     type: 'info',
+        //     title: 'Message',
+        //     text: 'Hello world',
+        // });
+
+        // this.MessageDialog1.label = 'My Message';
+        // this.MessageDialog1.text = 'Hello Beautiful World';
+
+        // this.MessageDialog1.show().then(
+        //     result => alert(`You clicked button #${result.response}`)
+        // );
     }
 
     onBtnSaveProjectClick(event, sender) {
