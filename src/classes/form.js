@@ -36,6 +36,13 @@ class Form {
         return this.#formComponent ? this.#formComponent.getDOM($) : null;
     }
 
+    createWindow() {
+        return window.ipc.invoke('form:call', {
+            formName: this.getName(),
+            methodName: 'createWindow'
+        });
+    }
+
     addChildren(...components) {
         this.#formComponent.addChildren(...components);
 

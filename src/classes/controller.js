@@ -28,12 +28,9 @@ class Controller {
             };
             return await this.callServiceMethod(caller, call.serviceName, call.methodName, call.methodArgs);
         });
+
         this.ipc.handle('form:call', async (event, call) => {
-            const caller = {
-                form: this.#forms[call.windowName],
-                window: this.#windows[call.windowName],
-            };
-            return await this.callFormMethod(caller, call.formName, call.methodName, call.methodArgs);
+            return await this.callFormMethod(call.formName, call.methodName, call.methodArgs || []);
         });
     }
 
@@ -46,6 +43,13 @@ class Controller {
             this.#forms[formName] = load.form(formName);
         }
         return this.#forms[formName];
+    }
+
+    getWindow(formName) {
+        if (!(formName in this.#windows)) {
+            this.createFormWindow(formName);
+        }
+        return this.#windows[formName];
     }
 
     getService(serviceName) {
@@ -61,10 +65,15 @@ class Controller {
         return result;
     }
 
-    async callFormMethod(caller, formName, methodName, methodArgs) {
-        const form = this.getForm(formName);
-        const window
-        const result = await service.callMethod(caller, methodName, methodArgs);
+    async callFormMethod(formName, methodName, methodArgs = []) {
+        let result = null;
+
+        switch (methodName) {
+            case 'createWindow':
+                await this.createFormWindow(formName);
+                break;
+        }
+
         return result;
     }
 

@@ -3,8 +3,8 @@ const Window = load.class('window');
 class MainWindow extends Window {
 
     start() {
-        // const inspectorForm = load.form('inspector');
-        // inspectorForm.createWindow();
+        const inspectorForm = load.form('inspector');
+        inspectorForm.createWindow();
     }
 
     async onBtnNewProjectClick(event, sender) {

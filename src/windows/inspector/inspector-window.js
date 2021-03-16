@@ -9,4 +9,4 @@ class InspectorWindow extends Window {
 
 }
 
-module.exports = MainWindow;
+module.exports = InspectorWindow;

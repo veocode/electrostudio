@@ -52,7 +52,7 @@ class Loader {
         if (name in this.#singletons) {
             return this.#singletons[name];
         }
-        return this.#singletons[name] = this.instance(`classes/${name}`, ...constructorArgs);
+        return this.#singletons[name] = this.instance(name, ...constructorArgs);
     }
 
     controller(name, ...constructorArgs) {
