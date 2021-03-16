@@ -1,3 +1,5 @@
+const ipc = load.electron('ipcRenderer');
+
 class Window {
 
     name;

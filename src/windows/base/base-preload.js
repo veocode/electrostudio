@@ -6,6 +6,8 @@ const query = new URLSearchParams(location.search);
 const windowName = query.get('name');
 const windowOptions = JSON.parse(query.get('options'));
 
+window.ipc = load.electron('ipcRenderer');
+
 window.handler = load.window(windowName, windowOptions);
 
 window.process.on('uncaughtException', (error) => {

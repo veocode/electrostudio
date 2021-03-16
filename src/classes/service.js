@@ -1,6 +1,12 @@
 class Service {
 
-    async callMethod(methodName, methodArgs) {
+    controller;
+
+    constructor(controller) {
+        this.controller = controller;
+    }
+
+    async callMethod(caller, methodName, methodArgs) {
         return new Promise((resolve, reject) => {
 
             if (!(methodName in this)) {
@@ -8,7 +14,7 @@ class Service {
                 return;
             };
 
-            Promise.resolve(this[methodName](...methodArgs)).then((result) => resolve(result));
+            Promise.resolve(this[methodName](caller, ...methodArgs)).then((result) => resolve(result));
 
         });
     }

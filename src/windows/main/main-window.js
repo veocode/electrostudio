@@ -3,14 +3,18 @@ const Window = load.class('window');
 class MainWindow extends Window {
 
     start() {
-        // TODO: add initialization logic
+        // const inspectorForm = load.form('inspector');
+        // inspectorForm.createWindow();
     }
 
     async onBtnNewProjectClick(event, sender) {
 
         const dialogService = this.getService('dialogs');
 
-        const result = await dialogService.showMessageDialog('Hello world');
+        const result = await dialogService.showOpenDialog({
+            title: t('Select New Project folder'),
+            properties: ['openDirectory']
+        });
 
         console.log('DIALOG RESULT:', result);
 

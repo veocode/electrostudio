@@ -42,10 +42,7 @@ class MainForm extends Form {
             click: 'onBtnSaveProjectClick'
         }));
 
-        const msgDialog = this.createComponent('MessageDialog');
-
         this.addChildren(panel);
-        this.addChildren(msgDialog);
     }
 
 }

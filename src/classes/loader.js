@@ -20,10 +20,11 @@ class Loader {
         }
         const full = require(module);
         let result = {};
-        for (i = 1; i < arguments.length; i++) {
+        for (let i = 1; i < arguments.length; i++) {
             const name = arguments[i];
             result[name] = full[name];
         }
+        console.log('result', result);
         return result;
     }
 
@@ -59,7 +60,7 @@ class Loader {
     }
 
     form(name, ...constructorArgs) {
-        return this.instance(`forms/${name}/${name}-form`, ...constructorArgs);
+        return this.instance(`windows/${name}/${name}-form`, ...constructorArgs);
     }
 
     window(name, options) {

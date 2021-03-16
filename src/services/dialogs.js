@@ -3,15 +3,30 @@ const dialog = load.electron('dialog');
 
 class DialogsService extends Service {
 
-    showMessageDialog(message, title = config.appTitle, type = 'info') {
-        const params = {
-            title,
-            message,
-            type,
+    showMessageDialog(caller, options) {
+        const defaultOptions = {
+            title: config.appTitle,
+            message: t('Message'),
+            type: 'info',
             buttons: [t('Ok')]
-        };
+        }
 
-        return dialog.showMessageBox(params);
+        options = Object.assign(defaultOptions, options);
+        return dialog.showMessageBox(caller.window, options);
+    }
+
+    showOpenDialog(caller, options) {
+        const defaultOptions = {}
+
+        options = Object.assign(defaultOptions, options);
+        return dialog.showOpenDialog(caller.window, options);
+    }
+
+    showSaveDialog(caller, options) {
+        const defaultOptions = {}
+
+        options = Object.assign(defaultOptions, options);
+        return dialog.showSaveDialog(caller.window, options);
     }
 
 }
