@@ -10,6 +10,7 @@ class DialogsService extends Service {
             type,
             buttons: [t('Ok')]
         };
+
         return dialog.showMessageBox(params);
     }
 
