@@ -2,8 +2,6 @@ const AttributesList = load.class('attributes');
 
 class Component {
 
-    static HTMLBuilder = load.instance('classes/htmlbuilder');
-
     static EventNames = {
         Focus: ['focus', 'blur'],
         Mouse: ['click', 'dblclick', 'mousedown', 'mouseup', 'mouseenter', 'mouseleave', 'mousemove', 'mouseover']
@@ -11,7 +9,7 @@ class Component {
 
     isVirtual = false;
 
-    events = load.instance('classes/events');
+    events = load.instance('classes/eventmanager');
 
     properties = {};
     propertyValues = {};

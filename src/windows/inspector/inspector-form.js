@@ -19,6 +19,8 @@ class InspectorForm extends Form {
     buildComponents() {
         const panel = this.createComponent('Panel', {
             alignment: 'client'
+        }, {
+            click: 'onPanelClick'
         });
 
         this.addChildren(panel);

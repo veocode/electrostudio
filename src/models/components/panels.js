@@ -15,6 +15,11 @@ class Panel extends ContainerComponent {
         this.width = this.height = 200;
         this.backgroundColor = '#252525';
     }
+    getEventNames() {
+        return [].concat(
+            Component.EventNames.Mouse,
+        )
+    }
     buildDOM($, ...$childrenDOM) {
         return this.buildTagDOM($, 'div', { class: ['component', 'panel'] }, ...$childrenDOM);
     }

@@ -2,9 +2,26 @@ const Window = load.class('window');
 
 class MainWindow extends Window {
 
+    forms = {
+        inspector: load.form('inspector'),
+        designer: load.form('designer'),
+    }
+
     start() {
-        const inspectorForm = load.form('inspector');
-        inspectorForm.createWindow();
+        this.createForms();
+
+
+        // inspectorForm.ipc.on('panel-click', (payload) => {
+        //     alert(payload.message);
+        // });
+
+        // inspectorForm.createWindow();
+    }
+
+    createForms() {
+        for (let [name, form] of Object.entries(this.forms)) {
+            form.createWindow();
+        }
     }
 
     async onBtnNewProjectClick(event, sender) {

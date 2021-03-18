@@ -153,6 +153,10 @@ class Window {
         alert(message.join('\n'));
     }
 
+    onClose() {
+
+    }
+
 }
 
 module.exports = Window;

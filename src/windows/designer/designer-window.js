@@ -1,7 +1,7 @@
 const Window = load.class('window');
 const Studio = load.singleton('studio/studio');
 
-class InspectorWindow extends Window {
+class DesignerWindow extends Window {
 
     start() {
 
@@ -13,4 +13,4 @@ class InspectorWindow extends Window {
 
 }
 
-module.exports = InspectorWindow;
+module.exports = DesignerWindow;

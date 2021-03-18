@@ -2,7 +2,8 @@ class Form {
 
     static Components = load.componentClasses();
 
-    events = load.instance('classes/events');
+    events = load.instance('classes/eventmanager');
+    ipc = load.instance('classes/formipc', this);
 
     #formComponent;
     #components = [];
