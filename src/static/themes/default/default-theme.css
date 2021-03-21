@@ -80,6 +80,14 @@ html, body, .view-window {
     background: #5B5B5B;
 }
 
+/*
+* Components Base 
+*/
+
+.component {
+    position: relative;
+}
+
 
 /*
 * Components Alignment

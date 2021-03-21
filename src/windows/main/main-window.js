@@ -10,12 +10,9 @@ class MainWindow extends Window {
     start() {
         this.createForms();
 
-
-        // inspectorForm.ipc.on('panel-click', (payload) => {
-        //     alert(payload.message);
-        // });
-
-        // inspectorForm.createWindow();
+        this.forms.inspector.on('panel-click', (payload) => {
+            alert(payload.message);
+        });
     }
 
     createForms() {

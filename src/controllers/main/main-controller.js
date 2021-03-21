@@ -1,5 +1,5 @@
 const Controller = load.class('controller');
-const app = load.electron('app');
+const Studio = load.instance('studio/studio');
 
 class MainController extends Controller {
 
@@ -8,8 +8,9 @@ class MainController extends Controller {
     }
 
     async start() {
-        await this.createFormWindow('main');
-        this.getWindow('main').on('close', () => app.quit());
+        Studio.start().then(() => {
+            this.createFormWindow('main');
+        })
     }
 
 }

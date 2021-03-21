@@ -44,6 +44,10 @@ class Loader {
         return this.file(`classes/${name}`);
     }
 
+    studio(name) {
+        return this.file(`studio/${name}`);
+    }
+
     instance(name, ...constructorArgs) {
         return new (this.file(name))(...constructorArgs);
     }
@@ -102,8 +106,7 @@ class Loader {
         return this.file('config');
     }
 
-    read(file) {
-        const filePath = `${Loader.rootDir}/${file}`;
+    read(filePath) {
         return new Promise((resolve, reject) => {
             fs.readFile(filePath, 'utf8', function (err, contents) {
                 if (err) {

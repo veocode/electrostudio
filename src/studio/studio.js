@@ -1,12 +1,17 @@
+const Project = load.studio('project');
+
 class Studio {
 
-    #windows = {};
+    project;
 
-    start(mainWindow) {
-        this.#windows.main = mainWindow;
+    start() {
+        return this.initProject();
     }
 
-
+    initProject(folder = null) {
+        this.project = new Project(folder);
+        return this.project.load();
+    }
 
 }
 

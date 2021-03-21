@@ -1,0 +1,64 @@
+{
+    "name": "Untitled Project",
+    "activeForm": "main",
+    "defaultForm": "main",
+    "forms": {
+        "main": {
+            "schema": {
+                "name": "main",
+                "title": "Demo Form #1",
+                "left": 400,
+                "top": 100,
+                "width": 640,
+                "height": 480,
+                "resizable": true,
+                "maximizable": true,
+                "minimizable": true
+            },
+            "children": [
+                {
+                    "className": "Panel",
+                    "properties": {
+                        "name": "Panel1",
+                        "alignment": "client",
+                        "left": 0,
+                        "top": 0,
+                        "width": 200,
+                        "height": 200,
+                        "backgroundColor": "#252525"
+                    },
+                    "children": [
+                        {
+                            "className": "Button",
+                            "properties": {
+                                "name": "Button1",
+                                "label": "Click Me!",
+                                "hint": "",
+                                "alignment": "none",
+                                "enabled": true,
+                                "left": 40,
+                                "top": 40,
+                                "width": 200,
+                                "height": 50
+                            }
+                        },
+                        {
+                            "className": "Button",
+                            "properties": {
+                                "name": "Button2",
+                                "label": "Click Me 2",
+                                "hint": "",
+                                "alignment": "none",
+                                "enabled": true,
+                                "left": 40,
+                                "top": 80,
+                                "width": 120,
+                                "height": 35
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+}

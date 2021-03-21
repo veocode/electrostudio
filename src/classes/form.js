@@ -5,6 +5,7 @@ class Form {
     events = load.instance('classes/eventmanager');
     ipc = load.instance('classes/formipc', this);
 
+    #name;
     #formComponent;
     #components = [];
 
@@ -12,11 +13,19 @@ class Form {
     #isListeningComponentEvents = false;
 
     getName() {
-        return this.getSchema().name;
+        if (!this.#name) {
+            this.#name = this.getSchema().name;
+        }
+        return this.#name;
     }
 
     getSchema() {
         // Override in children
+    }
+
+    getChildrenSchema() {
+        if (!this.#formComponent) { return []; }
+        return this.#formComponent.getSchema().children;
     }
 
     build() {
@@ -121,6 +130,14 @@ class Form {
 
     getNextComponentName(className) {
         return `${className}${this.getComponentCountByClass(className) + 1}`;
+    }
+
+    on(eventName, callback) {
+        return this.ipc.on(eventName, callback);
+    }
+
+    emit(eventName, payload) {
+        return this.ipc.emit(eventName, payload || {});
     }
 
 }

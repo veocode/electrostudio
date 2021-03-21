@@ -154,6 +154,10 @@ class Controller {
             windowHandle.webContents.openDevTools();
         }
 
+        if (formName != 'main' && this.#windows.main) {
+            windowHandle.setParentWindow(this.#windows.main);
+        }
+
         windowHandle.show();
         this.#windows[formName] = windowHandle;
     }
