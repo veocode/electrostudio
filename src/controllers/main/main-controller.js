@@ -1,5 +1,5 @@
 const Controller = load.class('controller');
-const Studio = load.instance('studio/studio');
+const Studio = load.singleton('studio/studio');
 
 class MainController extends Controller {
 

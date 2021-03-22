@@ -19,7 +19,7 @@ class Window {
         this.form.build();
 
         this.setTitle(this.options.title);
-        this.setContentDOM(this.form.getDOM($));
+        this.displayForm();
 
         this.registerComponents();
         this.registerFormEvents();
@@ -36,26 +36,7 @@ class Window {
             $head: $('head'),
             $headTitle: $('head > title'),
             $body: $('.window-view'),
-            $title: $('.window-title > .title'),
-            $btnMinimize: $('.window-title button.minimize'),
-            $btnMaximize: $('.window-title button.maximize'),
-            $btnClose: $('.window-title button.close'),
         }
-
-        this.dom.$btnMinimize && this.dom.$btnMinimize.on('click', (event) => {
-            event.preventDefault();
-            window.minimize();
-        });
-
-        this.dom.$btnMaximize && this.dom.$btnMaximize.on('click', (event) => {
-            event.preventDefault();
-            window.maximize();
-        });
-
-        this.dom.$btnClose && this.dom.$btnClose.on('click', (event) => {
-            event.preventDefault();
-            window.close();
-        });
     }
 
     registerComponents(...components) {
@@ -84,7 +65,6 @@ class Window {
     }
 
     registerFormEvents() {
-
         this.form.events.on('component-updated', (component) => {
             this.rebuildComponent(component);
         });
@@ -93,16 +73,18 @@ class Window {
             this.registerComponents(...addedChildren);
             this.rebuildComponent(component);
         });
-
     }
 
     setTitle(title) {
-        this.dom.$title.html(title);
         this.dom.$headTitle.html(title);
     }
 
     setContentDOM($rootContentElement) {
         this.dom.$body.empty().append($rootContentElement);
+    }
+
+    displayForm() {
+        this.setContentDOM(this.form.getDOM($));
     }
 
     callMethod(methodName, ...methodArgs) {

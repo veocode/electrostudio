@@ -1,5 +1,7 @@
 class Project {
 
+    static MetaFileName = 'es.project.json';
+
     folder;
     meta = {};
 
@@ -12,7 +14,7 @@ class Project {
 
     async load() {
         return new Promise(async resolve => {
-            const metaJSON = await load.read(`${this.folder}/es.project.json`);
+            const metaJSON = await load.read(`${this.folder}/${Project.MetaFileName}`);
             this.meta = JSON.parse(metaJSON);
             resolve();
         })
@@ -22,8 +24,8 @@ class Project {
         return this.meta.forms[formName].schema;
     }
 
-    getFormChildren(formName) {
-        return this.meta.forms[formName].children;
+    getFormComponents(formName) {
+        return this.meta.forms[formName].components;
     }
 
     getActiveFormName() {
@@ -32,6 +34,10 @@ class Project {
 
     getActiveFormSchema() {
         return this.getFormSchema(this.getActiveFormName());
+    }
+
+    getActiveFormComponents() {
+        return this.getFormComponents(this.getActiveFormName());
     }
 
     getDefaultFormName() {

@@ -7,7 +7,7 @@ class InspectorForm extends Form {
             name: 'inspector',
             title: t('Object Inspector'),
             left: 0,
-            top: 100,
+            top: 120,
             width: 330,
             height: 550,
             resizable: true,

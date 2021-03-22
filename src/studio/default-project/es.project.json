@@ -1,7 +1,7 @@
 {
     "name": "Untitled Project",
-    "activeForm": "main",
-    "defaultForm": "main",
+    "activeFormName": "main",
+    "defaultFormName": "main",
     "forms": {
         "main": {
             "schema": {
@@ -15,7 +15,7 @@
                 "maximizable": true,
                 "minimizable": true
             },
-            "children": [
+            "components": [
                 {
                     "className": "Panel",
                     "properties": {
@@ -51,7 +51,7 @@
                                 "alignment": "none",
                                 "enabled": true,
                                 "left": 40,
-                                "top": 80,
+                                "top": 120,
                                 "width": 120,
                                 "height": 35
                             }

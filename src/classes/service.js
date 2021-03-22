@@ -8,15 +8,19 @@ class Service {
 
     async callMethod(caller, methodName, methodArgs) {
         return new Promise((resolve, reject) => {
+            const targetObject = this.getServiceObject();
 
-            if (!(methodName in this)) {
+            if (!(methodName in targetObject)) {
                 reject();
                 return;
             };
 
-            Promise.resolve(this[methodName](caller, ...methodArgs)).then((result) => resolve(result));
-
+            Promise.resolve(targetObject[methodName](caller, ...methodArgs)).then((result) => resolve(result));
         });
+    }
+
+    getServiceObject() {
+        return this;
     }
 
 }

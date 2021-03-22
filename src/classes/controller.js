@@ -36,7 +36,6 @@ class Controller {
         this.ipc.on('form:event', async (event, call) => {
             this.dispatchFormEvent(call.formName, call.eventName, call.payload || {});
         });
-
     }
 
     loadForm(formName) {
@@ -77,6 +76,12 @@ class Controller {
             case 'createWindow':
                 await this.createFormWindow(formName);
                 break;
+            case 'setSize':
+                this.getWindow(formName).setSize(...methodArgs);
+                break;
+            case 'setResizable':
+                this.getWindow(formName).setResizable(...methodArgs);
+                break;
         }
 
         return result;
@@ -86,7 +91,6 @@ class Controller {
         for (let [name, window] of Object.entries(this.#windows)) {
             if (name == formName) { continue; }
             const channel = `form:${formName}:${eventName}`;
-            console.log('dispatchFormEvent', eventName, 'to', name);
             window.webContents.send(channel, payload);
         }
     }
@@ -108,6 +112,7 @@ class Controller {
             resizable: true,
             maximizable: true,
             minimizable: true,
+            isDebug: false
         }
 
         const options = Object.assign({}, defaultOptions, form.getSchema());
@@ -120,7 +125,6 @@ class Controller {
             resizable: options.resizable,
             maximizable: options.maximizable,
             minimizable: options.minimizable,
-            frame: false,
             webPreferences: {
                 webSecurity: true,
                 contextIsolation: false,
@@ -137,6 +141,18 @@ class Controller {
         }
 
         const windowHandle = new BrowserWindow(settings);
+        this.#windows[formName] = windowHandle;
+
+        windowHandle.once('ready-to-show', () => {
+            windowHandle.webContents.executeJavaScript('window.handler.boot()').then(() => {
+                windowHandle.setContentSize(size.width, size.height);
+                windowHandle.show();
+            })
+        });
+
+        if (options.isDebug) {
+            windowHandle.webContents.openDevTools();
+        }
 
         if (!options.menu) {
             windowHandle.setMenu(null);
@@ -150,16 +166,10 @@ class Controller {
 
         await windowHandle.loadFile(baseViewPath, { query: baseViewQuery });
 
-        if (config.isDebug) {
-            windowHandle.webContents.openDevTools();
-        }
-
         if (formName != 'main' && this.#windows.main) {
             windowHandle.setParentWindow(this.#windows.main);
         }
 
-        windowHandle.show();
-        this.#windows[formName] = windowHandle;
     }
 
     #calculateWindowSize(width, height) {

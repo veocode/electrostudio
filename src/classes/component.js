@@ -190,6 +190,10 @@ class Component {
         return this.$dom;
     }
 
+    resetCachedDOM() {
+        this.$dom = null;
+    }
+
     hasChildren() {
         return false;
     }
@@ -203,7 +207,7 @@ class Component {
     }
 
     setSchema(schema) {
-
+        this.proxy.setPropertyValues(schema.properties);
     }
 
 }
@@ -243,6 +247,11 @@ class ContainerComponent extends Component {
 
     getChildren() {
         return this.children;
+    }
+
+    removeChildren() {
+        this.children = [];
+        this.resetCachedDOM();
     }
 
     getRecursiveChildrenList() {
@@ -289,8 +298,30 @@ class ContainerComponent extends Component {
         return schema;
     }
 
+    setSchema(schema) {
+        super.setSchema(schema);
+        if (schema.children) {
+
+            const { ComponentFactory } = load.class('factories');
+
+            for (let childrenSchema of schema.children) {
+                const childrenComponent = ComponentFactory.Create(childrenSchema.className);
+                childrenComponent.setSchema(childrenSchema);
+                this.addChildren(childrenComponent);
+            }
+
+        }
+    }
+
     buildDOM($, ...$childrenDOM) {
         // Override in children
+    }
+
+    resetCachedDOM() {
+        super.resetCachedDOM();
+        for (let childrenComponent of this.getChildren()) {
+            childrenComponent.resetCachedDOM();
+        }
     }
 
     rebuildDOM($) {

@@ -42,6 +42,14 @@ module.exports = {
         }
     },
 
+    TitleTrait: class extends ComponentTrait {
+        getProps() {
+            return [
+                new Props.StringProperty('title', 'Default', false),
+            ]
+        }
+    },
+
     LabelTrait: class extends ComponentTrait {
         getProps() {
             return [

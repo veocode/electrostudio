@@ -7,7 +7,7 @@ class Form extends ContainerComponent {
     getTraits() {
         return super.getTraits().concat([
             new Traits.NameTrait(),
-            new Traits.LabelTrait(),
+            new Traits.TitleTrait(),
             new Traits.PositionTrait(),
             new Traits.SizeTrait(),
             new Traits.Forms.ResizableTrait()
@@ -17,7 +17,7 @@ class Form extends ContainerComponent {
     setDefaults() {
         this.width = 640;
         this.height = 480;
-        this.label = t('Form');
+        this.title = t('Form');
     }
 
     buildDOM($, ...$childrenDOM) {

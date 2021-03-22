@@ -21,7 +21,8 @@ class Panel extends ContainerComponent {
         )
     }
     buildDOM($, ...$childrenDOM) {
-        return this.buildTagDOM($, 'div', { class: ['component', 'panel'] }, ...$childrenDOM);
+        const $wrapper = this.buildTagDOM($, 'div', { class: ['panel-body'] }, ...$childrenDOM)
+        return this.buildTagDOM($, 'div', { class: ['component', 'panel'] }, $wrapper);
     }
 }
 

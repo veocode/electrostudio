@@ -1,6 +1,6 @@
-class Form {
+const { ComponentFactory } = load.class('factories');
 
-    static Components = load.componentClasses();
+class Form {
 
     events = load.instance('classes/eventmanager');
     ipc = load.instance('classes/formipc', this);
@@ -35,11 +35,26 @@ class Form {
     }
 
     buildForm() {
-        this.#formComponent = new Form.Components.Form(this.getSchema());
+        this.#formComponent = ComponentFactory.Create('Form', this.getSchema());
     }
 
     buildComponents() {
         // Override in children
+    }
+
+    buildComponentsFromSchemaList(schemaList) {
+        this.#isListeningComponentEvents = false;
+        let children = [];
+        for (let childrenSchema of schemaList) {
+            const childrenComponent = ComponentFactory.Create(childrenSchema.className);
+            childrenComponent.setSchema(childrenSchema);
+            children.push(childrenComponent);
+        }
+        if (children.length) {
+            this.removeChildren();
+            this.addChildren(...children);
+        }
+        this.#isListeningComponentEvents = true;
     }
 
     getDOM($) {
@@ -50,6 +65,22 @@ class Form {
         return window.ipc.invoke('form:call', {
             formName: this.getName(),
             methodName: 'createWindow'
+        });
+    }
+
+    setSize(width, height) {
+        return window.ipc.invoke('form:call', {
+            formName: this.getName(),
+            methodName: 'setSize',
+            methodArgs: [width, height]
+        });
+    }
+
+    setResizable(isResizable) {
+        return window.ipc.invoke('form:call', {
+            formName: this.getName(),
+            methodName: 'setResizable',
+            methodArgs: [isResizable]
         });
     }
 
@@ -66,6 +97,10 @@ class Form {
         }
 
         this.registerChildren(...added);
+    }
+
+    removeChildren() {
+        this.#formComponent.removeChildren();
     }
 
     registerChildren(...components) {
@@ -96,7 +131,7 @@ class Form {
     }
 
     createComponent(className, ...componentArgs) {
-        let component = new Form.Components[className](...componentArgs);
+        const component = ComponentFactory.Create(className, ...componentArgs);
 
         if (!component.name) {
             component.name = this.getNextComponentName(className);

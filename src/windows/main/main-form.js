@@ -9,9 +9,10 @@ class MainForm extends Form {
             left: 0,
             top: 0,
             width: '100%',
-            height: 90,
+            height: 60,
             resizable: false,
             maximizable: false,
+            // isDebug: true
         };
     }
 
