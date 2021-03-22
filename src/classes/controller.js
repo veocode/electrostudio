@@ -168,7 +168,6 @@ class Controller {
         if (formName != 'main' && this.#windows.main) {
             browserWindow.setParentWindow(this.#windows.main);
         }
-
     }
 
     #calculateWindowSize(width, height) {

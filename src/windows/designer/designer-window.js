@@ -6,10 +6,16 @@ class DesignerWindow extends Window {
     currentFormSchema = {};
 
     async start() {
+        await this.displayActiveProjectForm();
+    }
+
+    async displayActiveProjectForm() {
         const currentFormSchema = await this.projectService.getActiveFormSchema();
         const currentFormComponents = await this.projectService.getActiveFormComponents();
         this.applyFormSchemaToWindow(currentFormSchema);
         this.buildFormComponents(currentFormComponents);
+        this.bindComponentEvents();
+        this.displayForm();
     }
 
     applyFormSchemaToWindow(schema, components) {
@@ -20,7 +26,21 @@ class DesignerWindow extends Window {
 
     buildFormComponents(componentSchemaList) {
         this.form.buildComponentsFromSchemaList(componentSchemaList);
-        this.displayForm();
+    }
+
+    bindComponentEvents() {
+        const components = this.form.getComponentsList();
+        for (let component of components) {
+            component.getDOM($).on('click', (e) => {
+                e.preventDefault();
+                e.stopImmediatePropagation();
+                this.onComponentClick(component);
+            })
+        }
+    }
+
+    onComponentClick(component) {
+        console.log('Clicked: ' + component.name);
     }
 
 }
