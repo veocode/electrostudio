@@ -210,6 +210,11 @@ class Component {
         this.proxy.setPropertyValues(schema.properties);
     }
 
+    translatePosition(offset) {
+        this.proxy.left += offset.left;
+        this.proxy.top += offset.top;
+    }
+
 }
 
 class ContainerComponent extends Component {

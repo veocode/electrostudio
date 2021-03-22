@@ -1,4 +1,5 @@
 const Window = load.class('window');
+const interact = load.node('interactjs');
 
 class DesignerWindow extends Window {
 
@@ -11,9 +12,9 @@ class DesignerWindow extends Window {
 
     async displayActiveProjectForm() {
         const currentFormSchema = await this.projectService.getActiveFormSchema();
-        const currentFormComponents = await this.projectService.getActiveFormComponents();
+        const currentFormComponentSchemas = await this.projectService.getActiveFormComponents();
         this.applyFormSchemaToWindow(currentFormSchema);
-        this.buildFormComponents(currentFormComponents);
+        this.buildFormComponents(currentFormComponentSchemas);
         this.bindComponentEvents();
         this.displayForm();
     }
@@ -28,13 +29,46 @@ class DesignerWindow extends Window {
         this.form.buildComponentsFromSchemaList(componentSchemaList);
     }
 
-    bindComponentEvents() {
-        const components = this.form.getComponentsList();
+    registerComponentEvents(component) {
+        this.bindComponentEvents(component);
+        return;
+    }
+
+    bindComponentEvents(...components) {
+        if (!components.length) {
+            components = this.form.getComponentsList();
+        }
         for (let component of components) {
-            component.getDOM($).on('click', (e) => {
-                e.preventDefault();
-                e.stopImmediatePropagation();
+            const $componentDOM = component.getDOM($);
+
+            $componentDOM.on('click', event => {
+                event.preventDefault();
+                event.stopImmediatePropagation();
                 this.onComponentClick(component);
+            })
+
+            interact($componentDOM[0]).draggable({
+                modifiers: [
+                    interact.modifiers.snap({
+                        targets: [
+                            interact.snappers.grid({ x: 10, y: 10 }),
+                        ],
+                    })
+                ],
+                listeners: {
+                    move: event => {
+                        component.left += Math.ceil(event.dx / 10) * 10;
+                        component.top += Math.ceil(event.dy / 10) * 10;
+
+                        event.target.style.transform =
+                            `translate(${component.left}px, ${component.top}px)`
+                    },
+                    end: event => {
+                        component.left += event.dx;
+                        component.top += event.dy;
+                        this.rebuildComponent(component);
+                    }
+                }
             })
         }
     }

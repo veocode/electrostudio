@@ -16,6 +16,7 @@
     "electron-builder": "^22.9.1"
   },
   "dependencies": {
-    "electron-unhandled": "^3.0.2"
+    "electron-unhandled": "^3.0.2",
+    "interactjs": "^1.10.8"
   }
 }

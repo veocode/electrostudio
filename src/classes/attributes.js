@@ -13,6 +13,9 @@ class AttributesList {
         if (name == 'style' && !value.endsWith(';')) {
             value += ';';
         }
+        if (this.#attributes[name].includes(value)) {
+            return;
+        }
         this.#attributes[name].push(value);
     }
 
