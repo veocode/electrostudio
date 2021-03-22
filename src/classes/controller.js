@@ -140,22 +140,21 @@ class Controller {
             settings.center = true;
         }
 
-        const windowHandle = new BrowserWindow(settings);
-        this.#windows[formName] = windowHandle;
+        const browserWindow = this.#windows[formName] = new BrowserWindow(settings);
 
-        windowHandle.once('ready-to-show', () => {
-            windowHandle.webContents.executeJavaScript('window.handler.boot()').then(() => {
-                windowHandle.setContentSize(size.width, size.height);
-                windowHandle.show();
+        browserWindow.once('ready-to-show', () => {
+            browserWindow.setContentSize(size.width, size.height);
+            browserWindow.webContents.executeJavaScript('window.handler.boot()').then(() => {
+                browserWindow.show();
             })
         });
 
         if (options.isDebug) {
-            windowHandle.webContents.openDevTools();
+            browserWindow.webContents.openDevTools();
         }
 
         if (!options.menu) {
-            windowHandle.setMenu(null);
+            browserWindow.setMenu(null);
         }
 
         const baseViewPath = load.path(config.baseWindowView);
@@ -164,10 +163,10 @@ class Controller {
             options: JSON.stringify(options),
         };
 
-        await windowHandle.loadFile(baseViewPath, { query: baseViewQuery });
+        await browserWindow.loadFile(baseViewPath, { query: baseViewQuery });
 
         if (formName != 'main' && this.#windows.main) {
-            windowHandle.setParentWindow(this.#windows.main);
+            browserWindow.setParentWindow(this.#windows.main);
         }
 
     }
