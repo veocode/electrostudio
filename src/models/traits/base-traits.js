@@ -85,6 +85,15 @@ module.exports = {
                 new Props.ListProperty('alignment', ['none', 'client', 'top', 'bottom', 'left', 'right'], 'none'),
             ]
         }
+        isAllowComponentResizing(values) {
+            return !this.isAlignmentSet(values);
+        }
+        isAllowComponentDragging(values) {
+            return !this.isAlignmentSet(values);
+        }
+        isAlignmentSet(values) {
+            return values.alignment && values.alignment != 'none';
+        }
         appendAttributes(attributes, values) {
             if (values.alignment != 'none') {
                 attributes.add('class', `align-${values.alignment}`);
@@ -111,6 +120,19 @@ module.exports = {
         }
     },
 
+    TextColorTrait: class extends ComponentTrait {
+        getProps() {
+            return [
+                new Props.ColorProperty('color'),
+            ]
+        }
+        appendAttributes(attributes, values) {
+            if (values.color) {
+                attributes.add('style', `color: ${values.color}`);
+            }
+        }
+    },
+
     BackgroundColorTrait: class extends ComponentTrait {
         getProps() {
             return [
@@ -118,7 +140,7 @@ module.exports = {
             ]
         }
         appendAttributes(attributes, values) {
-            if (values.name) {
+            if (values.backgroundColor) {
                 attributes.add('style', `background: ${values.backgroundColor}`);
             }
         }

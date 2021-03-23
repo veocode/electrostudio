@@ -20,11 +20,10 @@
                     "className": "Panel",
                     "properties": {
                         "name": "Panel1",
-                        "alignment": "client",
-                        "left": 0,
-                        "top": 0,
-                        "width": 200,
-                        "height": 200,
+                        "left": 40,
+                        "top": 40,
+                        "width": 400,
+                        "height": 300,
                         "backgroundColor": "#252525"
                     },
                     "children": [
@@ -36,8 +35,8 @@
                                 "hint": "",
                                 "alignment": "none",
                                 "enabled": true,
-                                "left": 40,
-                                "top": 40,
+                                "left": 20,
+                                "top": 20,
                                 "width": 200,
                                 "height": 50
                             }
@@ -50,10 +49,10 @@
                                 "hint": "",
                                 "alignment": "none",
                                 "enabled": true,
-                                "left": 40,
+                                "left": 20,
                                 "top": 120,
                                 "width": 120,
-                                "height": 35
+                                "height": 40
                             }
                         }
                     ]

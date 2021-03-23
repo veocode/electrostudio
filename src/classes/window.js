@@ -1,4 +1,5 @@
 const ipc = load.electron('ipcRenderer');
+const fs = load.node('fs');
 
 class Window {
 
@@ -23,6 +24,11 @@ class Window {
 
         this.registerComponents();
         this.registerFormEvents();
+
+        const windowStylesPath = load.path(`windows/${this.name}/${this.name}-window.css`);
+        if (fs.existsSync(windowStylesPath)) {
+            this.addCSS(windowStylesPath);
+        }
 
         this.start();
     }
@@ -65,11 +71,11 @@ class Window {
     }
 
     registerFormEvents() {
-        this.form.events.on('component-updated', (component) => {
+        this.form.events.on('component:updated', (component) => {
             this.rebuildComponent(component);
         });
 
-        this.form.events.on('component-children-added', (component, ...addedChildren) => {
+        this.form.events.on('component:children-added', (component, ...addedChildren) => {
             this.registerComponents(...addedChildren);
             this.rebuildComponent(component);
         });
@@ -81,6 +87,14 @@ class Window {
 
     setContentDOM($rootContentElement) {
         this.dom.$body.empty().append($rootContentElement);
+    }
+
+    addCSS(url) {
+        this.dom.$head.append(`<link rel="stylesheet" href="${url}">`);
+    }
+
+    addJS(url) {
+        this.dom.$body.append(`<script src="${url}"></script>`);
     }
 
     displayForm() {

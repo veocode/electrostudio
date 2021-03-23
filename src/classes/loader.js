@@ -94,7 +94,6 @@ class Loader {
     componentClasses() {
         const dirPath = `${Loader.rootDir}/models/components`;
         let classesDictionary = {};
-        console.log('component classes');
         fs.readdirSync(dirPath).forEach(file => {
             const model = load.model(`components/${file.replace('.js', '')}`);
             classesDictionary = Object.assign({}, classesDictionary, model.classes);

@@ -1,21 +1,19 @@
 class ComponentTrait {
 
-    defaults = {};
-
-    constructor(defaultPropValues = {}) {
-        this.defaults = defaultPropValues;
-    }
-
     getProps() {
         return [];
     }
 
-    getDefault(propName) {
+    isAllowComponentDragging(values) {
+        return true;
+    }
 
+    isAllowComponentResizing(values) {
+        return true;
     }
 
     appendAttributes(attributes, values = {}) {
-
+        // Override in children
     }
 
 }

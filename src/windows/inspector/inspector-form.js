@@ -23,6 +23,12 @@ class InspectorForm extends Form {
             click: 'onPanelClick'
         });
 
+        panel.addChildren(this.createComponent('Label', {
+            left: 20,
+            top: 20,
+            color: '#FFF'
+        }));
+
         this.addChildren(panel);
     }
 

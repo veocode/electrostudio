@@ -9,16 +9,26 @@ class MainWindow extends Window {
 
     start() {
         this.createForms();
-
-        this.forms.inspector.on('panel-click', (payload) => {
-            alert(payload.message);
-        });
+        this.bindDesignerEvents();
+        this.bindInspectorEvents();
     }
 
     createForms() {
         for (let [name, form] of Object.entries(this.forms)) {
             form.createWindow();
         }
+    }
+
+    bindDesignerEvents() {
+        this.forms.designer.on('component:selected', (componentPropValues) => {
+            this.forms.inspector.send('component:show', componentPropValues);
+        });
+    }
+
+    bindInspectorEvents() {
+        // this.forms.inspector.on('panel-click', (payload) => {
+        //     alert(payload.message);
+        // });
     }
 
     async onBtnNewProjectClick(event, sender) {

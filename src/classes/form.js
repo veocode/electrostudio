@@ -28,6 +28,10 @@ class Form {
         return this.#formComponent.getSchema().children;
     }
 
+    getComponent() {
+        return this.#formComponent;
+    }
+
     build() {
         this.buildForm();
         this.buildComponents();
@@ -109,12 +113,12 @@ class Form {
             childrenComponent.events.setListenCondition(() => this.#isListeningComponentEvents);
 
             childrenComponent.events.on('updated', (component) => {
-                this.events.emit('component-updated', component);
+                this.events.emit('component:updated', component);
             });
 
             childrenComponent.events.on('children-added', (component, ...addedChildren) => {
                 this.registerChildren(...addedChildren);
-                this.events.emit('component-children-added', component, ...addedChildren);
+                this.events.emit('component:children-added', component, ...addedChildren);
             });
 
         }
@@ -173,6 +177,10 @@ class Form {
 
     emit(eventName, payload) {
         return this.ipc.emit(eventName, payload || {});
+    }
+
+    send(eventName, payload) {
+        return this.ipc.send(eventName, payload || {});
     }
 
 }

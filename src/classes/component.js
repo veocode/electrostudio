@@ -19,6 +19,7 @@ class Component {
 
     $dom;
     proxy;
+    meta = {};
 
     constructor(presetPropertyValues = null, presetEventHandlers = null) {
         for (let trait of this.getTraits()) {
@@ -166,16 +167,23 @@ class Component {
         // Override in children
     }
 
-    buildTagDOM($, tag = 'div', startingAttributes = {}, ...$childrenDOM) {
-        let $dom = $(`<${tag}></${tag}>`);
+    buildInnerTagDOM($, tag = 'div', tagAttributes = {}, ...$childrenDOM) {
+        const $dom = $(`<${tag}></${tag}>`);
         $childrenDOM.forEach(($childDOM) => {
             $dom.append($childDOM);
         });
+        if (tagAttributes && Object.keys(tagAttributes).length) {
+            const attributes = new AttributesList(tagAttributes);
+            attributes.applyToDOM($dom);
+        }
+        return $dom;
+    }
 
+    buildTagDOM($, tag = 'div', startingAttributes = {}, ...$childrenDOM) {
+        const $dom = this.buildInnerTagDOM($, tag, {}, ...$childrenDOM);
         const attributes = this.getTraitsAttributes(startingAttributes);
         attributes.add('id', this.name);
         attributes.applyToDOM($dom);
-
         return $dom;
     }
 
@@ -210,9 +218,36 @@ class Component {
         this.proxy.setPropertyValues(schema.properties);
     }
 
-    translatePosition(offset) {
-        this.proxy.left += offset.left;
-        this.proxy.top += offset.top;
+    isResizable() {
+        for (let trait of this.getTraits()) {
+            if (!trait.isAllowComponentResizing(this.propertyValues)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    isDraggable() {
+        for (let trait of this.getTraits()) {
+            if (!trait.isAllowComponentDragging(this.propertyValues)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    setMeta(key, value) {
+        this.meta[key] = value;
+    }
+
+    getMeta(key, defaultValue = null) {
+        return key in this.meta ? this.meta[key] : defaultValue;
+    }
+
+    deleteMeta(key) {
+        if (key in this.meta) {
+            delete this.meta[key];
+        }
     }
 
 }

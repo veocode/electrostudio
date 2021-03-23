@@ -21,14 +21,14 @@ class Panel extends ContainerComponent {
         )
     }
     buildDOM($, ...$childrenDOM) {
-        const $wrapper = this.buildTagDOM($, 'div', { class: ['panel-body'] }, ...$childrenDOM)
+        const $wrapper = this.buildInnerTagDOM($, 'div', { class: ['panel-body', 'container'] }, ...$childrenDOM)
         return this.buildTagDOM($, 'div', { class: ['component', 'panel'] }, $wrapper);
     }
 }
 
 class ToolPanel extends Panel {
     buildDOM($, ...$childrenDOM) {
-        return this.buildTagDOM($, 'div', { class: ['component', 'panel', 'toolpanel'] }, ...$childrenDOM);
+        return this.buildTagDOM($, 'div', { class: ['component', 'panel', 'toolpanel', 'container'] }, ...$childrenDOM);
     }
 }
 

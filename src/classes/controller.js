@@ -36,6 +36,10 @@ class Controller {
         this.ipc.on('form:event', async (event, call) => {
             this.dispatchFormEvent(call.formName, call.eventName, call.payload || {});
         });
+
+        this.ipc.on('form:send', async (event, call) => {
+            this.dispatchFormEventToTarget(call.targetFormName, call.eventName, call.payload || {});
+        });
     }
 
     loadForm(formName) {
@@ -91,6 +95,14 @@ class Controller {
         for (let [name, window] of Object.entries(this.#windows)) {
             if (name == formName) { continue; }
             const channel = `form:${formName}:${eventName}`;
+            window.webContents.send(channel, payload);
+        }
+    }
+
+    dispatchFormEventToTarget(targetFormName, eventName, payload = {}) {
+        if (targetFormName in this.#windows) {
+            const channel = `form:${targetFormName}:${eventName}`;
+            const window = this.#windows[targetFormName];
             window.webContents.send(channel, payload);
         }
     }

@@ -28,6 +28,14 @@ class FormIPC {
         });
     }
 
+    send(eventName, payload) {
+        window.ipc.send('form:send', {
+            targetFormName: this.#form.getName(),
+            eventName,
+            payload
+        });
+    }
+
 }
 
 module.exports = FormIPC;
