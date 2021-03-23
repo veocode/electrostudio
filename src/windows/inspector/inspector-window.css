@@ -1,6 +1,7 @@
 .prop-editor{
     font-size: 12px;
-    background: #5B5B5B;
+    background:  #252525;
+    overflow: auto;
 }
 
 .prop-editor .row{
@@ -11,11 +12,11 @@
 }
 
 .prop-editor .row:nth-child(even) {
-    background:#7a7a7a;
+    background:#333;
 }
 
 .prop-editor .row:nth-child(odd) {
-    background:#a3a3a3;
+    background:#404040;
 }
 
 .prop-editor .row .cell{
@@ -31,12 +32,16 @@
     width:40%;
     border-right: solid 1px #252525;
     user-select: none;
+    color: #969696;
+    opacity: 0.5;
 }
 
 .prop-editor .row .cell.value {
-    width:60%;
+    width: 60%;
+    color: #bfbfbf;    
 }
 
 .prop-editor .row:hover .cell{
     background: #0abde3;
+    color:#252525;
 }

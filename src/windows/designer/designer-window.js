@@ -41,7 +41,7 @@ class DesignerWindow extends Window {
     rebuildComponent(component) {
         super.rebuildComponent(component);
         if (this.selectedComponent == component) {
-            this.toggleComponentSelection(true);
+            this.selectComponent(component);
         }
         this.updateFormInProject();
     }
