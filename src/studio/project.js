@@ -5,9 +5,13 @@ class Project {
     folder;
     meta = {};
 
+    #isFolderSelected = true;
+    #isDirty = false;
+
     constructor(folder = null) {
         if (folder == null) {
             folder = load.path('studio/default-project');
+            this.#isFolderSelected = false;
         }
         this.folder = folder;
     }
@@ -46,6 +50,22 @@ class Project {
 
     getDefaultFormSchema() {
         return this.getFormSchema(this.getDefaultFormName());
+    }
+
+    updateActiveForm(schema, componentSchemas) {
+        const formName = schema.name;
+
+        if (!(formName in this.meta.forms)) {
+            this.meta.forms[formName] = {
+                schema: {},
+                components: {}
+            }
+        }
+
+        this.meta.forms[formName].schema = schema;
+        this.meta.forms[formName].components = componentSchemas;
+
+        this.#isDirty = true;
     }
 
 }

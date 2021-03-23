@@ -61,8 +61,8 @@ class Form {
         this.#isListeningComponentEvents = true;
     }
 
-    getDOM($) {
-        return this.#formComponent ? this.#formComponent.getDOM($) : null;
+    getDOM() {
+        return this.#formComponent ? this.#formComponent.getDOM() : null;
     }
 
     createWindow() {

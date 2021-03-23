@@ -60,7 +60,7 @@ class Window {
         const eventHandlerNames = component.getEventHandlerNames();
         if (!eventHandlerNames) { return; }
 
-        const $componentDOM = component.getDOM($);
+        const $componentDOM = component.getDOM();
         for (const [eventName, handlerName] of Object.entries(eventHandlerNames)) {
             if (!handlerName) { continue; }
 
@@ -98,7 +98,7 @@ class Window {
     }
 
     displayForm() {
-        this.setContentDOM(this.form.getDOM($));
+        this.setContentDOM(this.form.getDOM());
     }
 
     callMethod(methodName, ...methodArgs) {
@@ -112,9 +112,9 @@ class Window {
         if (component.isVirtual) {
             return;
         }
-        const $currentDOM = component.getDOM($);
-        component.rebuildDOM($);
-        $currentDOM.replaceWith(component.getDOM($));
+        const $currentDOM = component.getDOM();
+        component.rebuildDOM();
+        $currentDOM.replaceWith(component.getDOM());
         this.registerComponentEvents(component);
     }
 

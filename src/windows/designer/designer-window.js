@@ -21,20 +21,21 @@ class DesignerWindow extends Window {
     async displayActiveProjectForm() {
         this.currentFormSchema = await this.projectService.getActiveFormSchema();
         this.currentFormComponentSchemas = await this.projectService.getActiveFormComponents();
-        this.applyFormSchemaToWindow(this.currentFormSchema);
+        this.applyFormSchemaToWindow();
         this.buildFormComponents(this.currentFormComponentSchemas);
         this.bindComponentEvents();
         this.displayForm();
     }
 
-    applyFormSchemaToWindow(schema) {
+    applyFormSchemaToWindow() {
+        const schema = this.currentFormSchema;
         this.setTitle(schema.title);
         this.form.setSize(schema.width, schema.height);
         this.form.setResizable(schema.resizable);
     }
 
     buildFormComponents(componentSchemaList) {
-        this.form.buildComponentsFromSchemaList(componentSchemaList);
+        this.form.buildComponentsFromSchemaList(this.currentFormComponentSchemas);
     }
 
     rebuildComponent(component) {
@@ -42,14 +43,15 @@ class DesignerWindow extends Window {
         if (this.selectedComponent == component) {
             this.toggleComponentSelection(true);
         }
+        this.updateFormInProject();
     }
 
     registerFormEvents() {
         this.dom.$body.on('click', event => {
-            this.selectForm();
+            this.selectFormComponent();
         });
         window.addEventListener('resize', event => {
-            this.selectForm();
+            this.selectFormComponent();
         });
     }
 
@@ -62,7 +64,7 @@ class DesignerWindow extends Window {
             components = this.form.getComponentsList();
         }
         for (let component of components) {
-            const $componentDOM = component.getDOM($);
+            const $componentDOM = component.getDOM();
 
             $componentDOM.on('click', event => {
                 event.preventDefault();
@@ -88,7 +90,7 @@ class DesignerWindow extends Window {
     bindComponentResizable(component) {
         const snapSize = DesignerWindow.SnapSize;
         const minSize = DesignerWindow.MinSize;
-        const $componentDOM = component.getDOM($);
+        const $componentDOM = component.getDOM();
 
         interact($componentDOM[0]).resizable({
             edges: { top: true, left: true, bottom: true, right: true },
@@ -128,7 +130,7 @@ class DesignerWindow extends Window {
 
     bindComponentDraggable(component) {
         const snapSize = DesignerWindow.SnapSize;
-        const $componentDOM = component.getDOM($);
+        const $componentDOM = component.getDOM();
 
         interact($componentDOM[0]).draggable({
             modifiers: [
@@ -185,17 +187,28 @@ class DesignerWindow extends Window {
     selectComponent(component) {
         this.selectedComponent = component;
         this.toggleComponentSelection(true);
-        this.form.emit('component:selected', this.selectedComponent.getPropertiesValues())
+        this.form.emit('component:selected', this.selectedComponent.getSchema(false));
     }
 
     toggleComponentSelection(isSelected) {
-        console.log(this.selectComponent.constructor.name);
-        this.selectedComponent.getDOM($).toggleClass('selected', isSelected);
+        this.selectedComponent.getDOM().toggleClass('selected', isSelected);
     }
 
-    selectForm() {
+    selectFormComponent() {
         this.deselectComponent();
-        this.form.emit('component:selected', this.currentFormSchema);
+        this.form.emit('component:selected', this.getActiveFormComponentSchema());
+    }
+
+    getActiveFormComponentSchema() {
+        return {
+            className: 'Form',
+            properties: this.currentFormSchema
+        };
+    }
+
+    updateFormInProject() {
+        const componentSchemas = this.form.getChildrenSchema();
+        this.projectService.updateActiveForm(this.currentFormSchema, componentSchemas);
     }
 
 }

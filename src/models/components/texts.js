@@ -18,8 +18,8 @@ class Label extends Component {
             Component.EventNames.Mouse,
         )
     }
-    buildDOM($) {
-        return this.buildTagDOM($, 'div', { class: ['component', 'label'] }, this.label);
+    buildDOM() {
+        return this.buildTagDOM('div', { class: ['component', 'label'] }, this.label);
     }
 }
 

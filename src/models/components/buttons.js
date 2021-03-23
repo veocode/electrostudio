@@ -24,8 +24,8 @@ class Button extends Component {
             Component.EventNames.Focus,
         )
     }
-    buildDOM($) {
-        return this.buildTagDOM($, 'button', { class: ['component', 'button'] }, this.label);
+    buildDOM() {
+        return this.buildTagDOM('button', { class: ['component', 'button'] }, this.label);
     }
 }
 
@@ -41,9 +41,9 @@ class ToolButton extends Button {
         this.height = 48;
         this.label = '';
     }
-    buildDOM($) {
+    buildDOM() {
         const content = `<i class="fa fa-${this.icon}"></i>` + (this.label ? ` ${this.label}` : '');
-        return this.buildTagDOM($, 'button', { class: ['component', 'button', 'toolbutton'] }, content);
+        return this.buildTagDOM('button', { class: ['component', 'button', 'toolbutton'] }, content);
     }
 }
 

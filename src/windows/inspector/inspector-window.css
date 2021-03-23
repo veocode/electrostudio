@@ -1,0 +1,42 @@
+.prop-editor{
+    font-size: 12px;
+    background: #5B5B5B;
+}
+
+.prop-editor .row{
+    display: flex;
+    flex-direction: row;
+    border-bottom: solid 1px #252525;
+    cursor: pointer;
+}
+
+.prop-editor .row:nth-child(even) {
+    background:#7a7a7a;
+}
+
+.prop-editor .row:nth-child(odd) {
+    background:#a3a3a3;
+}
+
+.prop-editor .row .cell{
+    box-sizing: border-box;
+    overflow: hidden;
+    height:30px;
+    line-height:30px;
+    padding: 0 5px;
+}
+
+.prop-editor .row .cell.title {
+    font-weight: bold;
+    width:40%;
+    border-right: solid 1px #252525;
+    user-select: none;
+}
+
+.prop-editor .row .cell.value {
+    width:60%;
+}
+
+.prop-editor .row:hover .cell{
+    background: #0abde3;
+}

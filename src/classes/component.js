@@ -163,11 +163,11 @@ class Component {
         return name in this.properties;
     }
 
-    buildDOM($) {
+    buildDOM() {
         // Override in children
     }
 
-    buildInnerTagDOM($, tag = 'div', tagAttributes = {}, ...$childrenDOM) {
+    buildInnerTagDOM(tag = 'div', tagAttributes = {}, ...$childrenDOM) {
         const $dom = $(`<${tag}></${tag}>`);
         $childrenDOM.forEach(($childDOM) => {
             $dom.append($childDOM);
@@ -179,21 +179,21 @@ class Component {
         return $dom;
     }
 
-    buildTagDOM($, tag = 'div', startingAttributes = {}, ...$childrenDOM) {
-        const $dom = this.buildInnerTagDOM($, tag, {}, ...$childrenDOM);
+    buildTagDOM(tag = 'div', startingAttributes = {}, ...$childrenDOM) {
+        const $dom = this.buildInnerTagDOM(tag, {}, ...$childrenDOM);
         const attributes = this.getTraitsAttributes(startingAttributes);
         attributes.add('id', this.name);
         attributes.applyToDOM($dom);
         return $dom;
     }
 
-    rebuildDOM($) {
-        this.$dom = this.buildDOM($);
+    rebuildDOM() {
+        this.$dom = this.buildDOM();
     }
 
-    getDOM($) {
+    getDOM() {
         if (!this.$dom) {
-            this.rebuildDOM($);
+            this.rebuildDOM();
         }
         return this.$dom;
     }
@@ -320,10 +320,10 @@ class ContainerComponent extends Component {
         return this.children.length > 0;
     }
 
-    getSchema() {
+    getSchema(isWithChildren = true) {
         let childrenSchemas = [];
 
-        if (this.hasChildren()) {
+        if (isWithChildren && this.hasChildren()) {
             for (let childrenComponent of this.getChildren()) {
                 childrenSchemas.push(childrenComponent.getSchema());
             }
@@ -353,7 +353,7 @@ class ContainerComponent extends Component {
         }
     }
 
-    buildDOM($, ...$childrenDOM) {
+    buildDOM(...$childrenDOM) {
         // Override in children
     }
 
@@ -364,18 +364,18 @@ class ContainerComponent extends Component {
         }
     }
 
-    rebuildDOM($) {
+    rebuildDOM() {
         let $childrenDOM = [];
         for (let childrenComponent of this.getChildren()) {
             if (childrenComponent.isVirtual) { continue; }
-            $childrenDOM.push(childrenComponent.getDOM($));
+            $childrenDOM.push(childrenComponent.getDOM());
         }
-        this.$dom = this.buildDOM($, ...$childrenDOM);
+        this.$dom = this.buildDOM(...$childrenDOM);
     }
 
-    getDOM($) {
+    getDOM() {
         if (!this.$dom) {
-            this.rebuildDOM($);
+            this.rebuildDOM();
         }
         return this.$dom;
     }

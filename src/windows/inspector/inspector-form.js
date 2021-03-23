@@ -2,6 +2,8 @@ const Form = load.class('form');
 
 class InspectorForm extends Form {
 
+    #editor;
+
     getSchema() {
         return {
             name: 'inspector',
@@ -13,23 +15,17 @@ class InspectorForm extends Form {
             resizable: true,
             maximizable: false,
             minimizable: false,
+            isDebug: true
         };
     }
 
     buildComponents() {
-        const panel = this.createComponent('Panel', {
-            alignment: 'client'
-        }, {
-            click: 'onPanelClick'
-        });
+        this.#editor = this.createComponent('PropertyEditor');
+        this.addChildren(this.#editor);
+    }
 
-        panel.addChildren(this.createComponent('Label', {
-            left: 20,
-            top: 20,
-            color: '#FFF'
-        }));
-
-        this.addChildren(panel);
+    getEditor() {
+        return this.#editor;
     }
 
 }

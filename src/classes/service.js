@@ -15,7 +15,11 @@ class Service {
                 return;
             };
 
-            Promise.resolve(targetObject[methodName](caller, ...methodArgs)).then((result) => resolve(result));
+            if (targetObject == this) {
+                Promise.resolve(targetObject[methodName](caller, ...methodArgs)).then((result) => resolve(result));
+            } else {
+                Promise.resolve(targetObject[methodName](...methodArgs)).then((result) => resolve(result));
+            }
         });
     }
 

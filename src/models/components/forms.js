@@ -20,7 +20,7 @@ class Form extends ContainerComponent {
         this.title = t('Form');
     }
 
-    buildDOM($, ...$childrenDOM) {
+    buildDOM(...$childrenDOM) {
         const attributes = new AttributesList({ 'class': 'form-body' });
         let $dom = $('<div></div>');
         $childrenDOM.forEach(($childDOM) => {

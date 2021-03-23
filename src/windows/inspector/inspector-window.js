@@ -2,9 +2,13 @@ const Window = load.class('window');
 
 class InspectorWindow extends Window {
 
+    editor;
+
     start() {
-        this.form.on('component:show', (componentPropValues) => {
-            this.Label1.label = componentPropValues.name;
+        this.editor = this.form.getEditor();
+
+        this.form.on('component:show', (componentSchema) => {
+            this.editor.setSchema(componentSchema);
         });
     }
 
