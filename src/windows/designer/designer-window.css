@@ -1,3 +1,4 @@
 .component.selected {
-    outline: dashed 2px #0abde3;
+    outline: dotted 2px #0abde3;
+    outline-offset: -1px;
 }

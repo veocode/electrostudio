@@ -1,4 +1,5 @@
 const Form = load.class('form');
+const { ComponentFactory } = load.class('factories');
 
 class MainForm extends Form {
 
@@ -42,6 +43,14 @@ class MainForm extends Form {
         }, {
             click: 'onBtnSaveProjectClick'
         }));
+
+        for (const className of Object.keys(ComponentFactory.Library)) {
+            panel.addChildren(this.createComponent('ToolButton', {
+                hint: t(className)
+            }, {
+                click: 'onBtnComponentPalleteClick'
+            }));
+        }
 
         this.addChildren(panel);
     }
