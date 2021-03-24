@@ -88,6 +88,22 @@ class Form {
         });
     }
 
+    setMinimizable(isMinimizable) {
+        return window.ipc.invoke('form:call', {
+            formName: this.getName(),
+            methodName: 'setMinimizable',
+            methodArgs: [isMinimizable]
+        });
+    }
+
+    setMaximizable(isMaximizable) {
+        return window.ipc.invoke('form:call', {
+            formName: this.getName(),
+            methodName: 'setMaximizable',
+            methodArgs: [isMaximizable]
+        });
+    }
+
     addChildren(...components) {
         this.#formComponent.addChildren(...components);
 

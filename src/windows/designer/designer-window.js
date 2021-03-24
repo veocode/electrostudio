@@ -13,9 +13,22 @@ class DesignerWindow extends Window {
     currentFormComponentSchemas = {};
 
     selectedComponent;
+    #isFormSelected = false;
 
     async start() {
+        this.bindEvents();
         await this.displayActiveProjectForm();
+    }
+
+    bindEvents() {
+        this.form.on('component:prop-updated', (payload) => {
+            console.log('payload', payload);
+            if (this.#isFormSelected) {
+                this.updateFormPropertyValue(payload.propertyName, payload.previousValue, payload.value);
+            } else {
+                this.updateSelectedComponentPropertyValue(payload.propertyName, payload.previousValue, payload.value);
+            }
+        });
     }
 
     async displayActiveProjectForm() {
@@ -32,6 +45,8 @@ class DesignerWindow extends Window {
         this.setTitle(schema.title);
         this.form.setSize(schema.width, schema.height);
         this.form.setResizable(schema.resizable);
+        this.form.setMinimizable(schema.minimizable);
+        this.form.setMaximizable(schema.maximizable);
     }
 
     buildFormComponents(componentSchemaList) {
@@ -94,6 +109,7 @@ class DesignerWindow extends Window {
 
         interact($componentDOM[0]).resizable({
             edges: { top: true, left: true, bottom: true, right: true },
+            margin: 10,
             modifiers: [
                 interact.modifiers.snap({
                     targets: [
@@ -178,6 +194,7 @@ class DesignerWindow extends Window {
     }
 
     deselectComponent() {
+        this.#isFormSelected = false;
         if (!this.selectedComponent) { return; }
         this.form.emit('component:deselected', this.selectedComponent.getPropertiesValues())
         this.toggleComponentSelection(false);
@@ -190,13 +207,14 @@ class DesignerWindow extends Window {
         this.form.emit('component:selected', this.selectedComponent.getSchema(false));
     }
 
-    toggleComponentSelection(isSelected) {
-        this.selectedComponent.getDOM().toggleClass('selected', isSelected);
-    }
-
     selectFormComponent() {
         this.deselectComponent();
+        this.#isFormSelected = true;
         this.form.emit('component:selected', this.getActiveFormComponentSchema());
+    }
+
+    toggleComponentSelection(isSelected) {
+        this.selectedComponent.getDOM().toggleClass('selected', isSelected);
     }
 
     getActiveFormComponentSchema() {
@@ -209,6 +227,17 @@ class DesignerWindow extends Window {
     updateFormInProject() {
         const componentSchemas = this.form.getChildrenSchema();
         this.projectService.updateActiveForm(this.currentFormSchema, componentSchemas);
+    }
+
+    updateSelectedComponentPropertyValue(propertyName, previousValue, value) {
+        this.selectedComponent[propertyName] = value;
+        this.rebuildComponent(this.selectedComponent);
+    }
+
+    updateFormPropertyValue(propertyName, previousValue, value) {
+        this.currentFormSchema[propertyName] = value;
+        this.applyFormSchemaToWindow();
+        this.updateFormInProject();
     }
 
 }

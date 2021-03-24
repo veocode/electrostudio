@@ -38,10 +38,21 @@
 
 .prop-editor .row .cell.value {
     width: 60%;
-    color: #bfbfbf;    
+    color: #bfbfbf;
 }
 
 .prop-editor .row:hover .cell{
     background: #0abde3;
     color:#252525;
+}
+
+.prop-editor .prop-input {
+    width:100%;
+    height:100%;
+    background: none;
+    border: none;
+    outline: none;
+    box-shadow: none;
+    text-shadow: none;
+    color: inherit;
 }

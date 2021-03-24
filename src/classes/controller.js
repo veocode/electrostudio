@@ -76,16 +76,14 @@ class Controller {
     async callFormMethod(formName, methodName, methodArgs = []) {
         let result = null;
 
+        console.log('form:call', methodName, methodArgs);
+
         switch (methodName) {
             case 'createWindow':
                 await this.createFormWindow(formName);
                 break;
-            case 'setSize':
-                this.getWindow(formName).setSize(...methodArgs);
-                break;
-            case 'setResizable':
-                this.getWindow(formName).setResizable(...methodArgs);
-                break;
+            default:
+                this.getWindow(formName)[methodName](...methodArgs);
         }
 
         return result;

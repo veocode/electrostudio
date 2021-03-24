@@ -5,8 +5,25 @@ class InspectorWindow extends Window {
     editor;
 
     start() {
+        this.initEditor();
+        this.bindEvents();
+    }
+
+    initEditor() {
         this.editor = this.form.getEditor();
 
+        this.editor.setCallbacks({
+            result: (prop, previousValue, value) => {
+                this.form.emit('component:prop-updated', {
+                    propertyName: prop.name,
+                    previousValue,
+                    value
+                });
+            }
+        });
+    }
+
+    bindEvents() {
         this.form.on('component:show', (componentSchema) => {
             this.editor.setSchema(componentSchema);
         });

@@ -11,6 +11,7 @@ html, body, .view-window {
     margin: 0;
     background: #2B2B2B;
     font-family: 'Ubuntu', sans-serif;
+    position: relative;
 }
 
 /*
@@ -70,25 +71,37 @@ html, body, .view-window {
 .align-client {
     width:100% !important;
     height:100% !important;
+    left: 0 !important;
+    top: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
 }
 
 .align-top {
-    top:0;
+    top:0 !important;
+    left:0 !important;
+    bottom:auto !important;
     width:100% !important;
 }
 
 .align-bottom {
-    bottom:0;
+    bottom:0 !important;
+    left:0 !important;
+    top:auto !important;
     width:100% !important;
 }
 
 .align-left {
-    left:0;
+    top:0 !important;
+    left:0 !important;
+    right:auto !important;
     height:100% !important;
 }
 
 .align-right {
-    right:0;
+    top:0 !important;
+    right:0 !important;
+    left:auto !important;
     height:100% !important;
 }
 

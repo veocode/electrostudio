@@ -10,6 +10,37 @@ module.exports = {
             if (value === 'false') { return false; }
             return Boolean(value);
         }
+
+        buildInput(value, callbacks) {
+            this.$input = $('<select/>', { class: 'prop-input prop-list' });
+
+            for (let item of ['true', 'false']) {
+                $('<option/>', { value: item }).html(item).appendTo(this.$input);
+            }
+
+            this.$input.on('change', event => {
+                if ('result' in callbacks) {
+                    const value = this.sanitize(this.$input.val());
+                    if (!this.validate(value)) {
+                        if ('error' in callbacks) {
+                            callbacks.error(this.getValidationError());
+                        }
+                        return;
+                    }
+                    this.setInputValue(value);
+                    callbacks.result(value);
+                }
+            });
+
+            this.setInputValue(value);
+            return this.$input;
+        }
+
+        setInputValue(value) {
+            if (this.$input) {
+                this.$input.val(value ? 'true' : 'false');
+            }
+        }
     },
 
     IntegerProperty: class extends Property {
@@ -28,7 +59,7 @@ module.exports = {
         defaultValue = 0;
 
         isPercents(value) {
-            return value.match(/^[0-9]+%$/);
+            return value && value.match(/^[0-9]+%$/);
         }
 
         sanitize(value) {
@@ -61,6 +92,30 @@ module.exports = {
 
         validate(value) {
             return this.items.includes(value);
+        }
+
+        buildInput(value, callbacks) {
+            this.$input = $('<select/>', { class: 'prop-input prop-list' });
+
+            for (let item of this.items) {
+                $('<option/>', { value: item }).html(item).appendTo(this.$input);
+            }
+
+            this.$input.on('change', event => {
+                if ('result' in callbacks) {
+                    const value = this.sanitize(this.$input.val());
+                    if (!this.validate(value)) {
+                        if ('error' in callbacks) {
+                            callbacks.error(this.getValidationError());
+                        }
+                        return;
+                    }
+                    callbacks.result(value);
+                }
+            });
+
+            this.setInputValue(value);
+            return this.$input;
         }
     },
 

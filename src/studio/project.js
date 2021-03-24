@@ -52,8 +52,24 @@ class Project {
         return this.getFormSchema(this.getDefaultFormName());
     }
 
+    isDefaultFormActive() {
+        return this.getDefaultFormName() == this.getActiveFormName();
+    }
+
     updateActiveForm(schema, componentSchemas) {
+
+        const currentFormName = this.getActiveFormName();
         const formName = schema.name;
+        const isDefaultForm = this.isDefaultFormActive();
+
+        // Handle Form renaming here
+        if (formName != currentFormName) {
+            delete this.meta.forms[currentFormName];
+            this.meta.activeFormName = formName;
+            if (isDefaultForm) {
+                this.meta.defaultFormName = formName;
+            }
+        }
 
         if (!(formName in this.meta.forms)) {
             this.meta.forms[formName] = {
