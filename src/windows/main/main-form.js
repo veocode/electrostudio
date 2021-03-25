@@ -18,11 +18,25 @@ class MainForm extends Form {
     }
 
     buildComponents() {
-        const panel = this.createComponent('ToolPanel', {
+
+        const layout = this.createComponent('Layout', {
+            orientation: 'row',
             alignment: 'client'
         });
 
-        panel.addChildren(this.createComponent('ToolButton', {
+        const paneToolbarProject = this.createComponent('LayoutPane', {
+            fixedSize: 170
+        });
+
+        const paneToolbarComponents = this.createComponent('LayoutPane');
+
+        layout.addChildren(paneToolbarProject, paneToolbarComponents);
+
+        const toolbarProject = this.createComponent('ToolPanel', {
+            alignment: 'client'
+        });
+
+        toolbarProject.addChildren(this.createComponent('ToolButton', {
             name: 'btnNewProject',
             icon: 'file-o',
             hint: t('New Project')
@@ -30,13 +44,13 @@ class MainForm extends Form {
             click: 'onBtnNewProjectClick'
         }));
 
-        panel.addChildren(this.createComponent('ToolButton', {
+        toolbarProject.addChildren(this.createComponent('ToolButton', {
             name: 'btnOpenProject',
             icon: 'folder-o',
             hint: t('Open Project')
         }));
 
-        panel.addChildren(this.createComponent('ToolButton', {
+        toolbarProject.addChildren(this.createComponent('ToolButton', {
             name: 'btnSaveProject',
             icon: 'floppy-o',
             hint: t('Save Project')
@@ -44,15 +58,23 @@ class MainForm extends Form {
             click: 'onBtnSaveProjectClick'
         }));
 
+        paneToolbarProject.addChildren(toolbarProject);
+
+        const toolbarComponents = this.createComponent('ToolPanel', {
+            alignment: 'client'
+        });
+
         for (const className of Object.keys(ComponentFactory.Library)) {
-            panel.addChildren(this.createComponent('ToolButton', {
+            toolbarComponents.addChildren(this.createComponent('ToolButton', {
                 hint: t(className)
             }, {
                 click: 'onBtnComponentPalleteClick'
             }));
         }
 
-        this.addChildren(panel);
+        paneToolbarComponents.addChildren(toolbarComponents);
+
+        this.addChildren(layout);
     }
 
 }

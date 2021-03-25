@@ -162,7 +162,7 @@ html, body, .view-window {
 
 .layout-pane{
     height: 100%;
-    position: initial;
+    position: relative;
 }
 
 
