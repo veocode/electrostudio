@@ -18,23 +18,20 @@ class MainForm extends Form {
     }
 
     buildComponents() {
-
         const layout = this.createComponent('Layout', {
             orientation: 'row',
             alignment: 'client'
         });
 
-        const paneToolbarProject = this.createComponent('LayoutPane', {
-            fixedSize: 170
-        });
-
+        const paneToolbarProject = this.createComponent('LayoutPane', { fixedSize: 170 });
         const paneToolbarComponents = this.createComponent('LayoutPane');
-
         layout.addChildren(paneToolbarProject, paneToolbarComponents);
 
-        const toolbarProject = this.createComponent('ToolPanel', {
-            alignment: 'client'
-        });
+        const toolbarProject = this.createComponent('ToolPanel', { alignment: 'client' });
+        const toolbarComponents = this.createComponent('ToolPanel', { alignment: 'client' });
+
+        paneToolbarProject.addChildren(toolbarProject);
+        paneToolbarComponents.addChildren(toolbarComponents);
 
         toolbarProject.addChildren(this.createComponent('ToolButton', {
             name: 'btnNewProject',
@@ -58,12 +55,6 @@ class MainForm extends Form {
             click: 'onBtnSaveProjectClick'
         }));
 
-        paneToolbarProject.addChildren(toolbarProject);
-
-        const toolbarComponents = this.createComponent('ToolPanel', {
-            alignment: 'client'
-        });
-
         for (const className of Object.keys(ComponentFactory.Library)) {
             toolbarComponents.addChildren(this.createComponent('ToolButton', {
                 hint: t(className)
@@ -71,8 +62,6 @@ class MainForm extends Form {
                 click: 'onBtnComponentPalleteClick'
             }));
         }
-
-        paneToolbarComponents.addChildren(toolbarComponents);
 
         this.addChildren(layout);
     }
