@@ -154,3 +154,32 @@ html, body, .view-window {
 .toolpanel > button:not(:last-child) {
     border-right: none;
 }
+
+
+/*
+* Component: LayoutPane
+*/
+
+.layout-pane{
+    height: 100%;
+    position: initial;
+}
+
+
+/*
+* Component: Layout
+*/
+
+.layout > .panes {
+    display: flex;
+    height: 100%;
+    width: 100%;
+}
+
+.layout.orientation-row > .panes {
+    flex-direction: row;
+}
+
+.layout.orientation-column > .panes {
+    flex-direction: column;
+}

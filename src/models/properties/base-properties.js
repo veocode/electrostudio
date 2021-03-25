@@ -55,6 +55,18 @@ module.exports = {
         }
     },
 
+    FloatProperty: class extends Property {
+        defaultValue = 0.0;
+
+        sanitize(value) {
+            return parseFloat(value);
+        }
+
+        validate(value) {
+            return Number.isInteger(value) || (+value === value && (!isFinite(value) || !!(value % 1)))
+        }
+    },
+
     RelativeIntegerProperty: class extends Property {
         defaultValue = 0;
 

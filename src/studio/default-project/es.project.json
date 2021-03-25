@@ -17,42 +17,44 @@
             },
             "components": [
                 {
-                    "className": "Panel",
+                    "className": "Layout",
                     "properties": {
-                        "name": "Panel1",
-                        "left": 40,
-                        "top": 40,
+                        "name": "Layout1",
+                        "orientation": "column",
+                        "left": 0,
+                        "top": 0,
                         "width": 400,
-                        "height": 300,
-                        "backgroundColor": "#252525"
+                        "height": 400
                     },
                     "children": [
                         {
-                            "className": "Button",
+                            "className": "LayoutPane",
                             "properties": {
-                                "name": "Button1",
-                                "label": "Click Me!",
-                                "hint": "",
-                                "alignment": "none",
-                                "enabled": true,
-                                "left": 20,
-                                "top": 20,
-                                "width": 200,
-                                "height": 50
+                                "name": "LayoutPane1",
+                                "orderIndex": 1,
+                                "fixedSize": 0,
+                                "weight": 0.25,
+                                "backgroundColor": "#ECECEC"
                             }
                         },
                         {
-                            "className": "Button",
+                            "className": "LayoutPane",
                             "properties": {
-                                "name": "Button2",
-                                "label": "Click Me 2",
-                                "hint": "",
-                                "alignment": "none",
-                                "enabled": true,
-                                "left": 20,
-                                "top": 120,
-                                "width": 120,
-                                "height": 40
+                                "name": "LayoutPane2",
+                                "orderIndex": 2,
+                                "fixedSize": 0,
+                                "weight": 0.25,
+                                "backgroundColor": "#DDD"
+                            }
+                        },
+                        {
+                            "className": "LayoutPane",
+                            "properties": {
+                                "name": "LayoutPane3",
+                                "orderIndex": 3,
+                                "fixedSize": 0,
+                                "weight": 0.5,
+                                "backgroundColor": "#CCC"
                             }
                         }
                     ]

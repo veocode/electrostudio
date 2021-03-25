@@ -76,8 +76,6 @@ class Controller {
     async callFormMethod(formName, methodName, methodArgs = []) {
         let result = null;
 
-        console.log('form:call', methodName, methodArgs);
-
         switch (methodName) {
             case 'createWindow':
                 await this.createFormWindow(formName);

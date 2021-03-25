@@ -22,7 +22,6 @@ class DesignerWindow extends Window {
 
     bindEvents() {
         this.form.on('component:prop-updated', (payload) => {
-            console.log('payload', payload);
             if (this.#isFormSelected) {
                 this.updateFormPropertyValue(payload.propertyName, payload.previousValue, payload.value);
             } else {
@@ -118,6 +117,11 @@ class DesignerWindow extends Window {
                 })
             ],
             listeners: {
+                start: () => {
+                    if (this.selectedComponent != component) {
+                        this.selectComponent(component);
+                    }
+                },
                 move: event => {
                     const translateX = (parseFloat(event.target.dataset.x) || 0) + Utils.snap(event.deltaRect.left);
                     const translateY = (parseFloat(event.target.dataset.y) || 0) + Utils.snap(event.deltaRect.top);
@@ -230,8 +234,21 @@ class DesignerWindow extends Window {
     }
 
     updateSelectedComponentPropertyValue(propertyName, previousValue, value) {
-        this.selectedComponent[propertyName] = value;
-        this.rebuildComponent(this.selectedComponent);
+        const component = this.selectedComponent;
+        component[propertyName] = value;
+
+        if (component.parent && component.isRebuildParentOnPropertyUpdate(propertyName, value)) {
+            this.rebuildComponent(component.parent);
+            return;
+        }
+
+        this.rebuildComponent(component);
+
+        if (component.hasChildren() && component.isRebuildChildrenOnPropertyUpdate(propertyName, value)) {
+            for (let childrenComponent of component.getChildren()) {
+                this.rebuildComponent(childrenComponent);
+            }
+        }
     }
 
     updateFormPropertyValue(propertyName, previousValue, value) {

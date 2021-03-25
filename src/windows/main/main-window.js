@@ -27,7 +27,6 @@ class MainWindow extends Window {
 
     bindInspectorEvents() {
         this.forms.inspector.on('component:prop-updated', (payload) => {
-            console.log('component:prop-updated', payload);
             this.forms.designer.send('component:prop-updated', payload);
         });
     }

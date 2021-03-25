@@ -1,6 +1,6 @@
 class AttributesList {
 
-    #attributes;
+    #attributes = {};
 
     constructor(startingAttributes = {}) {
         this.#attributes = startingAttributes;

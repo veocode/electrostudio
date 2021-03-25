@@ -17,6 +17,7 @@ class Component {
     eventNames = [];
     eventHandlerNames = {};
 
+    parent;
     $dom;
     proxy;
     meta = {};
@@ -101,7 +102,7 @@ class Component {
     getTraitsAttributes(startingAttributes = {}) {
         let attributes = new AttributesList(startingAttributes);
         for (let trait of this.getTraits()) {
-            trait.appendAttributes(attributes, this.propertyValues);
+            trait.appendAttributes(attributes, this.propertyValues, this);
         }
         return attributes;
     }
@@ -157,6 +158,10 @@ class Component {
 
         this.propertyValues[name] = value;
         this.events.emit('updated', this.proxy);
+
+        if (this.parent && this.isRebuildParentOnPropertyUpdate(name, value)) {
+            this.parent.events.emit('updated', this.parent);
+        }
     }
 
     hasProperty(name) {
@@ -250,37 +255,37 @@ class Component {
         }
     }
 
+    isRebuildParentOnPropertyUpdate(updatedPropertyName, value) {
+        return false;
+    }
+
+    isRebuildChildrenOnPropertyUpdate(updatedPropertyName, value) {
+        return false;
+    }
+
 }
 
 class ContainerComponent extends Component {
 
     children = [];
 
-    getRenderedChildrenHTML() {
-        if (!this.children.length) {
-            return '';
-        }
-        let childrenHTML = '';
-        for (let childrenComponent of this.children) {
-            childrenHTML += childrenComponent.getRenderedHTML();
-        }
-        return childrenHTML;
-    }
+    setPropertyValue(name, value) {
+        // const currentValue = this.getPropertyValue(name);
+        // if (currentValue === value) { return; }
 
-    getRenderedChildrenEditorHTML() {
-        if (!this.children.length) {
-            return '';
+        super.setPropertyValue(name, value);
+
+        if (this.hasChildren() && this.isRebuildChildrenOnPropertyUpdate(name, value)) {
+            for (let childrenComponent of this.children) {
+                childrenComponent.events.emit('updated', childrenComponent);
+            }
         }
-        let childrenHTML = '';
-        for (let childrenComponent of this.children) {
-            childrenHTML += childrenComponent.getRenderedEditorHTML();
-        }
-        return childrenHTML;
     }
 
     addChildren(...components) {
         for (let component of components) {
             this.children.push(component);
+            component.parent = this;
         }
         this.events.emit('children-added', this.proxy, ...components);
     }
@@ -317,6 +322,9 @@ class ContainerComponent extends Component {
     }
 
     hasChildren() {
+        if (!this.children) {
+            this.children = [];
+        }
         return this.children.length > 0;
     }
 
@@ -359,6 +367,10 @@ class ContainerComponent extends Component {
 
     resetCachedDOM() {
         super.resetCachedDOM();
+        this.resetChildrenCachedDOM();
+    }
+
+    resetChildrenCachedDOM() {
         for (let childrenComponent of this.getChildren()) {
             childrenComponent.resetCachedDOM();
         }
