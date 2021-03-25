@@ -19,13 +19,21 @@ class InspectorWindow extends Window {
                     previousValue,
                     value
                 });
+            },
+            parentSelected: (name) => {
+                console.log('emit', name);
+                this.form.emit('component:parent-selected', name);
             }
         });
     }
 
     bindEvents() {
-        this.form.on('component:show', (componentSchema) => {
+        this.form.on('component:show', (payload) => {
+            const { componentSchema, parentComponentSchema } = payload;
             this.editor.setSchema(componentSchema);
+            if (parentComponentSchema !== null) {
+                this.editor.setParentSchema(parentComponentSchema);
+            }
         });
     }
 

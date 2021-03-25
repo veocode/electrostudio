@@ -8,7 +8,6 @@
     display: flex;
     flex-direction: row;
     border-bottom: solid 1px #252525;
-    cursor: pointer;
 }
 
 .prop-editor .row:nth-child(even) {
@@ -25,6 +24,8 @@
     height:30px;
     line-height:30px;
     padding: 0 5px;
+    opacity: 0.75;
+    transition: all 0.2s;
 }
 
 .prop-editor .row .cell.title {
@@ -36,14 +37,30 @@
     opacity: 0.5;
 }
 
+.prop-editor .row-parent .cell.title {
+    color: #2bcbba;
+}
+
+.prop-editor .row-name .cell.title {
+    color: #26de81;
+}
+
 .prop-editor .row .cell.value {
     width: 60%;
     color: #bfbfbf;
 }
 
+.prop-editor .row .cell.value a {
+    color: #45aaf2;
+    text-decoration: none;
+}
+
+.prop-editor .row .cell.value select option {
+    color: initial;    
+}
+
 .prop-editor .row:hover .cell{
-    background: #0abde3;
-    color:#252525;
+    opacity: 1;
 }
 
 .prop-editor .prop-input {

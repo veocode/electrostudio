@@ -20,14 +20,18 @@ class MainWindow extends Window {
     }
 
     bindDesignerEvents() {
-        this.forms.designer.on('component:selected', (componentPropValues) => {
-            this.forms.inspector.send('component:show', componentPropValues);
+        this.forms.designer.on('component:selected', (payload) => {
+            this.forms.inspector.send('component:show', payload);
         });
     }
 
     bindInspectorEvents() {
         this.forms.inspector.on('component:prop-updated', (payload) => {
             this.forms.designer.send('component:prop-updated', payload);
+        });
+
+        this.forms.inspector.on('component:parent-selected', (name) => {
+            this.forms.designer.send('component:parent-selected', name);
         });
     }
 

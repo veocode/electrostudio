@@ -34,6 +34,7 @@ class Controller {
         });
 
         this.ipc.on('form:event', async (event, call) => {
+            console.log('form:event', call);
             this.dispatchFormEvent(call.formName, call.eventName, call.payload || {});
         });
 
@@ -91,6 +92,7 @@ class Controller {
         for (let [name, window] of Object.entries(this.#windows)) {
             if (name == formName) { continue; }
             const channel = `form:${formName}:${eventName}`;
+            console.log('send to', channel);
             window.webContents.send(channel, payload);
         }
     }

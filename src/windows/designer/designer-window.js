@@ -12,7 +12,7 @@ class DesignerWindow extends Window {
     currentFormSchema = {};
     currentFormComponentSchemas = {};
 
-    selectedComponent;
+    selectedComponent = null;
     #isFormSelected = false;
 
     async start() {
@@ -22,10 +22,20 @@ class DesignerWindow extends Window {
 
     bindEvents() {
         this.form.on('component:prop-updated', (payload) => {
+            console.log('component:prop-updated');
             if (this.#isFormSelected) {
                 this.updateFormPropertyValue(payload.propertyName, payload.previousValue, payload.value);
             } else {
                 this.updateSelectedComponentPropertyValue(payload.propertyName, payload.previousValue, payload.value);
+            }
+        });
+
+        this.form.on('component:parent-selected', (payload) => {
+            console.log('component:parent-selected')
+            if (this.selectedComponent && this.selectedComponent.parent) {
+                const parent = this.selectedComponent.parent;
+                this.deselectComponent();
+                this.selectComponent(parent);
             }
         });
     }
@@ -119,6 +129,7 @@ class DesignerWindow extends Window {
             listeners: {
                 start: () => {
                     if (this.selectedComponent != component) {
+                        this.deselectComponent();
                         this.selectComponent(component);
                     }
                 },
@@ -206,15 +217,30 @@ class DesignerWindow extends Window {
     }
 
     selectComponent(component) {
+        let parentComponentSchema = null;
+        if (component.parent) {
+            const schema = component.parent.getSchema(false);
+            if (schema.className != 'Form') {
+                parentComponentSchema = schema;
+            }
+        }
+
+        this.form.emit('component:selected', {
+            componentSchema: component.getSchema(false),
+            parentComponentSchema
+        });
+
         this.selectedComponent = component;
         this.toggleComponentSelection(true);
-        this.form.emit('component:selected', this.selectedComponent.getSchema(false));
     }
 
     selectFormComponent() {
         this.deselectComponent();
         this.#isFormSelected = true;
-        this.form.emit('component:selected', this.getActiveFormComponentSchema());
+        this.form.emit('component:selected', {
+            componentSchema: this.getActiveFormComponentSchema(),
+            parentComponentSchema: null
+        });
     }
 
     toggleComponentSelection(isSelected) {

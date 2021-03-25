@@ -24,6 +24,10 @@ class PropertyEditor extends Component {
         this.buildEditor();
     }
 
+    setParentSchema(parentSchema) {
+        this.buildParentSelector(parentSchema);
+    }
+
     setCallbacks(callbacks) {
         this.#callbacks = Object.assign({}, this.#callbacks, callbacks);
     }
@@ -41,7 +45,7 @@ class PropertyEditor extends Component {
 
         for (let [name, prop] of Object.entries(props)) {
 
-            const $row = $('<div/>', { class: 'row' }).appendTo(this.$dom);
+            const $row = $('<div/>', { class: `row row-${name}` }).appendTo(this.$dom);
             const $titleCell = $('<div/>', { class: 'cell title' }).appendTo($row);
             const $valueCell = $('<div/>', { class: 'cell value' }).appendTo($row);
             const currentValue = values[prop.name];
@@ -58,6 +62,23 @@ class PropertyEditor extends Component {
             $titleCell.html(prop.name);
             $valueCell.append($valueInput);
         }
+    }
+
+    buildParentSelector(parentSchema) {
+
+        const $row = $('<div/>', { class: 'row row-parent' }).prependTo(this.$dom);
+        const $titleCell = $('<div/>', { class: 'cell title' }).html(t('Parent')).appendTo($row);
+        const $valueCell = $('<div/>', { class: 'cell value' }).appendTo($row);
+
+        const $parentLink = $('<a href="#"/>').html(parentSchema.properties.name).appendTo($valueCell);
+
+        $parentLink.on('click', event => {
+            event.preventDefault();
+            if ('parentSelected' in this.#callbacks) {
+                this.#callbacks.parentSelected(parentSchema.properties.name);
+            }
+        });
+
     }
 
     getComponentProps(componentClassName) {
