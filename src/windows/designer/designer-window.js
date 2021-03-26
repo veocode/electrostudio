@@ -85,6 +85,8 @@ class DesignerWindow extends Window {
         });
 
         window.addEventListener('resize', event => {
+            this.formComponent.width = window.innerWidth;
+            this.formComponent.height = window.innerHeight;
             this.onComponentClick(this.formComponent, event.offsetX, event.offsetY);
         });
 
@@ -309,19 +311,19 @@ class DesignerWindow extends Window {
         return this.selectedComponentClassToCreate != null;
     }
 
-    createChildrenIn(component, x, y) {
-        if (!component.isContainer()) { return; }
+    createChildrenIn(parentComponent, x, y) {
+        if (!parentComponent.isContainer()) { return; }
         if (!this.selectedComponentClassToCreate) { return; }
 
         const className = this.selectedComponentClassToCreate;
         const left = Utils.snap(x, DesignerWindow.snapSize);
         const top = Utils.snap(y, DesignerWindow.snapSize);
 
-        const childrenComponent = this.form.createComponent(className, { left, top });
+        const component = this.form.createComponent(className, { left, top });
 
-        component.addChildren(childrenComponent);
-        this.registerComponentEvents(childrenComponent);
-        this.rebuildComponent(component);
+        parentComponent.addChildren(component);
+        this.registerComponentEvents(component);
+        this.rebuildComponent(parentComponent);
         this.finishComponentAdding();
     }
 

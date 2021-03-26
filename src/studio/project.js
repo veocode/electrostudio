@@ -24,6 +24,10 @@ class Project {
         })
     }
 
+    isFolderSelected() {
+        return this.#isFolderSelected;
+    }
+
     getFormSchema(formName) {
         return this.meta.forms[formName].schema;
     }
@@ -57,7 +61,6 @@ class Project {
     }
 
     updateActiveForm(schema, componentSchemas) {
-
         const currentFormName = this.getActiveFormName();
         const formName = schema.name;
         const isDefaultForm = this.isDefaultFormActive();
