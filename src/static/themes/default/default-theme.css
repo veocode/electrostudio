@@ -107,6 +107,15 @@ html, body, .view-window {
 
 
 /*
+* Component: Button
+*/
+
+.button {
+    user-select: none;
+}
+
+
+/*
 * Component: Panel
 */
 
@@ -123,16 +132,21 @@ html, body, .view-window {
 
 .toolpanel{
     padding:10px;
+    display: flex;
+    flex-direction: row;
 }
 
 .toolpanel > button {
-    height:100% !important;
+    height: 100% !important;
     border: solid 1px #2B2B2B;
     background: #333333;
     color: #FFF;
     cursor: pointer;
-    outline: none !important;
-    position: relative;
+    position: initial;
+}
+
+.toolpanel > button:not(.selected) {
+    outline: none;
 }
 
 .toolpanel > button:hover {
@@ -164,9 +178,14 @@ html, body, .view-window {
 * Component: LayoutPane
 */
 
-.layout-pane{
-    height: 100%;
+.layout-pane{    
     position: relative;
+}
+
+.layout-pane > .pane-body {
+    position: relative;
+    width: 100%;
+    height: 100%;
 }
 
 

@@ -85,6 +85,7 @@ class DesignerWindow extends Window {
         });
 
         window.addEventListener('resize', event => {
+            if (!this.formComponent) { return; }
             this.formComponent.width = window.innerWidth;
             this.formComponent.height = window.innerHeight;
             this.onComponentClick(this.formComponent, event.offsetX, event.offsetY);
@@ -325,6 +326,7 @@ class DesignerWindow extends Window {
         this.registerComponentEvents(component);
         this.rebuildComponent(parentComponent);
         this.finishComponentAdding();
+        this.selectComponent(component);
     }
 
     finishComponentAdding() {

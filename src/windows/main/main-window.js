@@ -60,8 +60,8 @@ class MainWindow extends Window {
 
     }
 
-    onBtnComponentPalleteClick(event, sender) {
-        const componentClass = sender.data;
+    onBtnComponentPalleteClick(event, senderToolButton) {
+        const componentClass = senderToolButton.metaData;
 
         if (componentClass == this.selectedComponentClass) {
             this.deselectComponentClass();

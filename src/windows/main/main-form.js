@@ -63,7 +63,7 @@ class MainForm extends Form {
             const hint = componentClass.getTitle();
 
             toolbarComponents.addChildren(this.createComponent('ToolButton', {
-                data: className,
+                metaData: className,
                 hint,
                 icon
             }, {

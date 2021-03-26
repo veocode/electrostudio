@@ -73,9 +73,7 @@ module.exports = {
             ]
         }
         appendAttributes(attributes, values) {
-            if (values.hint) {
-                attributes.add('title', values.hint);
-            }
+            values.hint && attributes.add('title', values.hint);
         }
     },
 
@@ -127,9 +125,7 @@ module.exports = {
             ]
         }
         appendAttributes(attributes, values) {
-            if (values.color) {
-                attributes.add('style', `color: ${values.color}`);
-            }
+            values.color && attributes.add('style', `color: ${values.color}`);
         }
     },
 
@@ -140,9 +136,7 @@ module.exports = {
             ]
         }
         appendAttributes(attributes, values) {
-            if (values.backgroundColor) {
-                attributes.add('style', `background: ${values.backgroundColor}`);
-            }
+            values.backgroundColor && attributes.add('style', `background: ${values.backgroundColor}`);
         }
     },
 
@@ -154,10 +148,10 @@ module.exports = {
         }
     },
 
-    DataTrait: class extends ComponentTrait {
+    MetaDataTrait: class extends ComponentTrait {
         getProps() {
             return [
-                new Props.StringProperty('data'),
+                new Props.StringProperty('metaData'),
             ]
         }
     },

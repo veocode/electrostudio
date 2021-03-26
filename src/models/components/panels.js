@@ -38,6 +38,11 @@ class ToolPanel extends Panel {
             new Traits.ToggleableTrait(),
         ]);
     }
+    setDefaults() {
+        this.width = 300;
+        this.height = 60;
+        this.backgroundColor = '#252525';
+    }
     bindToggleOnClick() {
         for (let childrenComponent of this.getChildren()) {
             const $dom = childrenComponent.getDOM();

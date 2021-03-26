@@ -14,13 +14,13 @@ class Button extends Component {
             new Traits.EnabledTrait(),
             new Traits.PositionTrait(),
             new Traits.SizeTrait(),
-            new Traits.DataTrait(),
+            new Traits.MetaDataTrait(),
         ]);
     }
     setDefaults() {
         this.width = 130;
         this.height = 35;
-        this.label = t('Click Me');
+        this.label = t('Button');
     }
     getEventNames() {
         return [].concat(
