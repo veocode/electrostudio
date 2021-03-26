@@ -53,7 +53,6 @@ class PropertyEditor extends Component {
         this.$dom.empty();
 
         for (let [name, prop] of Object.entries(props)) {
-
             const $row = $('<div/>', { class: `row row-${name}` }).appendTo(this.$dom);
             const $titleCell = $('<div/>', { class: 'cell title' }).appendTo($row);
             const $valueCell = $('<div/>', { class: 'cell value' }).appendTo($row);
@@ -71,6 +70,10 @@ class PropertyEditor extends Component {
             $titleCell.html(prop.name);
             $valueCell.append($valueInput);
         }
+    }
+
+    addPane() {
+
     }
 
     buildParentSelector(parentSchema) {
