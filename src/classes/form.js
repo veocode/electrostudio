@@ -42,6 +42,10 @@ class Form {
         this.#formComponent = ComponentFactory.Create('Form', this.getSchema());
     }
 
+    replaceFormComponent(newFormComponent) {
+        this.#formComponent = newFormComponent;
+    }
+
     buildComponents() {
         // Override in children
     }
@@ -50,7 +54,7 @@ class Form {
         this.#isListeningComponentEvents = false;
         let children = [];
         for (let childrenSchema of schemaList) {
-            const childrenComponent = ComponentFactory.Create(childrenSchema.className);
+            const childrenComponent = this.createComponent(childrenSchema.className);
             childrenComponent.setSchema(childrenSchema);
             children.push(childrenComponent);
         }
@@ -117,6 +121,14 @@ class Form {
         }
 
         this.registerChildren(...added);
+    }
+
+    deleteChildren(childrenComponent) {
+        if (childrenComponent.parent) {
+            childrenComponent.parent.deleteChildren(childrenComponent);
+        }
+        this.#formComponent.deleteChildren(childrenComponent);
+        this.#components = this.#components.filter(component => component !== childrenComponent);
     }
 
     removeChildren() {

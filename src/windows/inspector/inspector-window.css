@@ -41,7 +41,9 @@
     color: #2bcbba;
 }
 
-.prop-editor .row-name .cell.title {
+.prop-editor .row-name .cell.title,
+.prop-editor .row-name .cell.value,
+.prop-editor .row-name .cell.value > input {
     color: #26de81;
 }
 
@@ -56,7 +58,7 @@
 }
 
 .prop-editor .row .cell.value select option {
-    color: initial;    
+    color: initial;
 }
 
 .prop-editor .row:hover .cell{

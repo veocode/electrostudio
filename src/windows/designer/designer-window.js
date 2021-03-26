@@ -9,11 +9,9 @@ class DesignerWindow extends Window {
 
     projectService = this.getService('project');
 
-    currentFormSchema = {};
-    currentFormComponentSchemas = {};
-
+    formComponent = null;
     selectedComponent = null;
-    #isFormSelected = false;
+    selectedComponentClassToCreate = null;
 
     async start() {
         this.bindEvents();
@@ -22,8 +20,7 @@ class DesignerWindow extends Window {
 
     bindEvents() {
         this.form.on('component:prop-updated', (payload) => {
-            console.log('component:prop-updated');
-            if (this.#isFormSelected) {
+            if (this.isFormSelected()) {
                 this.updateFormPropertyValue(payload.propertyName, payload.previousValue, payload.value);
             } else {
                 this.updateSelectedComponentPropertyValue(payload.propertyName, payload.previousValue, payload.value);
@@ -31,51 +28,70 @@ class DesignerWindow extends Window {
         });
 
         this.form.on('component:parent-selected', (payload) => {
-            console.log('component:parent-selected')
             if (this.selectedComponent && this.selectedComponent.parent) {
                 const parent = this.selectedComponent.parent;
                 this.deselectComponent();
                 this.selectComponent(parent);
             }
         });
+
+        this.form.on('component:class-selected', className => {
+            this.deselectComponent();
+            this.selectedComponentClassToCreate = className;
+        });
+
+        this.form.on('component:class-deselected', () => {
+            this.selectedComponentClassToCreate = null;
+        });
     }
 
     async displayActiveProjectForm() {
-        this.currentFormSchema = await this.projectService.getActiveFormSchema();
-        this.currentFormComponentSchemas = await this.projectService.getActiveFormComponents();
+        const currentFormSchema = await this.projectService.getActiveFormSchema();
+        const currentFormComponentSchemas = await this.projectService.getActiveFormComponents();
+
+        this.formComponent = this.form.createComponent('Form', currentFormSchema);
+        this.form.replaceFormComponent(this.formComponent);
+
         this.applyFormSchemaToWindow();
-        this.buildFormComponents(this.currentFormComponentSchemas);
+        this.buildFormComponents(currentFormComponentSchemas);
         this.bindComponentEvents();
         this.displayForm();
     }
 
     applyFormSchemaToWindow() {
-        const schema = this.currentFormSchema;
-        this.setTitle(schema.title);
-        this.form.setSize(schema.width, schema.height);
-        this.form.setResizable(schema.resizable);
-        this.form.setMinimizable(schema.minimizable);
-        this.form.setMaximizable(schema.maximizable);
+        const formProps = this.formComponent.getSchema(false).properties;
+        this.setTitle(formProps.title);
+        this.form.setSize(formProps.width, formProps.height);
+        this.form.setResizable(formProps.resizable);
+        this.form.setMinimizable(formProps.minimizable);
+        this.form.setMaximizable(formProps.maximizable);
     }
 
-    buildFormComponents(componentSchemaList) {
-        this.form.buildComponentsFromSchemaList(this.currentFormComponentSchemas);
+    buildFormComponents(childrenSchema) {
+        this.form.buildComponentsFromSchemaList(childrenSchema);
     }
 
     rebuildComponent(component) {
         super.rebuildComponent(component);
         if (this.selectedComponent == component) {
-            this.selectComponent(component);
+            this.toggleComponentSelection(true);
         }
         this.updateFormInProject();
     }
 
     registerFormEvents() {
         this.dom.$body.on('click', event => {
-            this.selectFormComponent();
+            this.onComponentClick(this.formComponent, event.offsetX, event.offsetY);
         });
+
         window.addEventListener('resize', event => {
-            this.selectFormComponent();
+            this.onComponentClick(this.formComponent, event.offsetX, event.offsetY);
+        });
+
+        window.addEventListener('keydown', event => {
+            if (event.key == 'Delete' && this.isComponentSelected()) {
+                this.deleteSelectedComponent();
+            }
         });
     }
 
@@ -98,7 +114,7 @@ class DesignerWindow extends Window {
             $componentDOM.on('mousedown', event => {
                 event.preventDefault();
                 event.stopImmediatePropagation();
-                this.onComponentClick(component);
+                this.onComponentClick(component, event.offsetX, event.offsetY);
             })
 
             if (component.isDraggable()) {
@@ -203,13 +219,18 @@ class DesignerWindow extends Window {
         });
     }
 
-    onComponentClick(component) {
+    onComponentClick(component, x, y) {
+        if (this.isAddingComponent()) {
+            if (component.isContainer()) {
+                this.createChildrenIn(component, x, y);
+            }
+            return;
+        }
         this.deselectComponent();
         this.selectComponent(component);
     }
 
     deselectComponent() {
-        this.#isFormSelected = false;
         if (!this.selectedComponent) { return; }
         this.form.emit('component:deselected', this.selectedComponent.getPropertiesValues())
         this.toggleComponentSelection(false);
@@ -217,8 +238,12 @@ class DesignerWindow extends Window {
     }
 
     selectComponent(component) {
+        if (this.isComponentSelected() && this.selectedComponent == component) {
+            return;
+        }
+
         let parentComponentSchema = null;
-        if (component.parent) {
+        if (!this.isFormSelected() && component.parent) {
             const schema = component.parent.getSchema(false);
             if (schema.className != 'Form') {
                 parentComponentSchema = schema;
@@ -234,29 +259,26 @@ class DesignerWindow extends Window {
         this.toggleComponentSelection(true);
     }
 
-    selectFormComponent() {
-        this.deselectComponent();
-        this.#isFormSelected = true;
-        this.form.emit('component:selected', {
-            componentSchema: this.getActiveFormComponentSchema(),
-            parentComponentSchema: null
-        });
-    }
-
     toggleComponentSelection(isSelected) {
         this.selectedComponent.getDOM().toggleClass('selected', isSelected);
     }
 
+    isComponentSelected() {
+        return this.selectedComponent != null;
+    }
+
+    isFormSelected() {
+        return this.isComponentSelected() && this.selectedComponent == this.formComponent;
+    }
+
     getActiveFormComponentSchema() {
-        return {
-            className: 'Form',
-            properties: this.currentFormSchema
-        };
+        return this.formComponent.getSchema(false);
     }
 
     updateFormInProject() {
-        const componentSchemas = this.form.getChildrenSchema();
-        this.projectService.updateActiveForm(this.currentFormSchema, componentSchemas);
+        const formSchema = this.formComponent.getSchema();
+        const componentSchemas = formSchema.children;
+        this.projectService.updateActiveForm(formSchema, componentSchemas);
     }
 
     updateSelectedComponentPropertyValue(propertyName, previousValue, value) {
@@ -278,8 +300,46 @@ class DesignerWindow extends Window {
     }
 
     updateFormPropertyValue(propertyName, previousValue, value) {
-        this.currentFormSchema[propertyName] = value;
+        this.formComponent[propertyName] = value;
         this.applyFormSchemaToWindow();
+        this.updateFormInProject();
+    }
+
+    isAddingComponent() {
+        return this.selectedComponentClassToCreate != null;
+    }
+
+    createChildrenIn(component, x, y) {
+        if (!component.isContainer()) { return; }
+        if (!this.selectedComponentClassToCreate) { return; }
+
+        const className = this.selectedComponentClassToCreate;
+        const left = Utils.snap(x, DesignerWindow.snapSize);
+        const top = Utils.snap(y, DesignerWindow.snapSize);
+
+        const childrenComponent = this.form.createComponent(className, { left, top });
+
+        component.addChildren(childrenComponent);
+        this.registerComponentEvents(childrenComponent);
+        this.rebuildComponent(component);
+        this.finishComponentAdding();
+    }
+
+    finishComponentAdding() {
+        this.selectedComponentClassToCreate = null;
+        this.form.emit('component:added');
+    }
+
+    deleteSelectedComponent() {
+        if (!this.isComponentSelected()) { return; }
+        if (this.isFormSelected()) { return; }
+
+        const component = this.selectedComponent;
+
+        this.form.deleteChildren(component)
+        this.deselectComponent();
+        component.getDOM().remove();
+
         this.updateFormInProject();
     }
 

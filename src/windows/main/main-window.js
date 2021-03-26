@@ -7,6 +7,8 @@ class MainWindow extends Window {
         designer: load.form('designer'),
     }
 
+    selectedComponentClass = null;
+
     start() {
         this.createForms();
         this.bindDesignerEvents();
@@ -22,6 +24,14 @@ class MainWindow extends Window {
     bindDesignerEvents() {
         this.forms.designer.on('component:selected', (payload) => {
             this.forms.inspector.send('component:show', payload);
+        });
+
+        this.forms.designer.on('component:deselected', (payload) => {
+            this.forms.inspector.send('component:hide', payload);
+        });
+
+        this.forms.designer.on('component:added', (payload) => {
+            this.deselectComponentClass();
         });
     }
 
@@ -44,24 +54,34 @@ class MainWindow extends Window {
             properties: ['openDirectory']
         });
 
-        console.log('DIALOG RESULT:', result);
-
     }
 
     onBtnSaveProjectClick(event, sender) {
-        const btnDynamic = this.form.createComponent('ToolButton', {
-            name: 'btnDynamic',
-            icon: 'bolt',
-            hint: t('Dynamic Button')
-        }, {
-            click: 'onBtnDynamicClick'
-        });
 
-        this.ToolPanel1.addChildren(btnDynamic);
     }
 
-    onBtnDynamicClick(event, sender) {
-        alert('Clicked: ' + sender.name);
+    onBtnComponentPalleteClick(event, sender) {
+        const componentClass = sender.data;
+
+        if (componentClass == this.selectedComponentClass) {
+            this.deselectComponentClass();
+            return;
+        }
+
+        this.selectComponentClass(componentClass);
+    }
+
+    deselectComponentClass() {
+        this.toolbarComponents.deactivateButton();
+        if (this.selectedComponentClass) {
+            this.selectedComponentClass = null;
+            this.forms.designer.send('component:class-deselected');
+        }
+    }
+
+    selectComponentClass(componentClass) {
+        this.selectedComponentClass = componentClass;
+        this.forms.designer.send('component:class-selected', componentClass);
     }
 
 }

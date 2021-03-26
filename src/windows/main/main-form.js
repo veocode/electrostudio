@@ -13,7 +13,7 @@ class MainForm extends Form {
             height: 60,
             resizable: false,
             maximizable: false,
-            // isDebug: true
+            isDebug: true
         };
     }
 
@@ -28,7 +28,7 @@ class MainForm extends Form {
         layout.addChildren(paneToolbarProject, paneToolbarComponents);
 
         const toolbarProject = this.createComponent('ToolPanel', { alignment: 'client' });
-        const toolbarComponents = this.createComponent('ToolPanel', { alignment: 'client' });
+        const toolbarComponents = this.createComponent('ToolPanel', { name: 'toolbarComponents', alignment: 'client', toggleable: true });
 
         paneToolbarProject.addChildren(toolbarProject);
         paneToolbarComponents.addChildren(toolbarComponents);
@@ -55,9 +55,17 @@ class MainForm extends Form {
             click: 'onBtnSaveProjectClick'
         }));
 
-        for (const className of Object.keys(ComponentFactory.Library)) {
+        for (const componentClass of Object.values(ComponentFactory.Library)) {
+            if (componentClass.isInternal()) { continue; }
+
+            const className = componentClass.name;
+            const icon = componentClass.getIcon();
+            const hint = componentClass.getTitle();
+
             toolbarComponents.addChildren(this.createComponent('ToolButton', {
-                hint: t(className)
+                data: className,
+                hint,
+                icon
             }, {
                 click: 'onBtnComponentPalleteClick'
             }));

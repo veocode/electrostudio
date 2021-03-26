@@ -62,9 +62,25 @@ class Component {
         return this.proxy;
     }
 
+    isContainer() {
+        return false;
+    }
+
     getEventNames() {
         // Override in children
         return [];
+    }
+
+    static getIcon() {
+        return 'bolt';
+    }
+
+    static getTitle() {
+        return this.name;
+    }
+
+    static isInternal() {
+        return false;
     }
 
     addEventName(eventName) {
@@ -269,9 +285,13 @@ class ContainerComponent extends Component {
 
     children = [];
 
+    isContainer() {
+        return true;
+    }
+
     setPropertyValue(name, value) {
-        // const currentValue = this.getPropertyValue(name);
-        // if (currentValue === value) { return; }
+        const currentValue = this.getPropertyValue(name);
+        if (currentValue === value) { return; }
 
         super.setPropertyValue(name, value);
 
@@ -297,6 +317,11 @@ class ContainerComponent extends Component {
     removeChildren() {
         this.children = [];
         this.resetCachedDOM();
+    }
+
+    deleteChildren(childrenComponent) {
+        this.children = this.children.filter(component => component !== childrenComponent);
+        // this.resetCachedDOM();
     }
 
     getRecursiveChildrenList() {
@@ -328,19 +353,19 @@ class ContainerComponent extends Component {
         return this.children.length > 0;
     }
 
-    getSchema(isWithChildren = true) {
+    getChildrenSchema() {
         let childrenSchemas = [];
-
-        if (isWithChildren && this.hasChildren()) {
-            for (let childrenComponent of this.getChildren()) {
-                childrenSchemas.push(childrenComponent.getSchema());
-            }
+        for (let childrenComponent of this.getChildren()) {
+            childrenSchemas.push(childrenComponent.getSchema());
         }
+        return childrenSchemas;
+    }
 
+    getSchema(isWithChildren = true) {
         let schema = super.getSchema();
 
-        if (childrenSchemas.length > 0) {
-            schema.children = childrenSchemas;
+        if (isWithChildren && this.hasChildren()) {
+            schema.children = this.getChildrenSchema();
         }
 
         return schema;

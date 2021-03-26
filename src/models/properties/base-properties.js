@@ -5,6 +5,13 @@ module.exports = {
     BooleanProperty: class extends Property {
         defaultValue = true;
 
+        constructor(name, defaultValue = null, isRequired = true) {
+            super(name, defaultValue, isRequired);
+            if (defaultValue !== null) {
+                this.defaultValue = defaultValue;
+            }
+        }
+
         sanitize(value) {
             if (value === 'true') { return true; }
             if (value === 'false') { return false; }

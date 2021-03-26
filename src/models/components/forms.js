@@ -4,6 +4,10 @@ const Traits = load.models.traits();
 
 class Form extends ContainerComponent {
 
+    static isInternal() {
+        return true;
+    }
+
     getTraits() {
         return super.getTraits().concat([
             new Traits.NameTrait(),

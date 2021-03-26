@@ -2,6 +2,9 @@ const { Component, ContainerComponent } = load.class('component');
 const Traits = load.models.traits();
 
 class Panel extends ContainerComponent {
+    static getIcon() {
+        return 'square-o';
+    }
     getTraits() {
         return super.getTraits().concat([
             new Traits.NameTrait(),
@@ -27,7 +30,41 @@ class Panel extends ContainerComponent {
 }
 
 class ToolPanel extends Panel {
+
+    selectedButton = null;
+
+    getTraits() {
+        return super.getTraits().concat([
+            new Traits.ToggleableTrait(),
+        ]);
+    }
+    bindToggleOnClick() {
+        for (let childrenComponent of this.getChildren()) {
+            const $dom = childrenComponent.getDOM();
+            $dom.on('click', event => {
+                event.preventDefault();
+                if ($dom.hasClass('active')) {
+                    this.deactivateButton();
+                } else {
+                    this.deactivateButton();
+                    this.activateButton(childrenComponent);
+                }
+            });
+        }
+    }
+    activateButton(buttonComponent) {
+        buttonComponent.getDOM().addClass('active');
+        this.selectedButton = buttonComponent;
+    }
+    deactivateButton() {
+        if (this.selectedButton == null) { return; }
+        this.selectedButton.getDOM().removeClass('active');
+        this.selectedButton = null;
+    }
     buildDOM(...$childrenDOM) {
+        if (this.toggleable) {
+            this.bindToggleOnClick();
+        }
         return this.buildTagDOM('div', { class: ['component', 'panel', 'toolpanel', 'container'] }, ...$childrenDOM);
     }
 }

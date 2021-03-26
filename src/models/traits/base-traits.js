@@ -146,4 +146,20 @@ module.exports = {
         }
     },
 
+    ToggleableTrait: class extends ComponentTrait {
+        getProps() {
+            return [
+                new Props.BooleanProperty('toggleable', false, false),
+            ]
+        }
+    },
+
+    DataTrait: class extends ComponentTrait {
+        getProps() {
+            return [
+                new Props.StringProperty('data'),
+            ]
+        }
+    },
+
 }

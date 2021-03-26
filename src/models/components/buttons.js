@@ -2,6 +2,9 @@ const { Component } = load.class('component');
 const Traits = load.models.traits();
 
 class Button extends Component {
+    static getIcon() {
+        return 'square';
+    }
     getTraits() {
         return super.getTraits().concat([
             new Traits.NameTrait(),
@@ -11,6 +14,7 @@ class Button extends Component {
             new Traits.EnabledTrait(),
             new Traits.PositionTrait(),
             new Traits.SizeTrait(),
+            new Traits.DataTrait(),
         ]);
     }
     setDefaults() {

@@ -21,7 +21,6 @@ class InspectorWindow extends Window {
                 });
             },
             parentSelected: (name) => {
-                console.log('emit', name);
                 this.form.emit('component:parent-selected', name);
             }
         });
@@ -30,10 +29,14 @@ class InspectorWindow extends Window {
     bindEvents() {
         this.form.on('component:show', (payload) => {
             const { componentSchema, parentComponentSchema } = payload;
-            this.editor.setSchema(componentSchema);
+            this.editor.setSchema(componentSchema)
             if (parentComponentSchema !== null) {
                 this.editor.setParentSchema(parentComponentSchema);
             }
+        });
+
+        this.form.on('component:hide', (payload) => {
+            this.editor.clearSchema();
         });
     }
 

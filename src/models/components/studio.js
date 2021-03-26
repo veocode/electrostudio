@@ -6,6 +6,10 @@ class PropertyEditor extends Component {
     #schema = {};
     #callbacks = {};
 
+    static isInternal() {
+        return true;
+    }
+
     getTraits() {
         return super.getTraits().concat([
             new Traits.NameTrait(),
@@ -22,6 +26,11 @@ class PropertyEditor extends Component {
     setSchema(schema) {
         this.#schema = schema;
         this.buildEditor();
+    }
+
+    clearSchema() {
+        this.$dom.empty();
+        this.#schema = {};
     }
 
     setParentSchema(parentSchema) {

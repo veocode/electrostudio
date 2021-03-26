@@ -2,6 +2,9 @@ const { Component } = load.class('component');
 const Traits = load.models.traits();
 
 class Label extends Component {
+    static getIcon() {
+        return 'font';
+    }
     getTraits() {
         return super.getTraits().concat([
             new Traits.NameTrait(),
@@ -12,6 +15,10 @@ class Label extends Component {
     }
     setDefaults() {
         this.label = t('Label');
+        this.color = '#000000';
+    }
+    isResizable() {
+        return false;
     }
     getEventNames() {
         return [].concat(

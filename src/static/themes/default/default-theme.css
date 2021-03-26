@@ -155,6 +155,10 @@ html, body, .view-window {
     border-right: none;
 }
 
+.toolpanel > button.active {
+    background:#3498db;
+}
+
 
 /*
 * Component: LayoutPane

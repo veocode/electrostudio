@@ -2,6 +2,10 @@ const { Component, ContainerComponent } = load.class('component');
 const Traits = load.models.traits();
 
 class LayoutPane extends ContainerComponent {
+    static isInternal() {
+        return true;
+    }
+
     getTraits() {
         return super.getTraits().concat([
             new Traits.NameTrait(),
@@ -41,7 +45,9 @@ class LayoutPane extends ContainerComponent {
 }
 
 class Layout extends ContainerComponent {
-
+    static getIcon() {
+        return 'columns';
+    }
     getTraits() {
         return super.getTraits().concat([
             new Traits.NameTrait(),
