@@ -20,14 +20,15 @@ class DesignerWindow extends Window {
 
     bindEvents() {
         this.form.on('component:prop-updated', (payload) => {
+            const { propertyName, previousValue, value } = payload;
             if (this.isFormSelected()) {
-                this.updateFormPropertyValue(payload.propertyName, payload.previousValue, payload.value);
+                this.updateFormPropertyValue(propertyName, previousValue, value);
             } else {
-                this.updateSelectedComponentPropertyValue(payload.propertyName, payload.previousValue, payload.value);
+                this.updateSelectedComponentPropertyValue(propertyName, previousValue, value);
             }
         });
 
-        this.form.on('component:parent-selected', (payload) => {
+        this.form.on('component:parent-selected', () => {
             if (this.selectedComponent && this.selectedComponent.parent) {
                 const parent = this.selectedComponent.parent;
                 this.deselectComponent();
