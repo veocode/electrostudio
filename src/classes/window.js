@@ -56,6 +56,17 @@ class Window {
         }
     }
 
+    unregisterComponents(...components) {
+        if (components.length == 0) { return; }
+        for (let component of components) {
+            delete this[component.name];
+            const $dom = component.getDOM();
+            if ($dom) {
+                $dom.remove();
+            }
+        }
+    }
+
     registerComponentEvents(component) {
         const eventHandlerNames = component.getEventHandlerNames();
         if (!eventHandlerNames) { return; }
@@ -78,6 +89,10 @@ class Window {
         this.form.events.on('component:children-added', (component, ...addedChildren) => {
             this.registerComponents(...addedChildren);
             this.rebuildComponent(component);
+        });
+
+        this.form.events.on('component:children-removed', (component, ...removedChildren) => {
+            this.unregisterComponents(...removedChildren);
         });
     }
 

@@ -9,6 +9,10 @@ class EventManager {
         this.#listeners[eventName] = listeners;
     }
 
+    off() {
+        this.#listeners = {};
+    }
+
     emit(eventName, ...params) {
         if (!this.#listenCheckCallback()) {
             return;

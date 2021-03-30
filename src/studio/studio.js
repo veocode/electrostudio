@@ -5,7 +5,8 @@ class Studio {
     project;
 
     start() {
-        return this.initProject();
+        const lastProjectFolder = settings.get('lastProjectFolder', null);
+        return this.initProject(lastProjectFolder);
     }
 
     initProject(folder = null) {

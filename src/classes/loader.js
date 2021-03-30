@@ -43,10 +43,6 @@ class Loader {
         return this.file(`classes/${name}`);
     }
 
-    studio(name) {
-        return this.file(`studio/${name}`);
-    }
-
     instance(name, ...constructorArgs) {
         return new (this.file(name))(...constructorArgs);
     }
@@ -115,6 +111,10 @@ class Loader {
                 }
             });
         });
+    }
+
+    studio(name) {
+        return this.file(`studio/${name}`);
     }
 
 }

@@ -10,8 +10,6 @@ class InspectorWindow extends Window {
     }
 
     initEditor() {
-        this.editor = this.form.getEditor();
-
         this.editor.setCallbacks({
             result: (prop, previousValue, value) => {
                 this.form.emit('component:prop-updated', {
@@ -28,8 +26,9 @@ class InspectorWindow extends Window {
 
     bindEvents() {
         this.form.on('component:show', (payload) => {
-            const { componentSchema, parentComponentSchema } = payload;
-            this.editor.setSchema(componentSchema)
+            const { componentSchema, actions, parentComponentSchema } = payload;
+            this.buildActionButtons(actions);
+            this.editor.setSchema(componentSchema);
             if (parentComponentSchema !== null) {
                 this.editor.setParentSchema(parentComponentSchema);
             }
@@ -40,8 +39,30 @@ class InspectorWindow extends Window {
         });
     }
 
-    onPanelClick(event, sender) {
-        // this.form.ipc.emit('panel-click', { message: 'hello from inspector' });
+    buildActionButtons(actions) {
+        this.actionPanel.removeChildren();
+
+        if (!actions || !Object.keys(actions).length) {
+            return;
+        }
+
+        for (let [methodName, actionParams] of Object.entries(actions)) {
+            const button = this.form.createComponent('ToolButton', {
+                icon: actionParams.icon,
+                hint: actionParams.title,
+                metaData: methodName
+            }, {
+                click: 'onActionPanelButtonClick'
+            });
+
+            this.actionPanel.addChildren(button);
+        }
+
+    }
+
+    onActionPanelButtonClick(event, senderButton) {
+        const methodName = senderButton.metaData;
+        this.form.emit('component:action', methodName);
     }
 
 }

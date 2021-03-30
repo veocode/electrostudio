@@ -2,6 +2,8 @@ const Window = load.class('window');
 
 class MainWindow extends Window {
 
+    projectService = this.getService('project');
+
     forms = {
         inspector: load.form('inspector'),
         designer: load.form('designer'),
@@ -10,6 +12,10 @@ class MainWindow extends Window {
     selectedComponentClass = null;
 
     start() {
+
+    }
+
+    startProject() {
         this.createForms();
         this.bindDesignerEvents();
         this.bindInspectorEvents();
@@ -42,6 +48,10 @@ class MainWindow extends Window {
 
         this.forms.inspector.on('component:parent-selected', (name) => {
             this.forms.designer.send('component:parent-selected', name);
+        });
+
+        this.forms.inspector.on('component:action', (methodName) => {
+            this.forms.designer.send('component:action', methodName);
         });
     }
 

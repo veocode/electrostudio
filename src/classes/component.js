@@ -71,7 +71,13 @@ class Component {
         return [];
     }
 
+    getInspectorActions() {
+        // Override in children
+        return {};
+    }
+
     static getIcon() {
+        // Override in children
         return 'bolt';
     }
 
@@ -81,6 +87,12 @@ class Component {
 
     static isInternal() {
         return false;
+    }
+
+    callAction(methodName, ...actionArgs) {
+        if (methodName in this) {
+            return this[methodName](...actionArgs);
+        }
     }
 
     addEventName(eventName) {
@@ -235,7 +247,7 @@ class Component {
         return schema;
     }
 
-    setSchema(schema) {
+    setSchema(schema, form) {
         this.proxy.setPropertyValues(schema.properties);
     }
 
@@ -315,8 +327,9 @@ class ContainerComponent extends Component {
     }
 
     removeChildren() {
+        if (!this.children.length) { return; }
+        this.events.emit('children-removed', this.proxy, ...this.children);
         this.children = [];
-        this.resetCachedDOM();
     }
 
     deleteChildren(childrenComponent) {
@@ -371,14 +384,14 @@ class ContainerComponent extends Component {
         return schema;
     }
 
-    setSchema(schema) {
-        super.setSchema(schema);
+    setSchema(schema, form) {
+        super.setSchema(schema, form);
         if (schema.children) {
 
             const { ComponentFactory } = load.class('factories');
 
             for (let childrenSchema of schema.children) {
-                const childrenComponent = ComponentFactory.Create(childrenSchema.className);
+                const childrenComponent = form.createComponent(childrenSchema.className);
                 childrenComponent.setSchema(childrenSchema);
                 this.addChildren(childrenComponent);
             }

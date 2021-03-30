@@ -55,7 +55,7 @@ class Form {
         let children = [];
         for (let childrenSchema of schemaList) {
             const childrenComponent = this.createComponent(childrenSchema.className);
-            childrenComponent.setSchema(childrenSchema);
+            childrenComponent.setSchema(childrenSchema, this);
             children.push(childrenComponent);
         }
         if (children.length) {
@@ -149,9 +149,24 @@ class Form {
                 this.events.emit('component:children-added', component, ...addedChildren);
             });
 
+            childrenComponent.events.on('children-removed', (component, ...removedChildren) => {
+                this.unregisterChildren(...removedChildren);
+                this.events.emit('component:children-removed', component, ...removedChildren);
+            });
+
         }
 
         this.#components = this.#components.concat(components);
+    }
+
+    unregisterChildren(...components) {
+        for (let childrenComponent of components) {
+            const index = this.#components.indexOf(childrenComponent);
+            if (index < 0) { continue; }
+
+            childrenComponent.events.off();
+            this.#components = this.#components.splice(index, 1);
+        }
     }
 
     getComponentNames() {
@@ -163,6 +178,7 @@ class Form {
     }
 
     createComponent(className, ...componentArgs) {
+        console.log('createComponent', className, componentArgs);
         const component = ComponentFactory.Create(className, ...componentArgs);
 
         if (!component.name) {

@@ -1,7 +1,7 @@
 const { Component } = load.class('component');
 const Traits = load.models.traits();
 
-class PropertyEditor extends Component {
+class InspectorPropertyEditor extends Component {
 
     #schema = {};
     #callbacks = {};
@@ -72,12 +72,7 @@ class PropertyEditor extends Component {
         }
     }
 
-    addPane() {
-
-    }
-
     buildParentSelector(parentSchema) {
-
         const $row = $('<div/>', { class: 'row row-parent' }).prependTo(this.$dom);
         const $titleCell = $('<div/>', { class: 'cell title' }).html(t('Parent')).appendTo($row);
         const $valueCell = $('<div/>', { class: 'cell value' }).appendTo($row);
@@ -90,7 +85,6 @@ class PropertyEditor extends Component {
                 this.#callbacks.parentSelected(parentSchema.properties.name);
             }
         });
-
     }
 
     getComponentProps(componentClassName) {
@@ -115,6 +109,6 @@ class PropertyEditor extends Component {
 module.exports = {
     groupName: null,
     classes: {
-        PropertyEditor
+        InspectorPropertyEditor
     }
 }

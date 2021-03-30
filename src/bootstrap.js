@@ -1,14 +1,16 @@
 const Loader = require('./classes/loader');
 const { app } = require('electron');
+const Store = require('electron-store');
 
 module.exports = function () {
 
-    global.load = new Loader();
-    global.app = app;
+    globalThis.load = new Loader();
+    globalThis.app = app;
 
-    global.config = load.config();
-    global.errors = load.model('errors/exceptions');
+    globalThis.config = load.config();
+    globalThis.settings = new Store();
+    globalThis.errors = load.model('errors/exceptions');
 
-    global.t = (text) => text; // future i18n placeholder
+    globalThis.t = (text) => text; // future i18n placeholder
 
 }

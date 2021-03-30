@@ -42,6 +42,19 @@ class LayoutPane extends ContainerComponent {
         }
         return this.buildTagDOM('div', paneAttributes, $wrapper);
     }
+    getInspectorActions() {
+        return {
+            addPane: {
+                title: t('Add Pane'),
+                icon: 'plus'
+            }
+        };
+    }
+    addPane(window) {
+        if (this.parent) {
+            this.parent.addPane(window);
+        }
+    }
 }
 
 class Layout extends ContainerComponent {
@@ -95,6 +108,22 @@ class Layout extends ContainerComponent {
     buildDOM(...$childrenDOM) {
         const $wrapper = this.buildInnerTagDOM('div', { class: ['panes', 'container'] }, ...$childrenDOM)
         return this.buildTagDOM('div', { class: ['component', 'layout'] }, $wrapper);
+    }
+
+    getInspectorActions() {
+        return {
+            addPane: {
+                title: t('Add Pane'),
+                icon: 'plus'
+            }
+        };
+    }
+
+    addPane(window) {
+        const pane = window.form.createComponent('LayoutPane');
+        this.addChildren(pane);
+        window.registerComponents(pane);
+        window.rebuildComponent(this);
     }
 
 }

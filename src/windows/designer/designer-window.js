@@ -44,6 +44,10 @@ class DesignerWindow extends Window {
         this.form.on('component:class-deselected', () => {
             this.selectedComponentClassToCreate = null;
         });
+
+        this.form.on('component:action', (methodName) => {
+            this.selectedComponent.callAction(methodName, this);
+        });
     }
 
     async displayActiveProjectForm() {
@@ -256,6 +260,7 @@ class DesignerWindow extends Window {
 
         this.form.emit('component:selected', {
             componentSchema: component.getSchema(false),
+            actions: component.getInspectorActions(),
             parentComponentSchema
         });
 

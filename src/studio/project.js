@@ -24,6 +24,21 @@ class Project {
         })
     }
 
+    async save() {
+        return new Promise(async (resolve, reject) => {
+            const fs = load.node('fs');
+            const metaJSON = JSON.stringify(this.meta);
+
+            fs.writeFile(filePath, metaJSON, function (err) {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve();
+                }
+            });
+        })
+    }
+
     isFolderSelected() {
         return this.#isFolderSelected;
     }
