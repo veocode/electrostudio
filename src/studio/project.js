@@ -25,17 +25,12 @@ class Project {
     }
 
     async save() {
-        return new Promise(async (resolve, reject) => {
-            const fs = load.node('fs');
+        return new Promise(async resolve => {
             const metaJSON = JSON.stringify(this.meta);
+            const metaFilePath = load.node('path').join(this.folder, Project.MetaFileName);
 
-            fs.writeFile(filePath, metaJSON, function (err) {
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve();
-                }
-            });
+            await load.write(metaFilePath, metaJSON);
+            resolve();
         })
     }
 

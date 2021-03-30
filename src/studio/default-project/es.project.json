@@ -6,7 +6,7 @@
         "main": {
             "schema": {
                 "name": "main",
-                "title": "Demo Form #1",
+                "title": "My Electron App",
                 "left": 400,
                 "top": 100,
                 "width": 640,
@@ -15,51 +15,7 @@
                 "maximizable": true,
                 "minimizable": true
             },
-            "components": [
-                {
-                    "className": "Layout",
-                    "properties": {
-                        "name": "Layout1",
-                        "orientation": "column",
-                        "left": 0,
-                        "top": 0,
-                        "width": 400,
-                        "height": 400
-                    },
-                    "children": [
-                        {
-                            "className": "LayoutPane",
-                            "properties": {
-                                "name": "LayoutPane1",
-                                "orderIndex": 1,
-                                "fixedSize": 0,
-                                "weight": 0.25,
-                                "backgroundColor": "#ECECEC"
-                            }
-                        },
-                        {
-                            "className": "LayoutPane",
-                            "properties": {
-                                "name": "LayoutPane2",
-                                "orderIndex": 2,
-                                "fixedSize": 0,
-                                "weight": 0.25,
-                                "backgroundColor": "#DDD"
-                            }
-                        },
-                        {
-                            "className": "LayoutPane",
-                            "properties": {
-                                "name": "LayoutPane3",
-                                "orderIndex": 3,
-                                "fixedSize": 0,
-                                "weight": 0.5,
-                                "backgroundColor": "#CCC"
-                            }
-                        }
-                    ]
-                }
-            ]
+            "components": []
         }
     }
 }

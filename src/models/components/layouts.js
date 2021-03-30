@@ -2,6 +2,7 @@ const { Component, ContainerComponent } = load.class('component');
 const Traits = load.models.traits();
 
 class LayoutPane extends ContainerComponent {
+
     static isInternal() {
         return true;
     }
@@ -15,25 +16,31 @@ class LayoutPane extends ContainerComponent {
             new Traits.Layouts.FixedSizeTrait()
         ]);
     }
+
     setDefaults() {
         this.fixedSize = 0;
         this.weight = 1;
         this.backgroundColor = '#252525';
     }
+
     getEventNames() {
         return [].concat(
             Component.EventNames.Mouse,
         )
     }
+
     isResizable() {
         return false;
     }
+
     isDraggable() {
         return false;
     }
+
     isRebuildParentOnPropertyUpdate(updatedPropertyName, value) {
         return updatedPropertyName == 'orderIndex';
     }
+
     buildDOM(...$childrenDOM) {
         const $wrapper = this.buildInnerTagDOM('div', { class: ['pane-body', 'container'] }, ...$childrenDOM)
         const paneAttributes = {
@@ -42,7 +49,8 @@ class LayoutPane extends ContainerComponent {
         }
         return this.buildTagDOM('div', paneAttributes, $wrapper);
     }
-    getInspectorActions() {
+
+    getDesignerActions() {
         return {
             addPane: {
                 title: t('Add Pane'),
@@ -50,6 +58,7 @@ class LayoutPane extends ContainerComponent {
             }
         };
     }
+
     addPane(window) {
         if (this.parent) {
             this.parent.addPane(window);
@@ -58,9 +67,11 @@ class LayoutPane extends ContainerComponent {
 }
 
 class Layout extends ContainerComponent {
+
     static getIcon() {
         return 'columns';
     }
+
     getTraits() {
         return super.getTraits().concat([
             new Traits.NameTrait(),
@@ -68,22 +79,28 @@ class Layout extends ContainerComponent {
             new Traits.PositionTrait(),
             new Traits.SizeTrait(),
             new Traits.Layouts.OrientationTrait(),
+            new Traits.BackgroundColorTrait()
         ]);
     }
+
     setDefaults() {
         this.width = 200;
         this.height = 200;
+        this.backgroundColor = '#555555';
     }
+
     getEventNames() {
         return [].concat(
             Component.EventNames.Mouse,
         )
     }
+
     getChildren() {
         return this.children.sort((a, b) => {
             return a.orderIndex - b.orderIndex;
         });
     }
+
     addChildren(...paneComponents) {
         let maxOrderIndex = this.children.length;
         if (maxOrderIndex) {
@@ -102,15 +119,17 @@ class Layout extends ContainerComponent {
         }
         super.addChildren(...paneComponents);
     }
+
     isRebuildChildrenOnPropertyUpdate(updatedPropertyName, value) {
         return updatedPropertyName == 'orientation';
     }
+
     buildDOM(...$childrenDOM) {
         const $wrapper = this.buildInnerTagDOM('div', { class: ['panes', 'container'] }, ...$childrenDOM)
         return this.buildTagDOM('div', { class: ['component', 'layout'] }, $wrapper);
     }
 
-    getInspectorActions() {
+    getDesignerActions() {
         return {
             addPane: {
                 title: t('Add Pane'),

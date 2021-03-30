@@ -71,7 +71,7 @@ class Component {
         return [];
     }
 
-    getInspectorActions() {
+    getDesignerActions() {
         // Override in children
         return {};
     }

@@ -260,7 +260,7 @@ class DesignerWindow extends Window {
 
         this.form.emit('component:selected', {
             componentSchema: component.getSchema(false),
-            actions: component.getInspectorActions(),
+            actions: component.getDesignerActions(),
             parentComponentSchema
         });
 

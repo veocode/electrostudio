@@ -113,6 +113,18 @@ class Loader {
         });
     }
 
+    write(filePath, contents) {
+        return new Promise((resolve, reject) => {
+            fs.writeFile(filePath, contents, function (err) {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve();
+                }
+            });
+        });
+    }
+
     studio(name) {
         return this.file(`studio/${name}`);
     }

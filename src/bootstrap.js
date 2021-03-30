@@ -1,6 +1,6 @@
 const Loader = require('./classes/loader');
 const { app } = require('electron');
-const Store = require('electron-store');
+const SettingStorage = require('electron-store');
 
 module.exports = function () {
 
@@ -8,7 +8,7 @@ module.exports = function () {
     globalThis.app = app;
 
     globalThis.config = load.config();
-    globalThis.settings = new Store();
+    globalThis.settings = new SettingStorage();
     globalThis.errors = load.model('errors/exceptions');
 
     globalThis.t = (text) => text; // future i18n placeholder

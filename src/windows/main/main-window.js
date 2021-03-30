@@ -12,7 +12,7 @@ class MainWindow extends Window {
     selectedComponentClass = null;
 
     start() {
-
+        this.startProject();
     }
 
     startProject() {
