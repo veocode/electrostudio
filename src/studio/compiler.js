@@ -1,5 +1,7 @@
 const fs = load.node('fs');
 const path = load.node('path');
+const Utils = load.class('utils');
+const beautifier = load.node('js-beautify');
 
 class Compiler {
 
@@ -28,6 +30,7 @@ class Compiler {
             'electron-builder': '^22.9.1'
         },
         dependencies: {
+            'electron-store': '^7.0.2',
             'electron-unhandled': '^3.0.2',
             'interactjs': '^1.10.8'
         }
@@ -54,6 +57,7 @@ class Compiler {
                 await this.compileMeta();
                 await this.compileConfig();
                 await this.compileWindows();
+                await this.compileControllers();
                 resolve();
             } catch (err) {
                 reject(err);
@@ -123,28 +127,55 @@ class Compiler {
     }
 
     async compileWindows() {
-
-        for (let [formName, meta] of this.project.meta.forms) {
-            const template = await load.studioTemplate('form.js');
-            const formCode = Utils.renderTemplate(template, {
-                className: 'Form1',
-                formProperties: {
-                    name: 'main',
-                    title: config.appTitle,
-                    left: 0,
-                    top: 0,
-                    width: '100%',
-                    height: 60,
-                    resizable: false,
-                    maximizable: false,
-                    isDebug: true
-                }
-            });
-
-            const beautifier = load.node('js-beautify');
-            console.log(beautifier.js(formCode));
+        for (let [formName, meta] of Object.entries(this.project.meta.forms)) {
+            await this.compileWindow(formName, meta.schema);
         }
+    }
 
+    async compileWindow(name, schema) {
+        const windowDir = path.join(this.project.folder, 'src', 'windows', name);
+        await fs.promises.mkdir(windowDir, { recursive: true });
+
+        const formFilePath = path.join(windowDir, `${name}-form.js`);
+        const windowFilePath = path.join(windowDir, `${name}-window.js`);
+
+        const formClassName = Utils.nameToClassName(name, 'Form');
+        const windowClassName = Utils.nameToClassName(name, 'Window');
+
+        const formTemplate = await load.studioTemplate('form.js');
+        const formCode = beautifier.js(Utils.renderTemplate(formTemplate, {
+            className: formClassName,
+            formProperties: schema.properties,
+            formChildren: schema.children
+        }));
+
+        const windowTemplate = await load.studioTemplate('window.js');
+        const windowCode = beautifier.js(Utils.renderTemplate(windowTemplate, {
+            className: windowClassName,
+        }));
+
+        await load.write(formFilePath, formCode);
+        await load.write(windowFilePath, windowCode);
+    }
+
+    async compileControllers() {
+        this.compileController('main');
+    }
+
+    async compileController(name) {
+        const controllerDir = path.join(this.project.folder, 'src', 'controllers', name);
+        await fs.promises.mkdir(controllerDir, { recursive: true });
+
+        const controllerFilePath = path.join(controllerDir, `${name}-controller.js`);
+        const controllerClassName = Utils.nameToClassName(name, 'Controller');
+
+        const controllerTemplate = await load.studioTemplate('controller.js');
+        const controllerCode = beautifier.js(Utils.renderTemplate(controllerTemplate, {
+            className: controllerClassName,
+            defaultFormName: this.project.meta.defaultFormName
+        }));
+
+        await load.write(controllerFilePath, controllerCode);
     }
 
 }

@@ -7,7 +7,7 @@ class {% className %} extends Form {
     }
 
     buildComponents() {
-        this.buildComponentsFromSchemaList({% childrenSchema %})
+        this.buildComponentsFromSchemaList({% formChildren %})
     }
 
 }

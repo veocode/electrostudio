@@ -1,0 +1,11 @@
+const Window = load.class('window');
+
+class {% className %} extends Window {
+
+    start() {
+
+    }
+
+}
+
+module.exports = {% className %};

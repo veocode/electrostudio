@@ -1,0 +1,11 @@
+const Controller = load.class('controller');
+
+class {% className %} extends Controller {
+
+    start() {
+        this.createFormWindow('{% defaultFormName %}');
+    }
+
+}
+
+module.exports = {% className %};

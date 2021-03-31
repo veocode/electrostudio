@@ -33,6 +33,19 @@ class Utils {
         return template;
     }
 
+    static nameToClassName(name, suffix = '') {
+        let nameParts = name.split(/_|-/);
+        let className = nameParts.map(part => Utils.capitalizeFirstLetter(part)).join('');
+        if (suffix && !className.includes(suffix)) {
+            className += suffix;
+        }
+        return className;
+    }
+
+    static capitalizeFirstLetter(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+
 }
 
 module.exports = Utils;
