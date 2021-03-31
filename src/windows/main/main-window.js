@@ -2,7 +2,8 @@ const Window = load.class('window');
 
 class MainWindow extends Window {
 
-    projectService = this.getService('project');
+    dialogService = this.getService('dialogs');
+    projectService = this.getService('studio/project');
 
     forms = {
         inspector: load.form('inspector'),
@@ -56,18 +57,31 @@ class MainWindow extends Window {
     }
 
     async onBtnNewProjectClick(event, sender) {
+        const result = await this.dialogService.showOpenDialog({
+            title: t('Select New Project Folder'),
+            properties: ['openDirectory']
+        });
+    }
 
-        const dialogService = this.getService('dialogs');
+    async onBtnSaveProjectClick(event, sender) {
+        const isFolderSelected = await this.projectService.isFolderSelected()
 
-        const result = await dialogService.showOpenDialog({
-            title: t('Select New Project folder'),
+        if (isFolderSelected) {
+            await this.projectService.save();
+            return;
+        }
+
+        const result = await this.dialogService.showOpenDialog({
+            title: t('Select New Project Folder'),
             properties: ['openDirectory']
         });
 
-    }
+        if (result.canceled || !result.filePaths[0]) { return; }
 
-    onBtnSaveProjectClick(event, sender) {
-
+        const folder = result.filePaths[0];
+        await this.projectService.setFolder(folder);
+        await this.projectService.save();
+        alert('Saved!');
     }
 
     onBtnComponentPalleteClick(event, senderToolButton) {

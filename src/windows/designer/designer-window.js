@@ -7,7 +7,7 @@ class DesignerWindow extends Window {
     static SnapSize = 10;
     static MinSize = { width: 10, height: 10 };
 
-    projectService = this.getService('project');
+    projectService = this.getService('studio/project');
 
     formComponent = null;
     selectedComponent = null;

@@ -178,7 +178,6 @@ class Form {
     }
 
     createComponent(className, ...componentArgs) {
-        console.log('createComponent', className, componentArgs);
         const component = ComponentFactory.Create(className, ...componentArgs);
 
         if (!component.name) {

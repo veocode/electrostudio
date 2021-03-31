@@ -1,12 +1,14 @@
-class Project {
+const Compiler = load.studio('compiler');
 
-    static MetaFileName = 'es.project.json';
+class Project {
 
     folder;
     meta = {};
 
     #isFolderSelected = true;
     #isDirty = false;
+
+    #compiler = new Compiler(this);
 
     constructor(folder = null) {
         if (folder == null) {
@@ -18,24 +20,32 @@ class Project {
 
     async load() {
         return new Promise(async resolve => {
-            const metaJSON = await load.read(`${this.folder}/${Project.MetaFileName}`);
+            const metaJSON = await load.read(`${this.folder}/${Compiler.FileNames.Meta}`);
             this.meta = JSON.parse(metaJSON);
             resolve();
         })
     }
 
-    async save() {
-        return new Promise(async resolve => {
-            const metaJSON = JSON.stringify(this.meta);
-            const metaFilePath = load.node('path').join(this.folder, Project.MetaFileName);
-
-            await load.write(metaFilePath, metaJSON);
-            resolve();
+    save() {
+        return new Promise(async (resolve, reject) => {
+            try {
+                await this.#compiler.compileProject();
+                resolve();
+            } catch (err) {
+                reject(err);
+            }
         })
     }
 
     isFolderSelected() {
         return this.#isFolderSelected;
+    }
+
+    setFolder(folder) {
+        const path = load.node('path');
+        this.folder = folder;
+        this.meta.name = path.basename(folder);
+        this.#isFolderSelected = true;
     }
 
     getFormSchema(formName) {
@@ -72,7 +82,7 @@ class Project {
 
     updateActiveForm(schema, componentSchemas) {
         const currentFormName = this.getActiveFormName();
-        const formName = schema.name;
+        const formName = schema.properties.name;
         const isDefaultForm = this.isDefaultFormActive();
 
         // Handle Form renaming here

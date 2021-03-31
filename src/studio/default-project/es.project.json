@@ -1,5 +1,9 @@
 {
     "name": "Untitled Project",
+    "version": "1.0.0",
+    "description": "My Electron Application",
+    "author": "Unknown Author",
+    "license": "0BSD",
     "activeFormName": "main",
     "defaultFormName": "main",
     "forms": {

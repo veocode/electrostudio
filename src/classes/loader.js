@@ -32,7 +32,7 @@ class Loader {
     }
 
     path(file) {
-        return `${Loader.rootDir}/${file}`;
+        return file ? `${Loader.rootDir}/${file}` : Loader.rootDir;
     }
 
     file(name) {
