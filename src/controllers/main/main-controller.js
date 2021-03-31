@@ -8,11 +8,9 @@ class MainController extends Controller {
     }
 
     async start() {
-
         Studio.start().then(() => {
             this.createFormWindow('main');
         })
-
     }
 
 }

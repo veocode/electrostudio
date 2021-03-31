@@ -6,30 +6,38 @@ class Compiler {
     static FileNames = {
         Ignore: '.esignore',
         Meta: 'es.project.json',
-        Manifest: 'package.json'
+        Manifest: 'package.json',
+        Config: 'config.js'
     };
 
     static PackageManifest = {
-        name: "",
-        version: "1.0.0",
-        description: "",
-        main: "src/main.js",
+        name: '',
+        version: '1.0.0',
+        description: '',
+        main: 'src/main.js',
         scripts: {
-            "start": "electron .",
-            "pack": "electron-builder --dir",
-            "dist": "electron-builder"
+            'start': 'electron .',
+            'pack': 'electron-builder --dir',
+            'dist': 'electron-builder'
         },
         keywords: [],
-        author: "",
-        license: "ISC",
+        author: '',
+        license: 'ISC',
         devDependencies: {
-            "electron": "^11.3.0",
-            "electron-builder": "^22.9.1"
+            'electron': '^11.3.0',
+            'electron-builder': '^22.9.1'
         },
         dependencies: {
-            "electron-unhandled": "^3.0.2",
-            "interactjs": "^1.10.8"
+            'electron-unhandled': '^3.0.2',
+            'interactjs': '^1.10.8'
         }
+    };
+
+    static DefaultConfig = {
+        appTitle: '',
+        mainControllerName: 'main',
+        baseWindowPreloadScript: 'windows/base/base-preload.js',
+        baseWindowView: 'windows/base/base-window.html',
     };
 
     project;
@@ -44,6 +52,7 @@ class Compiler {
                 await this.createProjectStructure();
                 await this.compilePackageManifest();
                 await this.compileMeta();
+                await this.compileConfig();
                 resolve();
             } catch (err) {
                 reject(err);
@@ -100,6 +109,16 @@ class Compiler {
         const manifestJSON = JSON.stringify(manifest, null, 4);
         const manifestFilePath = path.join(this.project.folder, Compiler.FileNames.Manifest);
         await load.write(manifestFilePath, manifestJSON);
+    }
+
+    async compileConfig() {
+        const config = Compiler.DefaultConfig;
+        config.appTitle = this.project.meta.name;
+
+        const configJSON = JSON.stringify(config, null, 4);
+        const configContent = `module.exports = ${configJSON}`;
+        const configFilePath = path.join(this.project.folder, 'src', Compiler.FileNames.Config);
+        await load.write(configFilePath, configContent);
     }
 
 }
