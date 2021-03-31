@@ -15,6 +15,24 @@ class Utils {
         }
     }
 
+    static renderTemplate(template, context = {}) {
+        let tokens = template.matchAll(/{%([a-zA-Z0-9\s_]+)%}/g);
+        if (tokens) {
+            for (let token of tokens) {
+                const originalTag = token[0].trim();
+                const variableName = token[1].trim();
+
+                let variableValue = (variableName in context) ? context[variableName] : '';
+                if (typeof (variableValue) == 'object') {
+                    variableValue = JSON.stringify(variableValue);
+                }
+
+                template = template.replace(originalTag, variableValue);
+            }
+        }
+        return template;
+    }
+
 }
 
 module.exports = Utils;

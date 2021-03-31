@@ -53,6 +53,7 @@ class Compiler {
                 await this.compilePackageManifest();
                 await this.compileMeta();
                 await this.compileConfig();
+                await this.compileWindows();
                 resolve();
             } catch (err) {
                 reject(err);
@@ -119,6 +120,31 @@ class Compiler {
         const configContent = `module.exports = ${configJSON}`;
         const configFilePath = path.join(this.project.folder, 'src', Compiler.FileNames.Config);
         await load.write(configFilePath, configContent);
+    }
+
+    async compileWindows() {
+
+        for (let [formName, meta] of this.project.meta.forms) {
+            const template = await load.studioTemplate('form.js');
+            const formCode = Utils.renderTemplate(template, {
+                className: 'Form1',
+                formProperties: {
+                    name: 'main',
+                    title: config.appTitle,
+                    left: 0,
+                    top: 0,
+                    width: '100%',
+                    height: 60,
+                    resizable: false,
+                    maximizable: false,
+                    isDebug: true
+                }
+            });
+
+            const beautifier = load.node('js-beautify');
+            console.log(beautifier.js(formCode));
+        }
+
     }
 
 }

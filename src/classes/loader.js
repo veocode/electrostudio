@@ -129,6 +129,12 @@ class Loader {
         return this.file(`studio/${name}`);
     }
 
+    async studioTemplate(name) {
+        const templateDir = path.join(Loader.rootDir, 'studio', 'templates');
+        const templateFile = path.join(templateDir, `${name}.template`);
+        return await this.read(templateFile);
+    }
+
 }
 
 module.exports = Loader;
