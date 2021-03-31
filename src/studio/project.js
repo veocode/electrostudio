@@ -11,7 +11,7 @@ class Project {
     #compiler = new Compiler(this);
 
     constructor(folder = null) {
-        if (folder == null) {
+        if (folder == null || !this.isFolderContainsProject(folder)) {
             folder = load.path('studio/default-project');
             this.#isFolderSelected = false;
         }
@@ -20,7 +20,7 @@ class Project {
 
     async load() {
         return new Promise(async resolve => {
-            const metaJSON = await load.read(`${this.folder}/${Compiler.FileNames.Meta}`);
+            const metaJSON = await load.read(`${this.folder}/meta/${Compiler.FileNames.Meta}`);
             this.meta = JSON.parse(metaJSON);
             resolve();
         })
@@ -39,6 +39,10 @@ class Project {
 
     isFolderSelected() {
         return this.#isFolderSelected;
+    }
+
+    isFolderContainsProject(folder) {
+        return load.node('fs').existsSync(`${folder}/meta/${Compiler.FileNames.Meta}`);
     }
 
     setFolder(folder) {

@@ -100,7 +100,7 @@ class Compiler {
 
     async compileMeta() {
         const metaJSON = JSON.stringify(this.project.meta, null, 4);
-        const metaFilePath = path.join(this.project.folder, Compiler.FileNames.Meta);
+        const metaFilePath = path.join(this.project.folder, 'meta', Compiler.FileNames.Meta);
         await load.write(metaFilePath, metaJSON);
     }
 

@@ -66,22 +66,20 @@ class MainWindow extends Window {
     async onBtnSaveProjectClick(event, sender) {
         const isFolderSelected = await this.projectService.isFolderSelected()
 
-        if (isFolderSelected) {
-            await this.projectService.save();
-            return;
+        if (!isFolderSelected) {
+            const result = await this.dialogService.showOpenDialog({
+                title: t('Select New Project Folder'),
+                properties: ['openDirectory']
+            });
+
+            if (result.canceled || !result.filePaths[0]) { return; }
+
+            const folder = result.filePaths[0];
+            await this.projectService.setFolder(folder);
         }
 
-        const result = await this.dialogService.showOpenDialog({
-            title: t('Select New Project Folder'),
-            properties: ['openDirectory']
-        });
-
-        if (result.canceled || !result.filePaths[0]) { return; }
-
-        const folder = result.filePaths[0];
-        await this.projectService.setFolder(folder);
         await this.projectService.save();
-        alert('Saved!');
+        settings.set('lastProjectFolder', folder);
     }
 
     onBtnComponentPalleteClick(event, senderToolButton) {
