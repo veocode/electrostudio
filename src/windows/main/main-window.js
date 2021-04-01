@@ -8,11 +8,13 @@ class MainWindow extends Window {
     forms = {
         inspector: load.form('inspector'),
         designer: load.form('designer'),
+        progress: load.form('progress')
     }
 
     selectedComponentClass = null;
 
     start() {
+        // this.forms.progress.createWindow();
         this.startProject();
     }
 

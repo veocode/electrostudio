@@ -177,6 +177,8 @@ class DesignerWindow extends Window {
                     const translateY = (parseFloat(event.target.dataset.y) || 0);
                     component.left += translateX;
                     component.top += translateY;
+                    this.deselectComponent();
+                    this.selectComponent(component);
                     this.rebuildComponent(component);
                 }
             }

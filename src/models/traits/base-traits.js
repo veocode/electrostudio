@@ -84,7 +84,7 @@ module.exports = {
             ]
         }
         isAllowComponentResizing(values) {
-            return !this.isAlignmentSet(values);
+            return values.alignment && values.alignment != 'client';
         }
         isAllowComponentDragging(values) {
             return !this.isAlignmentSet(values);

@@ -157,6 +157,10 @@ class Controller {
             })
         });
 
+        browserWindow.on('closed', () => {
+            delete this.#windows[formName];
+        });
+
         if (options.isDebug) {
             browserWindow.webContents.openDevTools();
         }
