@@ -129,6 +129,14 @@ module.exports = {
         }
     },
 
+    ForegroundColorTrait: class extends ComponentTrait {
+        getProps() {
+            return [
+                new Props.ColorProperty('foregroundColor'),
+            ]
+        }
+    },
+
     BackgroundColorTrait: class extends ComponentTrait {
         getProps() {
             return [

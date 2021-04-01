@@ -13,6 +13,7 @@ class ProgressBar extends Component {
             new Traits.PositionTrait(),
             new Traits.SizeTrait(),
             new Traits.ProgressBarTrait(),
+            new Traits.ForegroundColorTrait(),
             new Traits.BackgroundColorTrait(),
             new Traits.MetaDataTrait(),
         ]);
@@ -23,7 +24,8 @@ class ProgressBar extends Component {
         this.value = 50;
         this.maxValue = 100;
         this.minValue = 0;
-        this.backgroundColor = '#3498DB';
+        this.foregroundColor = '#3498DB';
+        this.backgroundColor = '#2B2B2B';
     }
     getEventNames() {
         return [].concat(
@@ -37,7 +39,7 @@ class ProgressBar extends Component {
     buildDOM() {
         const $bar = $('<div/>', { class: 'bar' });
         $bar.css('width', `${this.getProgressPercent()}%`);
-        $bar.css('background-color', this.backgroundColor);
+        $bar.css('background-color', this.foregroundColor);
         return this.buildTagDOM('div', { class: ['component', 'progressbar', this.mode] }, $bar);
     }
 }

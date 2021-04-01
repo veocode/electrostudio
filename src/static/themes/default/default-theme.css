@@ -227,14 +227,15 @@ html, body, .view-window {
     background-color:#3498db;
     border-radius: 4px;
     position: absolute;
-    left:-50%;
+    left:0;
     top:0;
-    width:200% !important;
     height:100%;
 }
 
 .progressbar.indeterminate .bar {
-    width:25%;
+    left:-50%;
+    top:0;
+    width:200% !important;
     height:100%;
     background-image: repeating-linear-gradient(
         45deg,
