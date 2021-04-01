@@ -80,6 +80,8 @@ class Controller {
             case 'createWindow':
                 await this.createFormWindow(formName);
                 break;
+            case 'setSize':
+                methodName = 'setContentSize';
             default:
                 this.getWindow(formName)[methodName](...methodArgs);
         }
@@ -141,7 +143,7 @@ class Controller {
             }
         };
 
-        if ('left' in options && 'top' in options) {
+        if ('left' in options && 'top' in options && !options.center) {
             settings.x = options.left;
             settings.y = options.top;
         } else {

@@ -12,15 +12,18 @@ class Form extends ContainerComponent {
         return super.getTraits().concat([
             new Traits.NameTrait(),
             new Traits.TitleTrait(),
-            new Traits.PositionTrait(),
             new Traits.SizeTrait(),
-            new Traits.Forms.ResizableTrait()
+            new Traits.PositionTrait(),
+            new Traits.FormTrait()
         ]);
     }
 
     setDefaults() {
         this.width = 640;
         this.height = 480;
+        this.left = 400;
+        this.top = 120;
+        this.center = true;
         this.title = t('Form');
     }
 

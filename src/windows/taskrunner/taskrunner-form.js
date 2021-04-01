@@ -1,6 +1,6 @@
 const Form = load.class('form');
 
-class ProgressForm extends Form {
+class TaskRunner extends Form {
 
     getSchema() {
         return {
@@ -23,4 +23,4 @@ class ProgressForm extends Form {
 
 }
 
-module.exports = ProgressForm;
+module.exports = TaskRunner;

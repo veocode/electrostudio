@@ -5,16 +5,12 @@ class MainWindow extends Window {
     dialogService = this.getService('dialogs');
     projectService = this.getService('studio/project');
 
-    forms = {
-        inspector: load.form('inspector'),
-        designer: load.form('designer'),
-        progress: load.form('progress')
-    }
+    inspectorForm = load.form('inspector');
+    designerForm = load.form('designer');
 
     selectedComponentClass = null;
 
     start() {
-        // this.forms.progress.createWindow();
         this.startProject();
     }
 
@@ -25,36 +21,35 @@ class MainWindow extends Window {
     }
 
     createForms() {
-        for (let [name, form] of Object.entries(this.forms)) {
-            form.createWindow();
-        }
+        this.designerForm.createWindow();
+        this.inspectorForm.createWindow();
     }
 
     bindDesignerEvents() {
-        this.forms.designer.on('component:selected', (payload) => {
-            this.forms.inspector.send('component:show', payload);
+        this.designerForm.on('component:selected', (payload) => {
+            this.inspectorForm.send('component:show', payload);
         });
 
-        this.forms.designer.on('component:deselected', (payload) => {
-            this.forms.inspector.send('component:hide', payload);
+        this.designerForm.on('component:deselected', (payload) => {
+            this.inspectorForm.send('component:hide', payload);
         });
 
-        this.forms.designer.on('component:added', (payload) => {
+        this.designerForm.on('component:added', (payload) => {
             this.deselectComponentClass();
         });
     }
 
     bindInspectorEvents() {
-        this.forms.inspector.on('component:prop-updated', (payload) => {
-            this.forms.designer.send('component:prop-updated', payload);
+        this.inspectorForm.on('component:prop-updated', (payload) => {
+            this.designerForm.send('component:prop-updated', payload);
         });
 
-        this.forms.inspector.on('component:parent-selected', (name) => {
-            this.forms.designer.send('component:parent-selected', name);
+        this.inspectorForm.on('component:parent-selected', (name) => {
+            this.designerForm.send('component:parent-selected', name);
         });
 
-        this.forms.inspector.on('component:action', (methodName) => {
-            this.forms.designer.send('component:action', methodName);
+        this.inspectorForm.on('component:action', (methodName) => {
+            this.designerForm.send('component:action', methodName);
         });
     }
 
@@ -99,13 +94,13 @@ class MainWindow extends Window {
         this.toolbarComponents.deactivateButton();
         if (this.selectedComponentClass) {
             this.selectedComponentClass = null;
-            this.forms.designer.send('component:class-deselected');
+            this.designerForm.send('component:class-deselected');
         }
     }
 
     selectComponentClass(componentClass) {
         this.selectedComponentClass = componentClass;
-        this.forms.designer.send('component:class-selected', componentClass);
+        this.designerForm.send('component:class-selected', componentClass);
     }
 
 }

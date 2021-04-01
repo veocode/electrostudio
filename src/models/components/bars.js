@@ -3,9 +3,11 @@ const Traits = load.models.traits();
 const Utils = load.class('utils');
 
 class ProgressBar extends Component {
+
     static getIcon() {
         return 'spinner';
     }
+
     getTraits() {
         return super.getTraits().concat([
             new Traits.NameTrait(),
@@ -18,6 +20,7 @@ class ProgressBar extends Component {
             new Traits.MetaDataTrait(),
         ]);
     }
+
     setDefaults() {
         this.width = 300;
         this.height = 20;
@@ -27,11 +30,13 @@ class ProgressBar extends Component {
         this.foregroundColor = '#3498DB';
         this.backgroundColor = '#2B2B2B';
     }
+
     getEventNames() {
         return [].concat(
             Component.EventNames.Mouse,
         )
     }
+
     getProgressPercent() {
         return Utils.percent(this.value, this.maxValue, this.minValue);
     }
@@ -42,6 +47,7 @@ class ProgressBar extends Component {
         $bar.css('background-color', this.foregroundColor);
         return this.buildTagDOM('div', { class: ['component', 'progressbar', this.mode] }, $bar);
     }
+
 }
 
 module.exports = {

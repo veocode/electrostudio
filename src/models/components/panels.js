@@ -2,9 +2,11 @@ const { Component, ContainerComponent } = load.class('component');
 const Traits = load.models.traits();
 
 class Panel extends ContainerComponent {
+
     static getIcon() {
         return 'square-o';
     }
+
     getTraits() {
         return super.getTraits().concat([
             new Traits.NameTrait(),
@@ -14,19 +16,23 @@ class Panel extends ContainerComponent {
             new Traits.BackgroundColorTrait(),
         ]);
     }
+
     setDefaults() {
         this.width = this.height = 200;
         this.backgroundColor = '#252525';
     }
+
     getEventNames() {
         return [].concat(
             Component.EventNames.Mouse,
         )
     }
+
     buildDOM(...$childrenDOM) {
         const $wrapper = this.buildInnerTagDOM('div', { class: ['panel-body', 'container'] }, ...$childrenDOM)
         return this.buildTagDOM('div', { class: ['component', 'panel'] }, $wrapper);
     }
+
 }
 
 class ToolPanel extends Panel {
@@ -38,11 +44,13 @@ class ToolPanel extends Panel {
             new Traits.ToggleableTrait(),
         ]);
     }
+
     setDefaults() {
         this.width = 300;
         this.height = 60;
         this.backgroundColor = '#252525';
     }
+
     bindToggleOnClick() {
         for (let childrenComponent of this.getChildren()) {
             const $dom = childrenComponent.getDOM();
@@ -57,21 +65,25 @@ class ToolPanel extends Panel {
             });
         }
     }
+
     activateButton(buttonComponent) {
         buttonComponent.getDOM().addClass('active');
         this.selectedButton = buttonComponent;
     }
+
     deactivateButton() {
         if (this.selectedButton == null) { return; }
         this.selectedButton.getDOM().removeClass('active');
         this.selectedButton = null;
     }
+
     buildDOM(...$childrenDOM) {
         if (this.toggleable) {
             this.bindToggleOnClick();
         }
         return this.buildTagDOM('div', { class: ['component', 'panel', 'toolpanel', 'container'] }, ...$childrenDOM);
     }
+
 }
 
 module.exports = {

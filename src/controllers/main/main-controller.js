@@ -3,14 +3,9 @@ const Studio = load.singleton('studio/studio');
 
 class MainController extends Controller {
 
-    boot() {
-
-    }
-
     async start() {
-        Studio.start().then(() => {
-            this.createFormWindow('main');
-        })
+        await Studio.start();
+        this.createFormWindow('main');
     }
 
 }

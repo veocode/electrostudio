@@ -142,9 +142,11 @@ module.exports = {
         defaultValue = '#FFFFFF';
 
         validate(value) {
-            // 4 - #FFF
-            // 7 - #FFFFFF
-            return (!this.isRequired || [4, 7].includes(value.length)) && value.startsWith('#');
+            return (
+                (!this.isRequired && value == '') ||
+                value == 'none' ||
+                value.match(/^#([0-9a-f]{3}|[0-9a-f]{6})$/i)
+            );
         }
     },
 

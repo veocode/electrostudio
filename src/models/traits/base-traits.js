@@ -118,6 +118,17 @@ module.exports = {
         }
     },
 
+    TextAlignTrait: class extends ComponentTrait {
+        getProps() {
+            return [
+                new Props.ListProperty('textAlign', ['auto', 'left', 'center', 'right', 'justify'], 'auto'),
+            ]
+        }
+        appendAttributes(attributes, values) {
+            values.textAlign && values.textAlign != 'auto' && attributes.add('style', `text-align: ${values.textAlign}`);
+        }
+    },
+
     TextColorTrait: class extends ComponentTrait {
         getProps() {
             return [
@@ -125,7 +136,7 @@ module.exports = {
             ]
         }
         appendAttributes(attributes, values) {
-            values.color && attributes.add('style', `color: ${values.color}`);
+            values.color && values.color != 'none' && attributes.add('style', `color: ${values.color}`);
         }
     },
 
@@ -144,7 +155,18 @@ module.exports = {
             ]
         }
         appendAttributes(attributes, values) {
-            values.backgroundColor && attributes.add('style', `background: ${values.backgroundColor}`);
+            values.backgroundColor && values.backgroundColor != 'none' && attributes.add('style', `background: ${values.backgroundColor}`);
+        }
+    },
+
+    PaddingTrait: class extends ComponentTrait {
+        getProps() {
+            return [
+                new Props.IntegerProperty('padding', 0),
+            ]
+        }
+        appendAttributes(attributes, values) {
+            values.padding && attributes.add('style', `padding: ${values.padding}px`);
         }
     },
 
