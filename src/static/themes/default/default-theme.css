@@ -216,11 +216,16 @@ html, body, .view-window {
 * Component: ProgressBar
 */
 
-.progressbar {
-    -webkit-appearance: none;
+progress.progressbar {
+    appearance: none;
     border-radius: 4px;
-    background: #2B2B2B;
     border:solid 2px #2B2B2B;
+    background: #2B2B2B;
+}
+
+progress.progressbar::-webkit-progress-bar,
+progress.progressbar:not([value])::-webkit-progress-bar {
+    background: #2B2B2B;
 }
 
 progress.progressbar::-webkit-progress-value {
@@ -228,6 +233,10 @@ progress.progressbar::-webkit-progress-value {
     border-radius: 4px;
 }
 
-@keyframes animate-stripes {
-    100% { background-position: -100px 0px; }
+progress.progressbar:not([value])::-webkit-progress-bar {
+    background:#3498db;
+    border-radius: 4px;
+    display:block;
+    width:25%;
+    height:100%;
 }

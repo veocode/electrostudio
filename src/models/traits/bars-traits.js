@@ -6,7 +6,7 @@ module.exports = {
     ProgressBarTrait: class extends ComponentTrait {
         getProps() {
             return [
-                new Props.ListProperty('mode', ['determinate', 'indeterminate'], 'determinate'),
+                new Props.ListProperty('mode', ['determinate', 'indeterminate'], 'indeterminate'),
                 new Props.IntegerProperty('value'),
                 new Props.IntegerProperty('maxValue'),
             ]
