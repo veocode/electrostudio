@@ -7,6 +7,10 @@ class Utils {
         return Math.round(value / snapSize) * snapSize
     }
 
+    static percent(value, maxValue, minValue = 0) {
+        return ((value - minValue) * 100) / (maxValue - minValue);
+    }
+
     static async *walkDirectory(directory) {
         for await (const nextFile of await fs.promises.opendir(directory)) {
             const entry = path.join(directory, nextFile.name);
