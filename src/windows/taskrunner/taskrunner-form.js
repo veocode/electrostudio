@@ -12,7 +12,8 @@ class TaskRunnerForm extends Form {
             resizable: false,
             minimizable: false,
             maximizable: false,
-            modal: true
+            modal: true,
+            isDebug: true
         };
     }
 
@@ -37,7 +38,7 @@ class TaskRunnerForm extends Form {
                 properties: {
                     name: 'labelStepTitle',
                     alignment: 'none',
-                    label: 'Label',
+                    label: t('Please wait') + '...',
                     left: 20,
                     top: 30,
                     width: 410,
@@ -78,6 +79,9 @@ class TaskRunnerForm extends Form {
                 width: 130,
                 height: 35,
                 metaData: ''
+            },
+            events: {
+                'click': 'onBtnCancelClick'
             }
         }])
     }

@@ -13,6 +13,7 @@ class MainWindow extends Window {
 
     start() {
         this.startProject();
+        this.initTaskRunner();
     }
 
     startProject() {
@@ -22,12 +23,14 @@ class MainWindow extends Window {
     }
 
     createForms() {
-        this.designerForm.createWindow();
         this.inspectorForm.createWindow();
+        this.designerForm.createWindow();
+    }
 
+    initTaskRunner() {
         this.taskRunnerForm.on('closed', () => {
-            this.designerForm.createWindow();
-            this.inspectorForm.createWindow();
+            this.designerForm.showWindow();
+            this.inspectorForm.showWindow();
         })
     }
 
@@ -60,10 +63,7 @@ class MainWindow extends Window {
     }
 
     async onBtnNewProjectClick(event, sender) {
-        const result = await this.dialogService.showOpenDialog({
-            title: t('Select New Project Folder'),
-            properties: ['openDirectory']
-        });
+
     }
 
     onBtnOpenProjectClick(event, sender) {
@@ -85,11 +85,11 @@ class MainWindow extends Window {
             if (result.canceled || !result.filePaths[0]) { return; }
 
             const folder = result.filePaths[0];
+            settings.set('lastProjectFolder', folder);
             await this.projectService.setFolder(folder);
         }
 
         await this.projectService.save();
-        settings.set('lastProjectFolder', folder);
     }
 
     onBtnComponentPalleteClick(event, senderToolButton) {

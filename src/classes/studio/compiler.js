@@ -68,16 +68,18 @@ class Compiler {
 
     async createProjectStructure() {
         const rootDir = load.path();
-        const targetDir = `${this.project.folder}/src`;
+        const targetDir = path.join(this.project.folder, 'src');
+        const dirsCreated = [];
 
         for await (const entry of this.walkDirectory(rootDir)) {
             const srcFilePath = entry;
-            const relativeFilePath = entry.replace(`${rootDir}/`, '');
+            const relativeFilePath = entry.replace(rootDir + path.sep, '');
             const destFilePath = path.join(targetDir, relativeFilePath);
             const destDirPath = path.dirname(destFilePath);
 
-            if (destDirPath) {
+            if (destDirPath && !dirsCreated.includes(destDirPath)) {
                 await fs.promises.mkdir(destDirPath, { recursive: true });
+                dirsCreated.push(destDirPath);
             }
 
             await fs.promises.copyFile(srcFilePath, destFilePath);
@@ -158,7 +160,7 @@ class Compiler {
         const controllerFilePath = path.join(controllerDir, `${name}-controller.js`);
         const controllerClassName = Utils.nameToClassName(name, 'Controller');
 
-        const controllerTemplate = await load.studioTemplate('controller.js');
+        const controllerTemplate = await this.getTemplateContents('controller.js');
         const controllerCode = beautifier.js(Utils.renderTemplate(controllerTemplate, {
             className: controllerClassName,
             defaultFormName: this.project.meta.defaultFormName
@@ -170,7 +172,7 @@ class Compiler {
     async getTemplateContents(name) {
         const templateDir = load.path('studio', 'templates');
         const templateFile = path.join(templateDir, `${name}.template`);
-        return await this.read(templateFile);
+        return await load.read(templateFile);
     }
 
     async *walkDirectory(directory) {
