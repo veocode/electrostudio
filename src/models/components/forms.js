@@ -24,6 +24,7 @@ class Form extends ContainerComponent {
         this.left = 400;
         this.top = 120;
         this.center = true;
+        this.modal = false;
         this.title = t('Form');
     }
 

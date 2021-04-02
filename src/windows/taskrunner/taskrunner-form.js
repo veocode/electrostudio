@@ -1,17 +1,18 @@
 const Form = load.class('form');
 
-class TaskRunner extends Form {
+class TaskRunnerForm extends Form {
 
     getSchema() {
         return {
-            name: 'main',
+            name: 'taskrunner',
             title: t('Work In Progress') + '...',
             width: 470,
             height: 190,
             center: true,
             resizable: false,
             minimizable: false,
-            maximizable: false
+            maximizable: false,
+            modal: true
         };
     }
 
@@ -34,7 +35,7 @@ class TaskRunner extends Form {
             children: [{
                 className: 'Label',
                 properties: {
-                    name: 'labelStepInfo',
+                    name: 'labelStepTitle',
                     alignment: 'none',
                     label: 'Label',
                     left: 20,
@@ -83,4 +84,4 @@ class TaskRunner extends Form {
 
 }
 
-module.exports = TaskRunner;
+module.exports = TaskRunnerForm;

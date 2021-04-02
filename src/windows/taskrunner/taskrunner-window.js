@@ -1,11 +1,11 @@
 const Window = load.class('window');
 
-class ProgressWindow extends Window {
+class TaskRunnerWindow extends Window {
 
     start() {
-
+        this.labelStepTitle.label = `RUN: ${this.payload.taskName}`;
     }
 
 }
 
-module.exports = ProgressWindow;
+module.exports = TaskRunnerWindow;

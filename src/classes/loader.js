@@ -64,8 +64,8 @@ class Loader {
         return this.instance(`windows/${name}/${name}-form`, ...constructorArgs);
     }
 
-    window(name, options) {
-        return this.instance(`windows/${name}/${name}-window`, name, options);
+    window(name, ...args) {
+        return this.instance(`windows/${name}/${name}-window`, name, ...args);
     }
 
     service(name) {

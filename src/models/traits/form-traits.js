@@ -10,6 +10,7 @@ module.exports = {
                 new Props.BooleanProperty('resizable'),
                 new Props.BooleanProperty('minimizable'),
                 new Props.BooleanProperty('maximizable'),
+                new Props.BooleanProperty('modal'),
             ]
         }
     }

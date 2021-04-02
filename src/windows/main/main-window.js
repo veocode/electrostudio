@@ -7,6 +7,7 @@ class MainWindow extends Window {
 
     inspectorForm = load.form('inspector');
     designerForm = load.form('designer');
+    taskRunnerForm = load.form('taskrunner');
 
     selectedComponentClass = null;
 
@@ -23,6 +24,11 @@ class MainWindow extends Window {
     createForms() {
         this.designerForm.createWindow();
         this.inspectorForm.createWindow();
+
+        this.taskRunnerForm.on('closed', () => {
+            this.designerForm.createWindow();
+            this.inspectorForm.createWindow();
+        })
     }
 
     bindDesignerEvents() {
@@ -58,6 +64,13 @@ class MainWindow extends Window {
             title: t('Select New Project Folder'),
             properties: ['openDirectory']
         });
+    }
+
+    onBtnOpenProjectClick(event, sender) {
+        this.designerForm.hideWindow();
+        this.inspectorForm.hideWindow();
+
+        this.taskRunnerForm.createWindow({ taskName: 'test' });
     }
 
     async onBtnSaveProjectClick(event, sender) {

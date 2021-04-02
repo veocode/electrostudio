@@ -52,7 +52,6 @@ class DesignerWindow extends Window {
 
     async displayActiveProjectForm() {
         const currentFormSchema = await this.projectService.getActiveFormSchema();
-        console.log('currentFormSchema', currentFormSchema);
         const currentFormComponentSchemas = await this.projectService.getActiveFormComponents();
 
         this.formComponent = this.form.createComponent('Form', currentFormSchema.properties);

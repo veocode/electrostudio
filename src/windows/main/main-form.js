@@ -13,7 +13,7 @@ class MainForm extends Form {
             height: 60,
             resizable: false,
             maximizable: false,
-            // isDebug: true
+            isDebug: true
         };
     }
 
@@ -45,6 +45,8 @@ class MainForm extends Form {
             name: 'btnOpenProject',
             icon: 'folder-o',
             hint: t('Open Project')
+        }, {
+            click: 'onBtnOpenProjectClick'
         }));
 
         toolbarProject.addChildren(this.createComponent('ToolButton', {

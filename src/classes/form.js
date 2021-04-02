@@ -69,10 +69,29 @@ class Form {
         return this.#formComponent ? this.#formComponent.getDOM() : null;
     }
 
-    createWindow() {
+    createWindow(payload = {}) {
         return window.ipc.invoke('form:call', {
             formName: this.getName(),
-            methodName: 'createWindow'
+            methodName: 'createWindow',
+            methodArgs: [payload]
+        });
+    }
+
+    showWindow() {
+        return this.createWindow();
+    }
+
+    hideWindow() {
+        return window.ipc.invoke('form:call', {
+            formName: this.getName(),
+            methodName: 'hide',
+        });
+    }
+
+    closeWindow() {
+        return window.ipc.invoke('form:call', {
+            formName: this.getName(),
+            methodName: 'close',
         });
     }
 

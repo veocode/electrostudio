@@ -5,14 +5,16 @@ class Window {
 
     name;
     options;
+    payload;
     form;
     dom = {};
     serviceClients = {};
 
-    constructor(name, options) {
+    constructor(name, options, payload = {}) {
         this.name = name;
         this.form = load.form(name);
         this.options = options;
+        this.payload = payload;
     }
 
     boot() {

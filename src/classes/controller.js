@@ -60,6 +60,10 @@ class Controller {
         return this.#windows[formName];
     }
 
+    hasOpenedWindows() {
+        return Object.keys(this.#windows).length > 0;
+    }
+
     getService(serviceName) {
         if (!(serviceName in this.#services)) {
             this.#services[serviceName] = load.service(serviceName, this);
@@ -75,10 +79,9 @@ class Controller {
 
     async callFormMethod(formName, methodName, methodArgs = []) {
         let result = null;
-
         switch (methodName) {
             case 'createWindow':
-                await this.createFormWindow(formName);
+                await this.createFormWindow(formName, ...methodArgs);
                 break;
             case 'setSize':
                 methodName = 'setContentSize';
@@ -105,7 +108,7 @@ class Controller {
         }
     }
 
-    async createFormWindow(formName) {
+    async createFormWindow(formName, payload = {}) {
         if (formName in this.#windows) {
             this.#windows[formName].show();
             return;
@@ -135,6 +138,7 @@ class Controller {
             resizable: options.resizable,
             maximizable: options.maximizable,
             minimizable: options.minimizable,
+            modal: options.modal,
             webPreferences: {
                 webSecurity: true,
                 contextIsolation: false,
@@ -150,6 +154,10 @@ class Controller {
             settings.center = true;
         }
 
+        if (formName != 'main' && this.#windows.main) {
+            settings.parent = this.#windows.main;
+        }
+
         const browserWindow = this.#windows[formName] = new BrowserWindow(settings);
 
         browserWindow.once('ready-to-show', () => {
@@ -161,6 +169,13 @@ class Controller {
 
         browserWindow.on('closed', () => {
             delete this.#windows[formName];
+
+            if (!this.hasOpenedWindows()) {
+                app.quit();
+                return;
+            }
+
+            this.dispatchFormEvent(formName, 'closed');
         });
 
         if (options.isDebug) {
@@ -175,13 +190,10 @@ class Controller {
         const baseViewQuery = {
             name: formName,
             options: JSON.stringify(options),
+            payload: JSON.stringify(payload)
         };
 
         await browserWindow.loadFile(baseViewPath, { query: baseViewQuery });
-
-        if (formName != 'main' && this.#windows.main) {
-            browserWindow.setParentWindow(this.#windows.main);
-        }
     }
 
     #calculateWindowSize(width, height) {
