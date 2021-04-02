@@ -39,8 +39,8 @@ class Compiler {
     static DefaultConfig = {
         appTitle: '',
         mainControllerName: 'main',
-        baseWindowPreloadScript: 'windows/base/base-preload.js',
-        baseWindowView: 'windows/base/base-window.html',
+        baseWindowPreloadScript: ['windows', 'base', 'base-preload.js'],
+        baseWindowView: ['windows', 'base', 'base-window.html'],
     };
 
     project;
@@ -84,23 +84,12 @@ class Compiler {
         }
     }
 
-    async *walkDirectory(directory) {
-        for await (const nextFile of await fs.promises.opendir(directory)) {
-            const filePath = path.join(directory, nextFile.name);
-            if (nextFile.isDirectory()) {
-                const ignoreFilePath = path.join(directory, nextFile.name, Compiler.FileNames.Ignore);
-                if (!fs.existsSync(ignoreFilePath)) {
-                    yield* await this.walkDirectory(filePath);
-                }
-            } else {
-                if (nextFile.isFile()) yield filePath;
-            }
-        }
-    }
-
     async compileMeta() {
-        const metaJSON = JSON.stringify(this.project.meta, null, 4);
-        const metaFilePath = path.join(this.project.folder, 'meta', Compiler.FileNames.Meta);
+        const metaDir = path.join(this.project.folder, 'meta');
+        await fs.promises.mkdir(metaDir, { recursive: true });
+
+        const metaJSON = JSON.stringify(this.project.meta, null, 2);
+        const metaFilePath = path.join(metaDir, Compiler.FileNames.Meta);
         await load.write(metaFilePath, metaJSON);
     }
 
@@ -142,14 +131,14 @@ class Compiler {
         const formClassName = Utils.nameToClassName(name, 'Form');
         const windowClassName = Utils.nameToClassName(name, 'Window');
 
-        const formTemplate = await load.studioTemplate('form.js');
+        const formTemplate = await this.getTemplateContents('form.js');
         const formCode = beautifier.js(Utils.renderTemplate(formTemplate, {
             className: formClassName,
             formProperties: schema.properties,
             formChildren: schema.children
         }));
 
-        const windowTemplate = await load.studioTemplate('window.js');
+        const windowTemplate = await this.getTemplateContents('window.js');
         const windowCode = beautifier.js(Utils.renderTemplate(windowTemplate, {
             className: windowClassName,
         }));
@@ -176,6 +165,26 @@ class Compiler {
         }));
 
         await load.write(controllerFilePath, controllerCode);
+    }
+
+    async getTemplateContents(name) {
+        const templateDir = load.path('studio', 'templates');
+        const templateFile = path.join(templateDir, `${name}.template`);
+        return await this.read(templateFile);
+    }
+
+    async *walkDirectory(directory) {
+        for await (const nextFile of await fs.promises.opendir(directory)) {
+            const filePath = path.join(directory, nextFile.name);
+            if (nextFile.isDirectory()) {
+                const ignoreFilePath = path.join(directory, nextFile.name, Compiler.FileNames.Ignore);
+                if (!fs.existsSync(ignoreFilePath)) {
+                    yield* await this.walkDirectory(filePath);
+                }
+            } else {
+                if (nextFile.isFile()) yield filePath;
+            }
+        }
     }
 
 }

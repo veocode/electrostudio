@@ -1,5 +1,5 @@
 const Service = load.class('service');
-const Studio = load.singleton('studio/studio');
+const Studio = load.singleton('classes/studio/studio');
 
 class ProjectService extends Service {
 

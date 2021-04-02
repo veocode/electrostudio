@@ -170,6 +170,24 @@ module.exports = {
         }
     },
 
+    BorderTrait: class extends ComponentTrait {
+        getProps() {
+            return [
+                new Props.IntegerProperty('borderRadius', 0),
+                new Props.IntegerProperty('borderWidth', 0),
+                new Props.ColorProperty('borderColor', '#000000'),
+                new Props.ListProperty('borderStyle', ['solid', 'dashed', 'dotted', 'inset', 'outset'], 'solid'),
+            ]
+        }
+        appendAttributes(attributes, values) {
+            if (values.borderWidth) {
+                attributes.add('style', `border: ${values.borderStyle} ${values.borderWidth}px ${values.borderColor}`);
+            }
+
+            values.borderRadius && attributes.add('style', `border-radius: ${values.borderRadius}px`);
+        }
+    },
+
     ToggleableTrait: class extends ComponentTrait {
         getProps() {
             return [

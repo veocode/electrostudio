@@ -1,4 +1,4 @@
-const Project = load.studio('project');
+const Project = load.class('studio/project');
 
 class Studio {
 

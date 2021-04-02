@@ -1,5 +1,6 @@
 const path = load.node('path');
 const fs = load.node('fs');
+const util = load.node('util');
 
 class Utils {
 
@@ -28,7 +29,12 @@ class Utils {
 
                 let variableValue = (variableName in context) ? context[variableName] : '';
                 if (typeof (variableValue) == 'object') {
-                    variableValue = JSON.stringify(variableValue);
+                    variableValue = util.inspect(variableValue, {
+                        depth: Infinity,
+                        maxArrayLength: Infinity,
+                        maxStringLength: Infinity,
+                        breakLength: Infinity
+                    });
                 }
 
                 template = template.replace(originalTag, variableValue);

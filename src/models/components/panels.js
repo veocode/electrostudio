@@ -14,6 +14,7 @@ class Panel extends ContainerComponent {
             new Traits.PositionTrait(),
             new Traits.SizeTrait(),
             new Traits.BackgroundColorTrait(),
+            new Traits.BorderTrait()
         ]);
     }
 

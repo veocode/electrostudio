@@ -7,10 +7,6 @@ class Loader {
 
     #singletons = {};
 
-    constructor() {
-        let self = this;
-    }
-
     node(module) {
         if (arguments.length == 1) {
             return require(module);
@@ -31,8 +27,14 @@ class Loader {
         return this.node('electron', apiName);
     }
 
-    path(file) {
-        return file ? `${Loader.rootDir}/${file}` : Loader.rootDir;
+    path(...files) {
+        if (!files.length) {
+            return Loader.rootDir;
+        }
+        if (files.length == 1 && Array.isArray(files[0])) {
+            files = files[0];
+        }
+        return path.join(Loader.rootDir, ...files);
     }
 
     file(name) {
@@ -123,16 +125,6 @@ class Loader {
                 }
             });
         });
-    }
-
-    studio(name) {
-        return this.file(`studio/${name}`);
-    }
-
-    async studioTemplate(name) {
-        const templateDir = path.join(Loader.rootDir, 'studio', 'templates');
-        const templateFile = path.join(templateDir, `${name}.template`);
-        return await this.read(templateFile);
     }
 
 }

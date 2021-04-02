@@ -1,4 +1,4 @@
-const Compiler = load.studio('compiler');
+const Compiler = load.class('studio/compiler');
 
 class Project {
 
@@ -12,7 +12,7 @@ class Project {
 
     constructor(folder = null) {
         if (folder == null || !this.isFolderContainsProject(folder)) {
-            folder = load.path('studio/default-project');
+            folder = load.path('studio', 'default-project');
             this.#isFolderSelected = false;
         }
         this.folder = folder;
@@ -42,7 +42,9 @@ class Project {
     }
 
     isFolderContainsProject(folder) {
-        return load.node('fs').existsSync(`${folder}/meta/${Compiler.FileNames.Meta}`);
+        const path = load.node('path');
+        const fs = load.node('fs');
+        return fs.existsSync(path.join(folder, 'meta', Compiler.FileNames.Meta));
     }
 
     setFolder(folder) {

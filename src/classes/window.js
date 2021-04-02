@@ -25,7 +25,7 @@ class Window {
         this.registerComponents();
         this.registerFormEvents();
 
-        const windowStylesPath = load.path(`windows/${this.name}/${this.name}-window.css`);
+        const windowStylesPath = load.path('windows', this.name, `${this.name}-window.css`);
         if (fs.existsSync(windowStylesPath)) {
             this.addCSS(windowStylesPath);
         }
