@@ -15,6 +15,14 @@ class DialogsService extends Service {
         return dialog.showMessageBox(caller.window, options);
     }
 
+    showErrorDialog(caller, message) {
+        return this.showMessageDialog(caller, {
+            title: t('An Error Occured'),
+            type: 'error',
+            message,
+        });
+    }
+
     showOpenDialog(caller, options) {
         const defaultOptions = {}
 

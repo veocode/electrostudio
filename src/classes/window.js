@@ -118,6 +118,18 @@ class Window {
         this.setContentDOM(this.form.getDOM());
     }
 
+    close() {
+        this.form.closeWindow();
+    }
+
+    hide() {
+        this.form.hideWindow();
+    }
+
+    show() {
+        this.form.showWindow();
+    }
+
     callMethod(methodName, ...methodArgs) {
         if (!(methodName in this)) {
             throw new errors.MethodNotExistsException(this.options.name, methodName);

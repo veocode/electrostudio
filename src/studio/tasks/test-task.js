@@ -11,40 +11,33 @@ class TestTask extends Task {
         ];
     }
 
-    step1() {
-        return new Promise((resolve, reject) => {
+    step1(resolve, reject) {
+        const stepTitle = t('Verifying NPM installation');
+        const stepError = t('NPM is not found on your machine.\nPlease install NPM and Node.js to build the project.');
 
-            this.runner.setStepTitle('Bulding project');
-            setTimeout(() => resolve(), 2000);
+        this.runner.setStepTitle(`${stepTitle}...`);
 
-        });
+        const shellService = this.getService('shell')
+
+        shellService.execute('ngm -v').then(
+            () => { resolve(); },
+            () => { reject(stepError); }
+        )
     }
 
-    step2() {
-        return new Promise((resolve, reject) => {
-
-            this.runner.setStepTitle('Compiling project');
-            setTimeout(() => resolve(), 2000);
-
-        });
+    step2(resolve, reject) {
+        this.runner.setStepTitle('Compiling project');
+        setTimeout(() => resolve('Failed to compile project'), 2000);
     }
 
-    step3() {
-        return new Promise((resolve, reject) => {
-
-            this.runner.setStepTitle('Doing something with compiled project');
-            setTimeout(() => resolve(), 2000);
-
-        });
+    step3(resolve, reject) {
+        this.runner.setStepTitle('Doing something with compiled project');
+        setTimeout(() => resolve(), 2000);
     }
 
-    step4() {
-        return new Promise((resolve, reject) => {
-
-            this.runner.setStepTitle('Finishing installation');
-            setTimeout(() => resolve(), 2000);
-
-        });
+    step4(resolve, reject) {
+        this.runner.setStepTitle('Finishing installation');
+        setTimeout(() => resolve(), 2000);
     }
 
 }

@@ -4,7 +4,7 @@ class TaskRunnerWindow extends Window {
 
     taskName;
 
-    runner = load.instance('classes/studio/taskrunner');
+    runner = load.instance('classes/studio/taskrunner', this);
 
     start() {
         const taskName = this.payload.taskName;
@@ -13,11 +13,17 @@ class TaskRunnerWindow extends Window {
             this.labelStepTitle.label = title;
         })
 
-        this.runner.events.on('task:done', () => {
-            this.form.closeWindow();
+        this.runner.events.on('task:step-failed', async (message) => {
+            await this.getService('dialogs').showErrorDialog(message);
+            this.close();
         })
 
-        this.runner.runTask(taskName);
+        this.runner.events.on('task:done', () => {
+            this.close();
+        })
+
+        this.runner.setTask(taskName);
+        this.runner.start();
     }
 
     onBtnCancelClick() {

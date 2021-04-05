@@ -2,11 +2,23 @@ class TaskRunner {
 
     events = load.instance('classes/eventmanager');
 
+    window;
     task;
-    steps;
+    steps = [];
 
-    runTask(taskName) {
+    constructor(window) {
+        this.window = window;
+    }
+
+    setTask(taskName) {
         this.task = load.instance(`studio/tasks/${taskName}-task`, this);
+    }
+
+    getStepsCount() {
+        return this.steps.length;
+    }
+
+    start() {
         this.steps = this.task.getSteps();
         this.runNextTaskStep();
     }
@@ -18,10 +30,13 @@ class TaskRunner {
         }
 
         const nextStepFunction = this.steps.shift();
+        const nextStepPromise = new Promise((resolve, reject) => nextStepFunction.call(this.task, resolve, reject));
 
-        Promise.resolve(nextStepFunction.call(this.task)).then(() => {
+        Promise.resolve(nextStepPromise).then(() => {
             this.events.emit('task:step-done');
             this.runNextTaskStep();
+        }, (errorMessage) => {
+            this.fail(errorMessage);
         });
     }
 
@@ -35,6 +50,10 @@ class TaskRunner {
 
     setProgressPercent(percent) {
         this.events.emit('task:step-progress', percent);
+    }
+
+    fail(reasonMessage) {
+        this.events.emit('task:step-failed', reasonMessage);
     }
 
 }

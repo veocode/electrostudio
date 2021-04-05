@@ -44,6 +44,17 @@ module.exports = {
         }
     },
 
+    ServiceMethodNotExistsException: class extends BaseException {
+        constructor(serviceName, methodName) {
+            super();
+            this.serviceName = serviceName;
+            this.methodName = methodName;
+        }
+        getMessage() {
+            return t('Service Method does not exists');
+        }
+    },
+
     ComponentNameAlreadyExists: class extends BaseException {
         constructor(componentName, className) {
             super();
