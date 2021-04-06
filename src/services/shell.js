@@ -5,32 +5,17 @@ class ShellService extends Service {
 
     execute(caller, command, workingDirectoryPath) {
         return new Promise((resolve, reject) => {
-            const parts = command.split(/\s+/g);
-            const commandName = parts[0];
-            const commandArgs = parts.slice(1);
+
             const options = { cwd: workingDirectoryPath };
 
-            const process = child_process.spawn(commandName, commandArgs, options);
-
-            process.stdout.on('data', (data) => {
-                console.log(`[SHELL: ${commandName}] ${data}`);
-            });
-
-            process.stderr.on('data', (data) => {
-                console.log(`[SHELL: ${commandName}] ${data}`);
-            });
-
-            process.on('error', error => {
-                reject(new Error(t('Error executing command') + ': ' + error.message));
-            });
-
-            process.on('exit', code => {
-                if (code == 0) {
-                    resolve();
+            child_process.exec(command, options, (error) => {
+                if (error) {
+                    reject(t('Error executing command') + ': ' + error.message);
                     return;
                 }
-                reject(new Error(t('Error executing command') + ': ' + t('Non-zero return code')));
+                resolve();
             });
+
         });
     }
 
