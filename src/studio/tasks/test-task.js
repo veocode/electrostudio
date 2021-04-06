@@ -2,42 +2,67 @@ const Task = load.class('studio/task');
 
 class TestTask extends Task {
 
+    shellService;
+    projectService;
+
+    projectFolderPath;
+    isProjectPackageCompiled;
+
+    async boot() {
+        this.shellService = this.getService('shell');
+        this.projectService = this.getService('studio/project');
+        this.projectFolderPath = await this.projectService.getFolder();
+        this.isProjectPackageCompiled = await this.projectService.isFolderPackageCompiled();
+    }
+
     getSteps() {
+        if (this.isProjectPackageCompiled) {
+            return [
+                this.stepRunApplication,
+            ];
+        }
+
         return [
-            this.step1,
-            this.step2,
-            this.step3,
-            this.step4
+            this.stepVerifyNPM,
+            this.stepInstallDependencies,
+            this.stepRunApplication,
         ];
     }
 
-    step1(resolve, reject) {
+    stepVerifyNPM(resolve, reject) {
         const stepTitle = t('Verifying NPM installation');
         const stepError = t('NPM is not found on your machine.\nPlease install NPM and Node.js to build the project.');
 
         this.runner.setStepTitle(`${stepTitle}...`);
 
-        const shellService = this.getService('shell')
-
-        shellService.execute('ngm -v').then(
+        this.shellService.execute('npm -v').then(
             () => { resolve(); },
             () => { reject(stepError); }
         )
     }
 
-    step2(resolve, reject) {
-        this.runner.setStepTitle('Compiling project');
-        setTimeout(() => resolve('Failed to compile project'), 2000);
+    async stepInstallDependencies(resolve, reject) {
+        const stepTitle = t('Installing dependencies');
+        const stepError = t('Failed to execute npm install command in project folder');
+
+        this.runner.setStepTitle(`${stepTitle}...`);
+
+        this.shellService.execute('npm install', this.projectFolderPath).then(
+            () => { resolve(); },
+            () => { reject(stepError); }
+        )
     }
 
-    step3(resolve, reject) {
-        this.runner.setStepTitle('Doing something with compiled project');
-        setTimeout(() => resolve(), 2000);
-    }
+    stepRunApplication(resolve, reject) {
+        const stepTitle = t('Running Application');
+        const stepError = t('Failed to execute npm start command in project folder');
 
-    step4(resolve, reject) {
-        this.runner.setStepTitle('Finishing installation');
-        setTimeout(() => resolve(), 2000);
+        this.runner.setStepTitle(`${stepTitle}...`);
+
+        this.shellService.execute('npm start', this.projectFolderPath).then(
+            () => { resolve(); },
+            () => { reject(stepError); }
+        )
     }
 
 }

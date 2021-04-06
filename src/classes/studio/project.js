@@ -1,4 +1,6 @@
 const Compiler = load.class('studio/compiler');
+const path = load.node('path');
+const fs = load.node('fs');
 
 class Project {
 
@@ -6,16 +8,21 @@ class Project {
     meta = {};
 
     #isFolderSelected = true;
+    #isFolderPackageCompiled = false;
     #isDirty = false;
 
     #compiler = new Compiler(this);
 
     constructor(folder = null) {
-        if (folder == null || !this.isFolderContainsProject(folder)) {
+        if (folder == null) {
             folder = load.path('studio', 'default-project');
+        }
+
+        this.setFolder(folder);
+
+        if (!this.isFolderContainsProject(folder)) {
             this.#isFolderSelected = false;
         }
-        this.folder = folder;
     }
 
     async load() {
@@ -41,17 +48,27 @@ class Project {
         return this.#isFolderSelected;
     }
 
+    isFolderPackageCompiled() {
+        return this.#isFolderPackageCompiled;
+    }
+
     isFolderContainsProject(folder) {
-        const path = load.node('path');
-        const fs = load.node('fs');
         return fs.existsSync(path.join(folder, 'meta', Compiler.FileNames.Meta));
     }
 
+    isFolderContainsPackage(folder) {
+        return fs.existsSync(path.join(folder, Compiler.FileNames.Manifest));
+    }
+
+    getFolder() {
+        return this.folder;
+    }
+
     setFolder(folder) {
-        const path = load.node('path');
         this.folder = folder;
         this.meta.name = path.basename(folder);
         this.#isFolderSelected = true;
+        this.#isFolderPackageCompiled = this.isFolderContainsPackage(folder);
     }
 
     getFormSchema(formName) {

@@ -15,11 +15,18 @@ class Service {
                 return;
             };
 
+            let resultPromiseOrValue;
+
             if (targetObject == this) {
-                Promise.resolve(targetObject[methodName](caller, ...methodArgs)).then((result) => resolve(result));
+                resultPromiseOrValue = targetObject[methodName](caller, ...methodArgs);
             } else {
-                Promise.resolve(targetObject[methodName](...methodArgs)).then((result) => resolve(result));
+                resultPromiseOrValue = targetObject[methodName](...methodArgs);
             }
+
+            Promise.resolve(resultPromiseOrValue).then(
+                result => resolve(result),
+                error => reject(error)
+            );
         });
     }
 

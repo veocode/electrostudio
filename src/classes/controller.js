@@ -73,17 +73,17 @@ class Controller {
 
     async callServiceMethod(caller, serviceName, methodName, methodArgs) {
         const service = this.getService(serviceName);
-        let result = {};
+        const result = {
+            error: null,
+            data: null
+        };
 
-        try {
-            result = {
-                error: null,
-                result: await service.callMethod(caller, methodName, methodArgs)
-            }
-        } catch (error) {
-            result = {
-                error: error.message
-            }
+        result.data = await service.callMethod(caller, methodName, methodArgs).catch(error => {
+            result.error = error.message;
+        });
+
+        if (result.error) {
+            result.data = null;
         }
 
         return result;

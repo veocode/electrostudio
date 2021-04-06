@@ -17,11 +17,18 @@ class ServiceClient {
     }
 
     callMethod(methodName, methodArgs) {
-        return window.ipc.invoke('service:call', {
-            windowName: this.clientWindow.name,
-            serviceName: this.serviceName,
-            methodName,
-            methodArgs
+        return new Promise(async (resolve, reject) => {
+            const result = await window.ipc.invoke('service:call', {
+                windowName: this.clientWindow.name,
+                serviceName: this.serviceName,
+                methodName,
+                methodArgs
+            });
+            if (result.error) {
+                reject(new Error(result.error));
+                return;
+            }
+            resolve(result.data);
         });
     }
 

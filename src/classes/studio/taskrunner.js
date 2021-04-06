@@ -18,8 +18,10 @@ class TaskRunner {
         return this.steps.length;
     }
 
-    start() {
+    async start() {
+        await this.task.boot();
         this.steps = this.task.getSteps();
+        console.log('start', this.steps);
         this.runNextTaskStep();
     }
 
@@ -32,12 +34,16 @@ class TaskRunner {
         const nextStepFunction = this.steps.shift();
         const nextStepPromise = new Promise((resolve, reject) => nextStepFunction.call(this.task, resolve, reject));
 
-        Promise.resolve(nextStepPromise).then(() => {
-            this.events.emit('task:step-done');
-            this.runNextTaskStep();
-        }, (errorMessage) => {
-            this.fail(errorMessage);
-        });
+        Promise.resolve(nextStepPromise).then(
+            () => {
+                this.events.emit('task:step-done');
+                this.runNextTaskStep();
+            },
+
+            error => {
+                this.fail(error);
+            }
+        );
     }
 
     setStepTitle(title) {

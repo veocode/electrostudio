@@ -7,7 +7,7 @@ class Task {
         this.boot();
     }
 
-    boot() {
+    async boot() {
         // Override in children
     }
 
