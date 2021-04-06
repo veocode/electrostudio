@@ -8,19 +8,21 @@ class Project {
     meta = {};
 
     #isFolderSelected = true;
-    #isFolderPackageCompiled = false;
     #isDirty = false;
 
     #compiler = new Compiler(this);
 
     constructor(folder = null) {
-        if (folder == null) {
+        let isUseDefaultFolder = false;
+
+        if (folder == null || !this.isFolderContainsProject(folder)) {
             folder = load.path('studio', 'default-project');
+            isUseDefaultFolder = true;
         }
 
         this.setFolder(folder);
 
-        if (!this.isFolderContainsProject(folder)) {
+        if (isUseDefaultFolder) {
             this.#isFolderSelected = false;
         }
     }
@@ -37,6 +39,7 @@ class Project {
         return new Promise(async (resolve, reject) => {
             try {
                 await this.#compiler.compileProject();
+                this.setDirty(false);
                 resolve();
             } catch (err) {
                 reject(err);
@@ -49,15 +52,11 @@ class Project {
     }
 
     isFolderPackageCompiled() {
-        return this.#isFolderPackageCompiled;
+        return fs.existsSync(path.join(this.folder, 'node_modules'));
     }
 
     isFolderContainsProject(folder) {
         return fs.existsSync(path.join(folder, 'meta', Compiler.FileNames.Meta));
-    }
-
-    isFolderContainsPackage(folder) {
-        return fs.existsSync(path.join(folder, Compiler.FileNames.Manifest));
     }
 
     getFolder() {
@@ -68,7 +67,14 @@ class Project {
         this.folder = folder;
         this.meta.name = path.basename(folder);
         this.#isFolderSelected = true;
-        this.#isFolderPackageCompiled = this.isFolderContainsPackage(folder);
+    }
+
+    isDirty() {
+        return this.#isDirty;
+    }
+
+    setDirty(isDirty) {
+        this.#isDirty = isDirty;
     }
 
     getFormSchema(formName) {
@@ -127,7 +133,7 @@ class Project {
         this.meta.forms[formName].schema = schema;
         this.meta.forms[formName].components = componentSchemas;
 
-        this.#isDirty = true;
+        this.setDirty(true);
     }
 
 }

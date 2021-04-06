@@ -66,30 +66,54 @@ class MainWindow extends Window {
 
     }
 
-    onBtnOpenProjectClick(event, sender) {
-        this.designerForm.hideWindow();
-        this.inspectorForm.hideWindow();
+    async onBtnOpenProjectClick(event, sender) {
+        const isProjectDirty = await this.projectService.isDirty();
 
-        this.taskRunnerForm.createWindow({ taskName: 'test' });
-    }
+        if (isProjectDirty) {
+            const dialogResult = await this.dialogService.showMessageDialog({
+                type: 'question',
+                message: t('Project has unsaved changes.\nSave Project before run?'),
+                buttons: [t('Yes'), t('No')]
+            })
 
-    async onBtnSaveProjectClick(event, sender) {
-        const isFolderSelected = await this.projectService.isFolderSelected()
-
-        if (!isFolderSelected) {
-            const result = await this.dialogService.showOpenDialog({
-                title: t('Select New Project Folder'),
-                properties: ['openDirectory']
-            });
-
-            if (result.canceled || !result.filePaths[0]) { return; }
-
-            const folder = result.filePaths[0];
-            settings.set('lastProjectFolder', folder);
-            await this.projectService.setFolder(folder);
+            if (dialogResult.response == 0) {
+                const isSaved = await this.saveProject();
+                if (!isSaved) { return; }
+            }
         }
 
-        await this.projectService.save();
+        this.designerForm.hideWindow();
+        this.inspectorForm.hideWindow();
+        this.taskRunnerForm.createWindow({ taskName: 'project-run' });
+    }
+
+    onBtnSaveProjectClick(event, sender) {
+        this.saveProject();
+    }
+
+    saveProject() {
+        return new Promise(async resolve => {
+            const isFolderSelected = await this.projectService.isFolderSelected()
+
+            if (!isFolderSelected) {
+                const result = await this.dialogService.showOpenDialog({
+                    title: t('Select New Project Folder'),
+                    properties: ['openDirectory']
+                });
+
+                if (result.canceled || !result.filePaths[0]) {
+                    resolve(false);
+                    return;
+                }
+
+                const folder = result.filePaths[0];
+                settings.set('lastProjectFolder', folder);
+                await this.projectService.setFolder(folder);
+            }
+
+            await this.projectService.save();
+            resolve(true);
+        });
     }
 
     onBtnComponentPalleteClick(event, senderToolButton) {

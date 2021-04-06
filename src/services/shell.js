@@ -12,17 +12,13 @@ class ShellService extends Service {
 
             const process = child_process.spawn(commandName, commandArgs, options);
 
-            // subprocess.stdout.on('data', (data) => {
-            //     if (this.stdoutCallback) {
-            //         this.stdoutCallback(data);
-            //     }
-            // });
+            process.stdout.on('data', (data) => {
+                console.log(`[SHELL: ${commandName}] ${data}`);
+            });
 
-            // subprocess.stderr.on('data', (data) => {
-            //     if (this.stderrCallback) {
-            //         this.stderrCallback(data);
-            //     }
-            // });
+            process.stderr.on('data', (data) => {
+                console.log(`[SHELL: ${commandName}] ${data}`);
+            });
 
             process.on('error', error => {
                 reject(new Error(t('Error executing command') + ': ' + error.message));

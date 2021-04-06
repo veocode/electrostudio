@@ -94,6 +94,7 @@ class DesignerWindow extends Window {
             this.formComponent.width = window.innerWidth;
             this.formComponent.height = window.innerHeight;
             this.onComponentClick(this.formComponent, event.offsetX, event.offsetY);
+            this.updateFormInProject();
         });
 
         window.addEventListener('keydown', event => {

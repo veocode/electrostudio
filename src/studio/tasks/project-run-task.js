@@ -1,6 +1,6 @@
 const Task = load.class('studio/task');
 
-class TestTask extends Task {
+class ProjectRunTask extends Task {
 
     shellService;
     projectService;
@@ -67,4 +67,4 @@ class TestTask extends Task {
 
 }
 
-module.exports = TestTask;
+module.exports = ProjectRunTask;
