@@ -3,8 +3,9 @@ const Traits = load.models.traits();
 
 class InspectorPropertyEditor extends Component {
 
+    events = load.instance('classes/eventmanager');
+
     #schema = {};
-    #callbacks = {};
 
     static isInternal() {
         return true;
@@ -35,10 +36,6 @@ class InspectorPropertyEditor extends Component {
 
     setParentSchema(parentSchema) {
         this.buildParentSelector(parentSchema);
-    }
-
-    setCallbacks(callbacks) {
-        this.#callbacks = Object.assign({}, this.#callbacks, callbacks);
     }
 
     buildDOM() {
@@ -81,9 +78,7 @@ class InspectorPropertyEditor extends Component {
 
         $parentLink.on('click', event => {
             event.preventDefault();
-            if ('parentSelected' in this.#callbacks) {
-                this.#callbacks.parentSelected(parentSchema.properties.name);
-            }
+            this.events.emit('parent-selected', parentSchema.properties.name);
         });
     }
 
@@ -94,13 +89,11 @@ class InspectorPropertyEditor extends Component {
     }
 
     onInputResult(prop, previousValue, value) {
-        if ('result' in this.#callbacks) {
-            this.#callbacks.result(prop, previousValue, value);
-        }
+        this.events.emit('input-result', prop, previousValue, value);
     }
 
     onInputError(prop, previousValue, message) {
-        alert(`${t('Validation Error')}: ${message}`);
+        this.events.emit('input-error', message);
         prop.setInputValue(previousValue);
     }
 

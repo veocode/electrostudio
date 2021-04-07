@@ -23,11 +23,14 @@ class InspectorForm extends Form {
             orientation: 'column'
         })
 
-        const paneActions = this.createComponent('LayoutPane', {
-            fixedSize: 50
-        });
+        const paneActions = this.createComponent('LayoutPane', { fixedSize: 50 });
+        const paneTabs = this.createComponent('LayoutPane');
 
-        const paneEditor = this.createComponent('LayoutPane');
+        const tabs = this.createComponent('Tabs', { alignment: 'client' });
+        const tabPropEditor = this.createComponent('TabPane', { label: 'Properties' });
+        const tabEventEditor = this.createComponent('TabPane', { label: 'Events' });
+        tabs.addChildren(tabPropEditor, tabEventEditor);
+        paneTabs.addChildren(tabs);
 
         const actionPanel = this.createComponent('ToolPanel', {
             name: 'actionPanel',
@@ -35,17 +38,18 @@ class InspectorForm extends Form {
             height: 50
         })
 
-        const editor = this.createComponent('InspectorPropertyEditor', {
+        const propEditor = this.createComponent('InspectorPropertyEditor', {
             name: 'editor'
         });
 
+        tabPropEditor.addChildren(propEditor);
+
         paneActions.addChildren(actionPanel);
-        paneEditor.addChildren(editor);
-        layout.addChildren(paneActions, paneEditor);
+        paneTabs.addChildren(tabs);
+        layout.addChildren(paneTabs, paneActions);
 
         this.addChildren(layout);
     }
-
 
 }
 

@@ -2,25 +2,26 @@ const Window = load.class('window');
 
 class InspectorWindow extends Window {
 
-    editor;
-
     start() {
         this.initEditor();
         this.bindEvents();
     }
 
     initEditor() {
-        this.editor.setCallbacks({
-            result: (prop, previousValue, value) => {
-                this.form.emit('component:prop-updated', {
-                    propertyName: prop.name,
-                    previousValue,
-                    value
-                });
-            },
-            parentSelected: (name) => {
-                this.form.emit('component:parent-selected', name);
-            }
+        this.editor.events.on('input-result', (prop, previousValue, value) => {
+            this.form.emit('component:prop-updated', {
+                propertyName: prop.name,
+                previousValue,
+                value
+            });
+        });
+
+        this.editor.events.on('input-error', (message) => {
+            alert(`${t('Validation Error')}: ${message}`);
+        });
+
+        this.editor.events.on('parent-selected', (name) => {
+            this.form.emit('component:parent-selected', name);
         });
     }
 

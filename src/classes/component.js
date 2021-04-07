@@ -222,6 +222,11 @@ class Component {
 
     rebuildDOM() {
         this.$dom = this.buildDOM();
+        this.onAfterRebuild();
+    }
+
+    onAfterRebuild() {
+        // Override in children
     }
 
     getDOM() {
@@ -243,12 +248,16 @@ class Component {
         let schema = {
             className: this.constructor.name,
             properties: this.propertyValues,
+            events: this.eventHandlerNames
         }
         return schema;
     }
 
     setSchema(schema, form) {
         this.proxy.setPropertyValues(schema.properties);
+        if (schema.events) {
+            this.proxy.setEventHandlers(schema.events);
+        }
     }
 
     isResizable() {
@@ -392,7 +401,7 @@ class ContainerComponent extends Component {
 
             for (let childrenSchema of schema.children) {
                 const childrenComponent = form.createComponent(childrenSchema.className);
-                childrenComponent.setSchema(childrenSchema);
+                childrenComponent.setSchema(childrenSchema, form);
                 this.addChildren(childrenComponent);
             }
 
@@ -421,6 +430,7 @@ class ContainerComponent extends Component {
             $childrenDOM.push(childrenComponent.getDOM());
         }
         this.$dom = this.buildDOM(...$childrenDOM);
+        this.onAfterRebuild();
     }
 
     getDOM() {

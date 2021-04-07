@@ -245,7 +245,66 @@ html, body, .view-window {
         rgba(0, 0, 0, 0.3) 20px
     );
     background-position-x: 0px;
-    animation: movebackground 2s linear infinite;
+    animation: anim-progress-background 2s linear infinite;
+}
+
+/*
+* Component: Tabs
+*/
+
+.tabs {
+    display: flex;
+    flex-direction: column;
+}
+
+.tabs > .tabs-header {
+    height:30px;
+    display:flex;
+    flex-direction: row;
+}
+
+.tabs > .tabs-header > button {
+    height:30px;
+    padding:0 15px;
+    border: none;
+    outline: none;
+    box-shadow: none;
+    background: #252525;
+    color:#888;
+    margin:0;
+}
+
+.tabs > .tabs-header > button:not(.active):hover {
+    color: #AAA;
+    cursor: pointer;
+}
+
+.tabs > .tabs-header > button.active {
+    background: #333;
+    color:#FFF;
+}
+
+.tabs > .tabs-panes {
+    flex-grow: 1;
+}
+
+.tabs > .tabs-panes > .tab-pane {
+    display: none;
+}
+
+.tabs > .tabs-panes > .tab-pane.active {
+    display: block;
+}
+
+/*
+* Component: TabPane
+*/
+
+.tab-pane,
+.tab-pane > .tab-pane-body {
+    position: relative;
+    width: 100%;
+    height: 100%;
 }
 
 
@@ -253,7 +312,7 @@ html, body, .view-window {
 * Animations
 */
 
-@keyframes movebackground {
+@keyframes anim-progress-background {
     0% { background-position-x: 0px; }
     100% { background-position-x: 56px; }
 }
