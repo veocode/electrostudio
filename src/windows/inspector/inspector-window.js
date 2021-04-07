@@ -3,12 +3,13 @@ const Window = load.class('window');
 class InspectorWindow extends Window {
 
     start() {
-        this.initEditor();
+        this.initPropEditor();
+        this.initEventEditor();
         this.bindEvents();
     }
 
-    initEditor() {
-        this.editor.events.on('input-result', (prop, previousValue, value) => {
+    initPropEditor() {
+        this.propEditor.events.on('input-result', (prop, previousValue, value) => {
             this.form.emit('component:prop-updated', {
                 propertyName: prop.name,
                 previousValue,
@@ -16,12 +17,26 @@ class InspectorWindow extends Window {
             });
         });
 
-        this.editor.events.on('input-error', (message) => {
+        this.propEditor.events.on('input-error', (message) => {
             alert(`${t('Validation Error')}: ${message}`);
         });
 
-        this.editor.events.on('parent-selected', (name) => {
+        this.propEditor.events.on('parent-selected', (name) => {
             this.form.emit('component:parent-selected', name);
+        });
+    }
+
+    initEventEditor() {
+        this.eventEditor.events.on('input-result', (eventName, previousHandlerName, handlerName) => {
+            this.form.emit('component:event-updated', {
+                eventName,
+                previousHandlerName,
+                handlerName
+            });
+        });
+
+        this.eventEditor.events.on('input-error', (message) => {
+            alert(`${t('Validation Error')}: ${message}`);
         });
     }
 
@@ -29,14 +44,16 @@ class InspectorWindow extends Window {
         this.form.on('component:show', (payload) => {
             const { componentSchema, actions, parentComponentSchema } = payload;
             this.buildActionButtons(actions);
-            this.editor.setSchema(componentSchema);
+            this.eventEditor.setSchema(componentSchema);
+            this.propEditor.setSchema(componentSchema);
             if (parentComponentSchema !== null) {
-                this.editor.setParentSchema(parentComponentSchema);
+                this.propEditor.setParentSchema(parentComponentSchema);
             }
         });
 
         this.form.on('component:hide', (payload) => {
-            this.editor.clearSchema();
+            this.propEditor.clearSchema();
+            this.eventEditor.clearSchema();
         });
     }
 

@@ -1,4 +1,5 @@
 const { Component } = load.class('component');
+const Property = load.class('property');
 const Traits = load.models.traits();
 
 class InspectorPropertyEditor extends Component {
@@ -39,8 +40,7 @@ class InspectorPropertyEditor extends Component {
     }
 
     buildDOM() {
-        const $dom = this.buildTagDOM('div', { class: ['component', 'prop-editor'] });
-        return $dom;
+        return this.buildTagDOM('div', { class: ['component', 'prop-editor'] });
     }
 
     buildEditor() {
@@ -99,9 +99,87 @@ class InspectorPropertyEditor extends Component {
 
 }
 
+class InspectorEventEditor extends Component {
+
+    events = load.instance('classes/eventmanager');
+
+    #schema = {};
+
+    static isInternal() {
+        return true;
+    }
+
+    getTraits() {
+        return super.getTraits().concat([
+            new Traits.NameTrait(),
+            new Traits.PositionTrait(),
+            new Traits.SizeTrait(),
+            new Traits.AlignmentTrait(),
+        ]);
+    }
+
+    setDefaults() {
+        this.alignment = 'client';
+    }
+
+    setSchema(schema) {
+        this.#schema = schema;
+        this.buildEditor();
+    }
+
+    clearSchema() {
+        this.$dom.empty();
+        this.#schema = {};
+    }
+
+    buildDOM() {
+        return this.buildTagDOM('div', { class: ['component', 'prop-editor'] });;
+    }
+
+    buildEditor() {
+        const events = this.#schema.events;
+
+        this.$dom.empty();
+
+        for (let [eventName, handlerName] of Object.entries(events)) {
+            const $row = $('<div/>', { class: `row row-${eventName}` }).appendTo(this.$dom);
+            const $titleCell = $('<div/>', { class: 'cell title' }).appendTo($row);
+            const $valueCell = $('<div/>', { class: 'cell value' }).appendTo($row);
+
+            const currentValue = handlerName ?? '';
+            const $valueInput = $('<input/>', { type: 'text', class: 'prop-input', value: currentValue });
+            $valueInput.on('keydown', event => {
+                if (event.keyCode == 13) {
+                    const newValue = valueInput.val();
+                    if (!newValue) {
+                        this.onInputError(t('Bad value'));
+                        valueInput.val(currentValue);
+                        return;
+                    }
+                    this.onInputResult(eventName, currentValue, newValue);
+                }
+            });
+
+            $titleCell.html(eventName);
+            $valueCell.append($valueInput);
+        }
+    }
+
+    onInputResult(eventName, previousValue, value) {
+        this.events.emit('input-result', eventName, previousValue, value);
+    }
+
+    onInputError(message, previousValue) {
+        this.events.emit('input-error', message);
+        prop.setInputValue(previousValue);
+    }
+
+}
+
 module.exports = {
     groupName: null,
     classes: {
-        InspectorPropertyEditor
+        InspectorPropertyEditor,
+        InspectorEventEditor
     }
 }

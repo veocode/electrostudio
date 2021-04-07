@@ -13,7 +13,7 @@ class InspectorForm extends Form {
             resizable: true,
             maximizable: false,
             minimizable: false,
-            // isDebug: true
+            isDebug: true
         };
     }
 
@@ -39,10 +39,14 @@ class InspectorForm extends Form {
         })
 
         const propEditor = this.createComponent('InspectorPropertyEditor', {
-            name: 'editor'
+            name: 'propEditor'
         });
-
         tabPropEditor.addChildren(propEditor);
+
+        const eventEditor = this.createComponent('InspectorEventEditor', {
+            name: 'eventEditor'
+        });
+        tabEventEditor.addChildren(eventEditor);
 
         paneActions.addChildren(actionPanel);
         paneTabs.addChildren(tabs);

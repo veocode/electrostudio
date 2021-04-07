@@ -184,12 +184,16 @@ class Component {
             throw new errors.PropertyValidationException(name, value);
         }
 
-        this.propertyValues[name] = value;
+        this.assignPropertyValue(name, value);
         this.events.emit('updated', this.proxy);
 
         if (this.parent && this.isRebuildParentOnPropertyUpdate(name, value)) {
             this.parent.events.emit('updated', this.parent);
         }
+    }
+
+    assignPropertyValue(name, value) {
+        this.propertyValues[name] = value;
     }
 
     hasProperty(name) {

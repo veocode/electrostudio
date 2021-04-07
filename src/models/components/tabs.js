@@ -40,7 +40,6 @@ class TabPane extends ContainerComponent {
     }
 
     onAfterRebuild() {
-        console.log('PANE onAfterRebuild', this);
         if (this.parent) {
             this.parent.selectTab();
         }
@@ -121,7 +120,6 @@ class Tabs extends ContainerComponent {
     }
 
     onAfterRebuild() {
-        console.log('TABS onAfterRebuild', this);
         this.selectTab();
     }
 
@@ -129,7 +127,7 @@ class Tabs extends ContainerComponent {
         if (index == null) {
             index = this.activeTabIndex
         } else {
-            this.activeTabIndex = index;
+            this.assignPropertyValue('activeTabIndex', index);
         }
         const $dom = this.getDOM();
         const $panes = $dom.find('.tab-pane');

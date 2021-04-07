@@ -28,6 +28,15 @@ class DesignerWindow extends Window {
             }
         });
 
+        this.form.on('component:event-updated', (payload) => {
+            const { eventName, previousHandlerName, handlerName } = payload;
+            if (this.isFormSelected()) {
+                this.updateFormEventValue(eventName, previousHandlerName, handlerName);
+            } else {
+                this.updateSelectedComponentEventValue(eventName, previousHandlerName, handlerName);
+            }
+        });
+
         this.form.on('component:parent-selected', () => {
             if (this.selectedComponent && this.selectedComponent.parent) {
                 const parent = this.selectedComponent.parent;
@@ -295,7 +304,7 @@ class DesignerWindow extends Window {
 
     updateSelectedComponentPropertyValue(propertyName, previousValue, value) {
         const component = this.selectedComponent;
-        component[propertyName] = value;
+        component.setPropertyValue(propertyName, value);
 
         if (component.parent && component.isRebuildParentOnPropertyUpdate(propertyName, value)) {
             this.rebuildComponent(component.parent);
@@ -311,9 +320,19 @@ class DesignerWindow extends Window {
         }
     }
 
+    updateSelectedComponentEventValue(eventName, previousHandlerName, handlerName) {
+        const component = this.selectedComponent;
+        component.setEventHandler(eventName, handlerName);
+    }
+
     updateFormPropertyValue(propertyName, previousValue, value) {
         this.formComponent[propertyName] = value;
         this.applyFormSchemaToWindow();
+        this.updateFormInProject();
+    }
+
+    updateFormEventValue(eventName, previousHandlerName, handlerName) {
+        this.formComponent.setEventHandler(eventName, handlerName);
         this.updateFormInProject();
     }
 

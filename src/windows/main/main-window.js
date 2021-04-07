@@ -53,6 +53,10 @@ class MainWindow extends Window {
             this.designerForm.send('component:prop-updated', payload);
         });
 
+        this.inspectorForm.on('component:event-updated', (payload) => {
+            this.designerForm.send('component:event-updated', payload);
+        });
+
         this.inspectorForm.on('component:parent-selected', (name) => {
             this.designerForm.send('component:parent-selected', name);
         });
