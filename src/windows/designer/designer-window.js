@@ -321,8 +321,8 @@ class DesignerWindow extends Window {
     }
 
     updateSelectedComponentEventValue(eventName, previousHandlerName, handlerName) {
-        const component = this.selectedComponent;
-        component.setEventHandler(eventName, handlerName);
+        this.selectedComponent.setEventHandler(eventName, handlerName);
+        this.updateFormInProject();
     }
 
     updateFormPropertyValue(propertyName, previousValue, value) {

@@ -150,10 +150,10 @@ class InspectorEventEditor extends Component {
             const $valueInput = $('<input/>', { type: 'text', class: 'prop-input', value: currentValue });
             $valueInput.on('keydown', event => {
                 if (event.keyCode == 13) {
-                    const newValue = valueInput.val();
+                    const newValue = $valueInput.val();
                     if (!newValue) {
                         this.onInputError(t('Bad value'));
-                        valueInput.val(currentValue);
+                        $valueInput.val(currentValue);
                         return;
                     }
                     this.onInputResult(eventName, currentValue, newValue);
