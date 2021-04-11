@@ -18,10 +18,9 @@ class TaskRunner {
         return this.steps.length;
     }
 
-    async start() {
-        await this.task.boot();
+    async start(...taskArgs) {
+        await this.task.boot(...taskArgs);
         this.steps = this.task.getSteps();
-        console.log('start', this.steps);
         this.runNextTaskStep();
     }
 
@@ -41,7 +40,7 @@ class TaskRunner {
             },
 
             error => {
-                this.fail(error);
+                this.fail(error.message);
             }
         );
     }

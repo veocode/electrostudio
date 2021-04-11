@@ -112,6 +112,24 @@ html, body, .view-window {
 
 .button {
     user-select: none;
+    outline: none;
+}
+
+.component.button {
+    background: #393939;
+    border: none;
+    border-radius: 4px;
+    color: #AAA;
+}
+
+.component.button:not(:disabled):hover {
+    background: #444;
+    color: #DDD;
+    cursor: pointer;
+}
+
+.component.button:disabled {
+    background:#404040;
 }
 
 

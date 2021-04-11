@@ -25,7 +25,7 @@ class ServiceClient {
                 methodArgs
             });
             if (result.error) {
-                reject(new Error(result.error));
+                reject(result.error);
                 return;
             }
             resolve(result.data);

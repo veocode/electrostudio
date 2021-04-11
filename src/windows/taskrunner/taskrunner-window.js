@@ -8,6 +8,7 @@ class TaskRunnerWindow extends Window {
 
     start() {
         const taskName = this.payload.taskName;
+        const taskArgs = this.payload.taskArgs ?? [];
 
         this.runner.events.on('task:step-title', title => {
             this.labelStepTitle.label = title;
@@ -23,7 +24,7 @@ class TaskRunnerWindow extends Window {
         })
 
         this.runner.setTask(taskName);
-        this.runner.start();
+        this.runner.start(...taskArgs);
     }
 
     onBtnCancelClick() {

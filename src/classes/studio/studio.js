@@ -3,11 +3,11 @@ const Project = load.class('studio/project');
 class Studio {
 
     project;
+    compiler = load.instance('classes/studio/compiler');
 
     start() {
-        const lastProjectFolder = settings.get('lastProjectFolder', null);
-        console.log('lastProjectFolder', lastProjectFolder);
-        return this.initProject(lastProjectFolder);
+        //const lastProjectFolder = settings.get('lastProjectFolder', null);
+        //return this.initProject(lastProjectFolder);
     }
 
     initProject(folder = null) {

@@ -43,17 +43,28 @@ class Compiler {
         baseWindowView: ['windows', 'base', 'base-window.html'],
     };
 
-    project;
+    // project;
 
-    constructor(project) {
-        this.project = project;
+    // constructor(project) {
+    //     this.project = project;
+    // }
+
+    initProject(folder) {
+        console.log('initProject', folder);
+        return new Promise(async (resolve, reject) => {
+            try {
+                await this.#createProjectStructure(folder);
+                await this.#compilePackageManifest(folder);
+                resolve();
+            } catch (err) {
+                reject(err);
+            }
+        });
     }
 
     compileProject() {
         return new Promise(async (resolve, reject) => {
             try {
-                await this.createProjectStructure();
-                await this.compilePackageManifest();
                 await this.compileMeta();
                 await this.compileConfig();
                 await this.compileWindows();
@@ -63,12 +74,11 @@ class Compiler {
                 reject(err);
             }
         });
-
     }
 
-    async createProjectStructure() {
+    async #createProjectStructure(folder) {
         const rootDir = load.path();
-        const targetDir = path.join(this.project.folder, 'src');
+        const targetDir = path.join(folder, 'src');
         const dirsCreated = [];
 
         for await (const entry of this.walkDirectory(rootDir)) {
@@ -86,6 +96,18 @@ class Compiler {
         }
     }
 
+    async #compilePackageManifest(folder) {
+        const manifest = Compiler.PackageManifest;
+        // manifest.name = this.project.meta.name;
+        // manifest.version = this.project.meta.version;
+        // manifest.author = this.project.meta.author;
+        // manifest.description = this.project.meta.description;
+
+        const manifestJSON = JSON.stringify(manifest, null, 4);
+        const manifestFilePath = path.join(folder, Compiler.FileNames.Manifest);
+        await load.write(manifestFilePath, manifestJSON);
+    }
+
     async compileMeta() {
         const metaDir = path.join(this.project.folder, 'meta');
         await fs.promises.mkdir(metaDir, { recursive: true });
@@ -93,18 +115,6 @@ class Compiler {
         const metaJSON = JSON.stringify(this.project.meta, null, 2);
         const metaFilePath = path.join(metaDir, Compiler.FileNames.Meta);
         await load.write(metaFilePath, metaJSON);
-    }
-
-    async compilePackageManifest() {
-        const manifest = Compiler.PackageManifest;
-        manifest.name = this.project.meta.name;
-        manifest.version = this.project.meta.version;
-        manifest.author = this.project.meta.author;
-        manifest.description = this.project.meta.description;
-
-        const manifestJSON = JSON.stringify(manifest, null, 4);
-        const manifestFilePath = path.join(this.project.folder, Compiler.FileNames.Manifest);
-        await load.write(manifestFilePath, manifestJSON);
     }
 
     async compileConfig() {

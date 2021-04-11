@@ -38,6 +38,35 @@ class Form extends ContainerComponent {
         return $dom;
     }
 
+    getDesignerActions() {
+        return {
+            getComponentScheme: {
+                title: t('Get Scheme'),
+                icon: 'cog'
+            }
+        };
+    }
+
+    getComponentScheme() {
+        const beautifier = load.node('js-beautify');
+        const util = load.node('util');
+        const schema = this.getSchema();
+        const propJS = util.inspect(schema.properties, {
+            depth: Infinity,
+            maxArrayLength: Infinity,
+            maxStringLength: Infinity,
+            breakLength: Infinity
+        });
+        const chidlrenJS = util.inspect(schema.children, {
+            depth: Infinity,
+            maxArrayLength: Infinity,
+            maxStringLength: Infinity,
+            breakLength: Infinity
+        });
+        console.log(beautifier.js(propJS));
+        console.log(beautifier.js(chidlrenJS));
+    }
+
 }
 
 module.exports = {
