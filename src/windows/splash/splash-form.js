@@ -14,7 +14,8 @@ class SplashForm extends Form {
             resizable: false,
             minimizable: true,
             maximizable: false,
-            modal: false
+            modal: false,
+            isDebug: true
         };
     }
 

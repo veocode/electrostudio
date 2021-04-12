@@ -154,44 +154,45 @@ html, body, .view-window {
     flex-direction: row;
 }
 
-.toolpanel > button {
+.toolpanel > .component.button {
     height: 100% !important;
     border: solid 1px #2B2B2B;
     background: #333333;
     color: #FFF;
     cursor: pointer;
     position: initial;
+    border-radius: 0;
 }
 
-.toolpanel > button:not(.selected) {
+.toolpanel > .component.button:not(.selected) {
     outline: none;
 }
 
-.toolpanel > button:hover {
+.toolpanel > .component.button:hover {
     background: #555555;
 }
 
-.toolpanel > button:active {
+.toolpanel > .component.button:active {
     background: #777;
 }
 
-.toolpanel > button:first-child {
+.toolpanel > .component.button:first-child {
     border-radius: 5px 0 0 5px;
 }
 
-.toolpanel > button:last-child {
+.toolpanel > .component.button:last-child {
     border-radius: 0 5px 5px 0;
 }
 
-.toolpanel > button:first-child:last-child {
+.toolpanel > .component.button:first-child:last-child {
     border-radius: 5px;
 }
 
-.toolpanel > button:not(:last-child) {
+.toolpanel > .component.button:not(:last-child) {
     border-right: none;
 }
 
-.toolpanel > button.active {
+.toolpanel > .component.button.active {
     background:#3498db;
 }
 

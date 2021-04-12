@@ -56,6 +56,20 @@ class Utils {
         return string.charAt(0).toUpperCase() + string.slice(1);
     }
 
+    static async isFolderEmpty(folder) {
+        const files = await fs.promises.readdir(folder);
+        return files.length === 0;
+    }
+
+    static async isPathExists(path) {
+        try {
+            await fs.promises.stat(path);
+            return true;
+        } catch {
+            return false;
+        }
+    }
+
 }
 
 module.exports = Utils;

@@ -3,6 +3,7 @@ const Window = load.class('window');
 class MainWindow extends Window {
 
     dialogService = this.getService('dialogs');
+    studioService = this.getService('studio/studio');
     projectService = this.getService('studio/project');
 
     inspectorForm = load.form('inspector');
@@ -81,8 +82,7 @@ class MainWindow extends Window {
             })
 
             if (dialogResult.response == 0) {
-                const isSaved = await this.saveProject();
-                if (!isSaved) { return; }
+                await this.saveProject();
             }
         }
 
@@ -96,28 +96,7 @@ class MainWindow extends Window {
     }
 
     saveProject() {
-        return new Promise(async resolve => {
-            const isFolderSelected = await this.projectService.isFolderSelected()
-
-            if (!isFolderSelected) {
-                const result = await this.dialogService.showOpenDialog({
-                    title: t('Select New Project Folder'),
-                    properties: ['openDirectory']
-                });
-
-                if (result.canceled || !result.filePaths[0]) {
-                    resolve(false);
-                    return;
-                }
-
-                const folder = result.filePaths[0];
-                settings.set('lastProjectFolder', folder);
-                await this.projectService.setFolder(folder);
-            }
-
-            await this.projectService.save();
-            resolve(true);
-        });
+        return this.studioService.saveProject();
     }
 
     onBtnComponentPalleteClick(event, senderToolButton) {

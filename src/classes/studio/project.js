@@ -1,63 +1,15 @@
-const Compiler = load.class('studio/compiler');
 const path = load.node('path');
 const fs = load.node('fs');
+const Utils = load.class('utils');
+const Presets = load.class('studio/presets');
+
 
 class Project {
 
     folder;
     meta = {};
 
-    #isFolderSelected = true;
     #isDirty = false;
-
-    #compiler = new Compiler(this);
-
-    constructor(folder = null) {
-        let isUseDefaultFolder = false;
-
-        if (folder == null || !this.isFolderContainsProject(folder)) {
-            folder = load.path('studio', 'default-project');
-            isUseDefaultFolder = true;
-        }
-
-        this.setFolder(folder);
-
-        if (isUseDefaultFolder) {
-            this.#isFolderSelected = false;
-        }
-    }
-
-    async load() {
-        return new Promise(async resolve => {
-            const metaJSON = await load.read(`${this.folder}/meta/${Compiler.FileNames.Meta}`);
-            this.meta = JSON.parse(metaJSON);
-            resolve();
-        })
-    }
-
-    save() {
-        return new Promise(async (resolve, reject) => {
-            try {
-                await this.#compiler.compileProject();
-                this.setDirty(false);
-                resolve();
-            } catch (err) {
-                reject(err);
-            }
-        })
-    }
-
-    isFolderSelected() {
-        return this.#isFolderSelected;
-    }
-
-    isFolderPackageCompiled() {
-        return fs.existsSync(path.join(this.folder, 'node_modules'));
-    }
-
-    isFolderContainsProject(folder) {
-        return fs.existsSync(path.join(folder, 'meta', Compiler.FileNames.Meta));
-    }
 
     getFolder() {
         return this.folder;
@@ -65,8 +17,38 @@ class Project {
 
     setFolder(folder) {
         this.folder = folder;
-        this.meta.name = path.basename(folder);
-        this.#isFolderSelected = true;
+    }
+
+    async isFolderSuitableForNewProject(folder) {
+        return await Utils.isFolderEmpty(folder);
+    }
+
+    async isFolderContainsProject(folder) {
+        return await Utils.isPathExists(path.join(folder, 'meta', Presets.FileNames.Meta));
+    }
+
+    async load() {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const metaJSON = await load.read(`${this.folder}/meta/${Presets.FileNames.Meta}`);
+                this.meta = JSON.parse(metaJSON);
+                this.setDirty(false);
+                resolve();
+            } catch (error) {
+                reject(error);
+            }
+        })
+    }
+
+    save() {
+        return new Promise(async (resolve, reject) => {
+            try {
+                this.setDirty(false);
+                resolve();
+            } catch (error) {
+                reject(error);
+            }
+        })
     }
 
     isDirty() {
@@ -130,7 +112,7 @@ class Project {
             }
         }
 
-        this.meta.forms[formName].schema = schema;
+        this.meta.forms[formName].schema = schema.properties;
         this.meta.forms[formName].components = componentSchemas;
 
         this.setDirty(true);

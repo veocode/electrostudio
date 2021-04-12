@@ -3,16 +3,28 @@ const Project = load.class('studio/project');
 class Studio {
 
     project;
-    compiler = load.instance('classes/studio/compiler');
+    compiler;
 
-    start() {
-        //const lastProjectFolder = settings.get('lastProjectFolder', null);
-        //return this.initProject(lastProjectFolder);
+    async start() {
+        this.project = load.instance('classes/studio/project')
+        this.compiler = load.instance('classes/studio/compiler');
     }
 
-    initProject(folder = null) {
-        this.project = new Project(folder);
+    loadProject(folder) {
+        this.project.setFolder(folder);
         return this.project.load();
+    }
+
+    saveProject() {
+        return this.compiler.compileProject(this.project);
+    }
+
+    async isFolderContainsProject(folder) {
+        return await this.project.isFolderContainsProject(folder);
+    }
+
+    async isFolderSuitableForNewProject(folder) {
+        return await this.project.isFolderSuitableForNewProject(folder);
     }
 
 }

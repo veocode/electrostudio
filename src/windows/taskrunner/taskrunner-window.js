@@ -20,6 +20,7 @@ class TaskRunnerWindow extends Window {
         })
 
         this.runner.events.on('task:done', () => {
+            this.form.emit('task:done', this.payload);
             this.close();
         })
 
