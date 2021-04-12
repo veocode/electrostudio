@@ -91,7 +91,7 @@ class Project {
         return this.getDefaultFormName() == this.getActiveFormName();
     }
 
-    updateActiveForm(schema, componentSchemas) {
+    updateActiveForm(schema) {
         const currentFormName = this.getActiveFormName();
         const formName = schema.properties.name;
         const isDefaultForm = this.isDefaultFormActive();
@@ -113,7 +113,7 @@ class Project {
         }
 
         this.meta.forms[formName].schema = schema.properties;
-        this.meta.forms[formName].components = componentSchemas;
+        this.meta.forms[formName].components = schema.children;
 
         this.setDirty(true);
     }

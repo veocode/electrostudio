@@ -60,8 +60,8 @@ class DesignerWindow extends Window {
     }
 
     async displayActiveProjectForm() {
-        const currentFormSchema = await this.projectService.getActiveFormSchema();
-        const currentFormComponentSchemas = await this.projectService.getActiveFormComponents();
+        const currentFormSchema = this.payload.schema;
+        const currentFormComponentSchemas = this.payload.components;
 
         this.formComponent = this.form.createComponent('Form', currentFormSchema);
         this.form.replaceFormComponent(this.formComponent);
@@ -297,9 +297,7 @@ class DesignerWindow extends Window {
     }
 
     updateFormInProject() {
-        const formSchema = this.formComponent.getSchema();
-        const componentSchemas = formSchema.children;
-        this.projectService.updateActiveForm(formSchema, componentSchemas);
+        this.form.emit('form:updated', this.formComponent.getSchema());
     }
 
     updateSelectedComponentPropertyValue(propertyName, previousValue, value) {

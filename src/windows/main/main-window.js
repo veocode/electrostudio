@@ -6,26 +6,39 @@ class MainWindow extends Window {
     studioService = this.getService('studio/studio');
     projectService = this.getService('studio/project');
 
-    inspectorForm = load.form('inspector');
-    designerForm = load.form('designer');
+    inspectorForm;
+    designerForm;
     taskRunnerForm = load.form('taskrunner');
 
     selectedComponentClass = null;
 
     start() {
-        this.startProject();
         this.initTaskRunner();
+        this.startProject();
     }
 
     startProject() {
-        this.createForms();
-        this.bindDesignerEvents();
-        this.bindInspectorEvents();
+        this.openActiveProjectForm();
     }
 
-    createForms() {
+    async openActiveProjectForm() {
+        const activeFormSchema = await this.projectService.getActiveFormSchema();
+        const activeFormComponentSchemas = await this.projectService.getActiveFormComponents();
+
+        if (this.inspectorForm) { this.inspectorForm.closeWindow(); }
+        if (this.designerForm) { this.designerForm.closeWindow(); }
+
+        this.inspectorForm = load.form('inspector');
+        this.designerForm = load.form('designer');
+
+        this.bindInspectorEvents();
+        this.bindDesignerEvents();
+
         this.inspectorForm.createWindow();
-        this.designerForm.createWindow();
+        this.designerForm.createWindow({
+            schema: activeFormSchema,
+            components: activeFormComponentSchemas
+        });
     }
 
     initTaskRunner() {
@@ -36,16 +49,20 @@ class MainWindow extends Window {
     }
 
     bindDesignerEvents() {
-        this.designerForm.on('component:selected', (payload) => {
+        this.designerForm.on('component:selected', payload => {
             this.inspectorForm.send('component:show', payload);
         });
 
-        this.designerForm.on('component:deselected', (payload) => {
+        this.designerForm.on('component:deselected', payload => {
             this.inspectorForm.send('component:hide', payload);
         });
 
-        this.designerForm.on('component:added', (payload) => {
+        this.designerForm.on('component:added', payload => {
             this.deselectComponentClass();
+        });
+
+        this.designerForm.on('form:updated', schema => {
+            this.projectService.updateActiveForm(schema);
         });
     }
 
@@ -67,11 +84,7 @@ class MainWindow extends Window {
         });
     }
 
-    async onBtnNewProjectClick(event, sender) {
-
-    }
-
-    async onBtnOpenProjectClick(event, sender) {
+    async onBtnRunProjectClick(event, sender) {
         const isProjectDirty = await this.projectService.isDirty();
 
         if (isProjectDirty) {
@@ -91,8 +104,8 @@ class MainWindow extends Window {
         this.taskRunnerForm.createWindow({ taskName: 'project-run' });
     }
 
-    onBtnSaveProjectClick(event, sender) {
-        this.saveProject();
+    async onBtnSaveProjectClick(event, sender) {
+        await this.saveProject();
     }
 
     saveProject() {

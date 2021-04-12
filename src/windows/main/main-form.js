@@ -13,7 +13,7 @@ class MainForm extends Form {
             height: 60,
             resizable: false,
             maximizable: false,
-            // isDebug: true
+            isDebug: true
         };
     }
 
@@ -23,7 +23,7 @@ class MainForm extends Form {
             alignment: 'client'
         });
 
-        const paneToolbarProject = this.createComponent('LayoutPane', { fixedSize: 170 });
+        const paneToolbarProject = this.createComponent('LayoutPane', { fixedSize: 130 });
         const paneToolbarComponents = this.createComponent('LayoutPane');
         layout.addChildren(paneToolbarProject, paneToolbarComponents);
 
@@ -34,27 +34,19 @@ class MainForm extends Form {
         paneToolbarComponents.addChildren(toolbarComponents);
 
         toolbarProject.addChildren(this.createComponent('ToolButton', {
-            name: 'btnNewProject',
-            icon: 'file-o',
-            hint: t('New Project')
-        }, {
-            click: 'onBtnNewProjectClick'
-        }));
-
-        toolbarProject.addChildren(this.createComponent('ToolButton', {
-            name: 'btnOpenProject',
-            icon: 'folder-o',
-            hint: t('Open Project')
-        }, {
-            click: 'onBtnOpenProjectClick'
-        }));
-
-        toolbarProject.addChildren(this.createComponent('ToolButton', {
             name: 'btnSaveProject',
             icon: 'floppy-o',
             hint: t('Save Project')
         }, {
             click: 'onBtnSaveProjectClick'
+        }));
+
+        toolbarProject.addChildren(this.createComponent('ToolButton', {
+            name: 'btnRunProject',
+            icon: 'play',
+            hint: t('Run Project')
+        }, {
+            click: 'onBtnRunProjectClick'
         }));
 
         for (const componentClass of Object.values(ComponentFactory.Library)) {
