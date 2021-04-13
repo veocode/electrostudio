@@ -258,8 +258,8 @@ class Component {
     getSchema() {
         let schema = {
             className: this.constructor.name,
-            properties: this.propertyValues,
-            events: this.eventHandlerNames
+            properties: Object.assign({}, this.propertyValues),
+            events: Object.assign({}, this.eventHandlerNames)
         }
         return schema;
     }
@@ -358,7 +358,6 @@ class ContainerComponent extends Component {
 
     deleteChildren(childrenComponent) {
         this.children = this.children.filter(component => component !== childrenComponent);
-        // this.resetCachedDOM();
     }
 
     getRecursiveChildrenList() {

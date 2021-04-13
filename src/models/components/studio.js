@@ -274,8 +274,7 @@ class CodeEditor extends Component {
         }
 
         const content = await load.read(filePath);
-        this.#editor.getModel().setValue(content);
-        this.resetDirty();
+        await this.#editor.getModel().setValue(content);
         this.#openedFilePath = filePath;
         this.events.emit('file:loaded', filePath);
     }

@@ -23,6 +23,9 @@ class DesignerWindow extends Window {
         this.onShortcut(['ctrl+s', 'command+s'], () => {
             this.form.emit('project:save');
         });
+        this.onShortcut(['ctrl+d', 'command+d'], () => {
+            this.copySelectedComponent();
+        });
     }
 
     bindEvents() {
@@ -365,6 +368,27 @@ class DesignerWindow extends Window {
     finishComponentAdding() {
         this.selectedComponentClassToCreate = null;
         this.form.emit('component:added');
+    }
+
+    copySelectedComponent() {
+        if (!this.isComponentSelected()) { return; }
+        if (this.isFormSelected()) { return; }
+
+        const parentComponent = this.selectedComponent.parent;
+        const schema = this.selectedComponent.getSchema();
+
+        const propertyValues = schema.properties;
+        propertyValues.left = propertyValues.left + 20;
+        propertyValues.top = propertyValues.top + 20;
+        delete propertyValues.name;
+
+        this.deselectComponent();
+        const componentCopy = this.form.createComponent(schema.className, propertyValues, schema.events);
+
+        parentComponent.addChildren(componentCopy);
+        this.registerComponentEvents(componentCopy);
+        this.rebuildComponent(parentComponent);
+        this.selectComponent(componentCopy);
     }
 
     deleteSelectedComponent() {

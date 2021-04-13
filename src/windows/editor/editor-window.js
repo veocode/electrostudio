@@ -34,7 +34,7 @@ class EditorWindow extends Window {
 
     insertMethod(methodName, methodArgs, methodBody) {
         const code = this.editor.getValue();
-        const insertRegEx = new RegExp(/}\n?\s?module\.exports\s=/);
+        const insertRegEx = new RegExp(/}([\r\n\s\t]*)module\.exports\s?=/);
         const methodSignature = `${methodName}(${methodArgs})`;
         const insertReplace = [
             '',
@@ -48,9 +48,11 @@ class EditorWindow extends Window {
         ].join('\n');
 
         const match = code.match(insertRegEx);
-        const updatedCode = code.replace(match[0], insertReplace);
 
-        this.editor.setValue(updatedCode);
+        if (match) {
+            const updatedCode = code.replace(match[0], insertReplace);
+            this.editor.setValue(updatedCode);
+        }
     }
 
 }

@@ -13,7 +13,7 @@ class TaskRunnerForm extends Form {
             minimizable: false,
             maximizable: false,
             modal: true,
-            isDebug: true
+            // isDebug: true
         };
     }
 

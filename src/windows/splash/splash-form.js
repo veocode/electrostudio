@@ -15,7 +15,7 @@ class SplashForm extends Form {
             minimizable: true,
             maximizable: false,
             modal: false,
-            isDebug: true
+            // isDebug: true
         };
     }
 
