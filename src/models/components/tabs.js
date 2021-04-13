@@ -54,7 +54,7 @@ class TabPane extends ContainerComponent {
         return {
             addTab: {
                 title: t('Add Tab'),
-                icon: 'plus'
+                icon: 'tab-plus'
             }
         };
     }
@@ -69,7 +69,7 @@ class TabPane extends ContainerComponent {
 class Tabs extends ContainerComponent {
 
     static getIcon() {
-        return 'address-book-o';
+        return 'tab';
     }
 
     getTraits() {
@@ -165,7 +165,7 @@ class Tabs extends ContainerComponent {
         return {
             addTab: {
                 title: t('Add Tab'),
-                icon: 'plus'
+                icon: 'tab-plus'
             }
         };
     }

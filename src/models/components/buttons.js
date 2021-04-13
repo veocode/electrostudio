@@ -4,7 +4,7 @@ const Traits = load.models.traits();
 class Button extends Component {
 
     static getIcon() {
-        return 'square';
+        return 'gesture-tap-button';
     }
 
     getTraits() {
@@ -55,7 +55,7 @@ class ToolButton extends Button {
     }
 
     buildDOM() {
-        const content = `<i class="fa fa-${this.icon}"></i>` + (this.label ? ` ${this.label}` : '');
+        const content = `<i class="mdi mdi-${this.icon}"></i>` + (this.label ? ` ${this.label}` : '');
         return this.buildTagDOM('button', { class: ['component', 'button', 'toolbutton'] }, content);
     }
 

@@ -54,7 +54,7 @@ class LayoutPane extends ContainerComponent {
         return {
             addPane: {
                 title: t('Add Pane'),
-                icon: 'plus'
+                icon: 'table-column-plus-after'
             }
         };
     }
@@ -69,7 +69,7 @@ class LayoutPane extends ContainerComponent {
 class Layout extends ContainerComponent {
 
     static getIcon() {
-        return 'columns';
+        return 'table-column';
     }
 
     getTraits() {
@@ -133,7 +133,7 @@ class Layout extends ContainerComponent {
         return {
             addPane: {
                 title: t('Add Pane'),
-                icon: 'plus'
+                icon: 'table-column-plus-after'
             }
         };
     }

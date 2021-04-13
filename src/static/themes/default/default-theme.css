@@ -164,6 +164,10 @@ html, body, .view-window {
     border-radius: 0;
 }
 
+.toolpanel > .component.button > i {
+    font-size:18px;
+}
+
 .toolpanel > .component.button:not(.selected) {
     outline: none;
 }

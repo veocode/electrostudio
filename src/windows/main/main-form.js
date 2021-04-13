@@ -35,7 +35,7 @@ class MainForm extends Form {
 
         toolbarProject.addChildren(this.createComponent('ToolButton', {
             name: 'btnSaveProject',
-            icon: 'floppy-o',
+            icon: 'content-save',
             hint: t('Save Project')
         }, {
             click: 'onBtnSaveProjectClick'
@@ -43,7 +43,7 @@ class MainForm extends Form {
 
         toolbarProject.addChildren(this.createComponent('ToolButton', {
             name: 'btnRunProject',
-            icon: 'play',
+            icon: 'play-circle-outline',
             hint: t('Run Project')
         }, {
             click: 'onBtnRunProjectClick'

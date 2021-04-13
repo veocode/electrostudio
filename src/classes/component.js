@@ -185,7 +185,10 @@ class Component {
         }
 
         this.assignPropertyValue(name, value);
-        this.events.emit('updated', this.proxy);
+
+        if (this.isRebuildOnPropertyUpdate(name, value)) {
+            this.events.emit('updated', this.proxy);
+        }
 
         if (this.parent && this.isRebuildParentOnPropertyUpdate(name, value)) {
             this.parent.events.emit('updated', this.parent);
@@ -294,6 +297,10 @@ class Component {
         if (key in this.meta) {
             delete this.meta[key];
         }
+    }
+
+    isRebuildOnPropertyUpdate(updatedPropertyName, value) {
+        return true;
     }
 
     isRebuildParentOnPropertyUpdate(updatedPropertyName, value) {

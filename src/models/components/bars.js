@@ -5,7 +5,7 @@ const Utils = load.class('utils');
 class ProgressBar extends Component {
 
     static getIcon() {
-        return 'spinner';
+        return 'percent';
     }
 
     getTraits() {

@@ -4,8 +4,6 @@ const Traits = load.models.traits();
 
 class InspectorPropertyEditor extends Component {
 
-    events = load.instance('classes/eventmanager');
-
     #schema = {};
 
     static isInternal() {
@@ -101,9 +99,8 @@ class InspectorPropertyEditor extends Component {
 
 class InspectorEventEditor extends Component {
 
-    events = load.instance('classes/eventmanager');
-
     #schema = {};
+    #inputs = {};
 
     static isInternal() {
         return true;
@@ -132,6 +129,11 @@ class InspectorEventEditor extends Component {
         this.#schema = {};
     }
 
+    setEventHandlerName(eventName, handlerName) {
+        if (!(eventName in this.#inputs)) { return; }
+        this.#inputs[eventName].val(handlerName).blur();
+    }
+
     buildDOM() {
         return this.buildTagDOM('div', { class: ['component', 'prop-editor'] });;
     }
@@ -139,6 +141,7 @@ class InspectorEventEditor extends Component {
     buildEditor() {
         const events = this.#schema.events;
 
+        this.#inputs = {};
         this.$dom.empty();
 
         for (let [eventName, handlerName] of Object.entries(events)) {
@@ -160,8 +163,15 @@ class InspectorEventEditor extends Component {
                 }
             });
 
+            $valueInput.on('dblclick', event => {
+                if ($valueInput.val()) { return; }
+                this.onInputAutoGenerateValue(eventName, currentValue);
+            })
+
             $titleCell.html(eventName);
             $valueCell.append($valueInput);
+
+            this.#inputs[eventName] = $valueInput;
         }
     }
 
@@ -174,12 +184,120 @@ class InspectorEventEditor extends Component {
         prop.setInputValue(previousValue);
     }
 
+    onInputAutoGenerateValue(eventName, previousValue) {
+        this.events.emit('input-auto', this.#schema.properties.name, eventName, previousValue);
+    }
+
+}
+
+class CodeEditor extends Component {
+
+    #editor;
+    #fileToOpen;
+    #openedFilePath;
+
+    static isInternal() {
+        return true;
+    }
+
+    getTraits() {
+        return super.getTraits().concat([
+            new Traits.NameTrait(),
+            new Traits.PositionTrait(),
+            new Traits.SizeTrait(),
+            new Traits.AlignmentTrait(),
+        ]);
+    }
+
+    setDefaults() {
+        this.width = 300;
+        this.height = 300;
+    }
+
+    buildDOM() {
+        const $dom = this.buildTagDOM('div', { class: ['component', 'code-editor'] });
+        this.initEditor($dom);
+        return $dom;
+    }
+
+    isRebuildOnPropertyUpdate(updatedPropertyName, value) {
+        return false;
+    }
+
+    initEditor($container) {
+        const path = load.node('path');
+        const amdLoader = load.node(path.resolve(load.path(), '../node_modules/monaco-editor/min/vs/loader.js'));
+        const amdRequire = amdLoader.require;
+
+        const uriFromPath = (_path) => {
+            var pathName = path.resolve(_path).replace(/\\/g, '/');
+            if (pathName.length > 0 && pathName.charAt(0) !== '/') {
+                pathName = '/' + pathName;
+            }
+            return encodeURI('file://' + pathName);
+        }
+
+        amdRequire.config({
+            baseUrl: uriFromPath(path.resolve(load.path(), '../node_modules/monaco-editor/min'))
+        });
+
+        amdRequire(['vs/editor/editor.main'], () => {
+            this.#editor = monaco.editor.create($container.get(0), {
+                value: 'return;',
+                language: 'javascript',
+                theme: 'vs-dark',
+                automaticLayout: true,
+                minimap: {
+                    enabled: false
+                },
+            });
+
+            this.#editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KEY_S, () => {
+                this.saveFile();
+            });
+
+            if (this.#fileToOpen) {
+                this.openFile(this.#fileToOpen);
+                this.#fileToOpen = null;
+            }
+        });
+    }
+
+    async openFile(filePath) {
+        if (!this.#editor) {
+            this.#fileToOpen = filePath;
+            return;
+        }
+
+        const content = await load.read(filePath);
+        this.#editor.getModel().setValue(content);
+        this.#openedFilePath = filePath;
+        this.events.emit('file:loaded', filePath);
+    }
+
+    async saveFile() {
+        const filePath = this.#openedFilePath;
+        const content = this.#editor.getModel().getValue();
+        this.events.emit('file:save', filePath, content);
+    }
+
+    getValue() {
+        if (!this.#editor) { return ''; }
+        return this.#editor.getModel().getValue();
+    }
+
+    setValue(value) {
+        if (!this.#editor) { return; }
+        this.#editor.getModel().setValue(value);
+    }
+
 }
 
 module.exports = {
     groupName: null,
     classes: {
         InspectorPropertyEditor,
-        InspectorEventEditor
+        InspectorEventEditor,
+        CodeEditor
     }
 }

@@ -6,9 +6,11 @@ class MainWindow extends Window {
     studioService = this.getService('studio/studio');
     projectService = this.getService('studio/project');
 
+    taskRunnerForm = load.form('taskrunner');
+
     inspectorForm;
     designerForm;
-    taskRunnerForm = load.form('taskrunner');
+    editorForm;
 
     selectedComponentClass = null;
 
@@ -24,26 +26,36 @@ class MainWindow extends Window {
     async openActiveProjectForm() {
         const activeFormSchema = await this.projectService.getActiveFormSchema();
         const activeFormComponentSchemas = await this.projectService.getActiveFormComponents();
+        const activeFormWindowFile = await this.projectService.getActiveFormWindowFilePath();
 
         if (this.inspectorForm) { this.inspectorForm.closeWindow(); }
         if (this.designerForm) { this.designerForm.closeWindow(); }
 
         this.inspectorForm = load.form('inspector');
         this.designerForm = load.form('designer');
+        this.editorForm = load.form('editor');
 
         this.bindInspectorEvents();
         this.bindDesignerEvents();
+        this.bindEditorEvents();
 
         this.inspectorForm.createWindow();
+
         this.designerForm.createWindow({
             schema: activeFormSchema,
             components: activeFormComponentSchemas
+        });
+
+        this.editorForm.createWindow({
+            filePath: activeFormWindowFile
         });
     }
 
     initTaskRunner() {
         this.taskRunnerForm.on('closed', () => {
+            this.show();
             this.designerForm.showWindow();
+            this.editorForm.showWindow();
             this.inspectorForm.showWindow();
         })
     }
@@ -66,6 +78,13 @@ class MainWindow extends Window {
         });
     }
 
+    bindEditorEvents() {
+        this.editorForm.on('file:save', (payload) => {
+            const { filePath, content } = payload;
+            this.studioService.saveProjectFile(filePath, content);
+        });
+    }
+
     bindInspectorEvents() {
         this.inspectorForm.on('component:prop-updated', (payload) => {
             this.designerForm.send('component:prop-updated', payload);
@@ -73,6 +92,16 @@ class MainWindow extends Window {
 
         this.inspectorForm.on('component:event-updated', (payload) => {
             this.designerForm.send('component:event-updated', payload);
+        });
+
+        this.inspectorForm.on('component:event-created', (payload) => {
+            this.designerForm.send('component:event-updated', payload);
+            this.editorForm.send('file:method-add', {
+                methodName: payload.handlerName,
+                methodArgs: 'event, sender',
+                methodBody: '// TODO: Add Implementation'
+            });
+            this.editorForm.showWindow();
         });
 
         this.inspectorForm.on('component:parent-selected', (name) => {
@@ -100,7 +129,9 @@ class MainWindow extends Window {
         }
 
         this.designerForm.hideWindow();
+        this.editorForm.hideWindow();
         this.inspectorForm.hideWindow();
+        this.hide();
         this.taskRunnerForm.createWindow({ taskName: 'project-run' });
     }
 

@@ -158,8 +158,8 @@ class Window {
         if (!(error.constructor.name in errors)) {
             console.error(error);
             alert([
-                t('An error occured during execution'),
-                t('Check console for details')
+                t('An error occured during execution') + ':',
+                `[${error.name}] ${error.message}`,
             ].join('\n'));
             return;
         }

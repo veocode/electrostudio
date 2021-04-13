@@ -4,7 +4,7 @@ const Traits = load.models.traits();
 class Panel extends ContainerComponent {
 
     static getIcon() {
-        return 'square-o';
+        return 'card-outline';
     }
 
     getTraits() {

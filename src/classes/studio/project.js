@@ -59,6 +59,10 @@ class Project {
         this.#isDirty = isDirty;
     }
 
+    getFormWindowFilePath(formName) {
+        return path.join(this.folder, 'src', 'windows', formName, `${formName}-window.js`);
+    }
+
     getFormSchema(formName) {
         return this.meta.forms[formName].schema;
     }
@@ -77,6 +81,10 @@ class Project {
 
     getActiveFormComponents() {
         return this.getFormComponents(this.getActiveFormName());
+    }
+
+    getActiveFormWindowFilePath() {
+        return this.getFormWindowFilePath(this.getActiveFormName());
     }
 
     getDefaultFormName() {

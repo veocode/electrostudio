@@ -4,7 +4,7 @@ const Traits = load.models.traits();
 class Label extends Component {
 
     static getIcon() {
-        return 'font';
+        return 'format-color-text';
     }
 
     getTraits() {

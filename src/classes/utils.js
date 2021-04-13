@@ -56,6 +56,12 @@ class Utils {
         return string.charAt(0).toUpperCase() + string.slice(1);
     }
 
+    static joinAsCamelCase(parts) {
+        const firstPart = parts.shift();
+        let capitalizedParts = parts.map(part => Utils.capitalizeFirstLetter(part)).join('');
+        return firstPart + capitalizedParts;
+    }
+
     static async isFolderEmpty(folder) {
         const files = await fs.promises.readdir(folder);
         return files.length === 0;

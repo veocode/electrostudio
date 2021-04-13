@@ -10,21 +10,26 @@ class Studio {
         this.compiler = load.instance('classes/studio/compiler');
     }
 
-    loadProject(folder) {
-        this.project.setFolder(folder);
-        return this.project.load();
-    }
-
-    saveProject() {
-        return this.compiler.compileProject(this.project);
-    }
-
     async isFolderContainsProject(folder) {
         return await this.project.isFolderContainsProject(folder);
     }
 
     async isFolderSuitableForNewProject(folder) {
         return await this.project.isFolderSuitableForNewProject(folder);
+    }
+
+    loadProject(folder) {
+        this.project.setFolder(folder);
+        return this.project.load();
+    }
+
+    async saveProject() {
+        await this.compiler.compileProject(this.project);
+        this.project.setDirty(false);
+    }
+
+    saveProjectFile(filePath, content) {
+        return load.write(filePath, content);
     }
 
 }

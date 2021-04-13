@@ -129,7 +129,7 @@ class Compiler {
         const formCode = beautifier.js(Utils.renderTemplate(formTemplate, {
             className: formClassName,
             formProperties: formMeta.schema,
-            formChildren: formMeta.components,
+            formChildren: formMeta.components || [],
         }));
 
         await load.write(formFilePath, formCode);

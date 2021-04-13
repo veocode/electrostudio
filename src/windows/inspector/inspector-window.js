@@ -1,4 +1,5 @@
 const Window = load.class('window');
+const Utils = load.class('utils');
 
 class InspectorWindow extends Window {
 
@@ -37,6 +38,16 @@ class InspectorWindow extends Window {
 
         this.eventEditor.events.on('input-error', (message) => {
             alert(`${t('Validation Error')}: ${message}`);
+        });
+
+        this.eventEditor.events.on('input-auto', (componentName, eventName, previousHandlerName) => {
+            const autoEventHandlerName = Utils.joinAsCamelCase(['on', componentName, eventName]);
+            this.eventEditor.setEventHandlerName(eventName, autoEventHandlerName);
+            this.form.emit('component:event-created', {
+                eventName,
+                previousHandlerName,
+                handlerName: autoEventHandlerName
+            });
         });
     }
 
