@@ -13,13 +13,23 @@ class MainWindow extends Window {
     editorForm;
 
     selectedComponentClass = null;
+    isProjectDirty = false;
 
     start() {
+        this.bindShortcuts();
         this.initTaskRunner();
         this.startProject();
     }
 
-    startProject() {
+    bindShortcuts() {
+        this.onShortcut(['ctrl+s', 'command+s'], () => {
+            this.saveProject();
+        });
+    }
+
+    async startProject() {
+        const projectName = await this.projectService.getName();
+        this.setTitleDocument(projectName);
         this.openActiveProjectForm();
     }
 
@@ -74,7 +84,12 @@ class MainWindow extends Window {
         });
 
         this.designerForm.on('form:updated', schema => {
+            this.setProjectDirty(true);
             this.projectService.updateActiveForm(schema);
+        });
+
+        this.designerForm.on('project:save', () => {
+            this.saveProject();
         });
     }
 
@@ -139,8 +154,14 @@ class MainWindow extends Window {
         await this.saveProject();
     }
 
-    saveProject() {
-        return this.studioService.saveProject();
+    async saveProject() {
+        await this.studioService.saveProject();
+        this.setProjectDirty(false);
+    }
+
+    setProjectDirty(isDirty) {
+        this.isProjectDirty = isDirty;
+        this.setTitleDirty(isDirty);
     }
 
     onBtnComponentPalleteClick(event, senderToolButton) {

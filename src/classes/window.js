@@ -1,5 +1,6 @@
 const ipc = load.electron('ipcRenderer');
 const fs = load.node('fs');
+const mousetrap = load.node('mousetrap');
 
 class Window {
 
@@ -9,6 +10,12 @@ class Window {
     form;
     dom = {};
     serviceClients = {};
+
+    titleData = {
+        title: '',
+        document: '',
+        isDirty: false
+    }
 
     constructor(name, options, payload = {}) {
         this.name = name;
@@ -98,8 +105,30 @@ class Window {
         });
     }
 
-    setTitle(title) {
+    updateTitle() {
+        let title = this.titleData.title;
+        if (this.titleData.document) {
+            title += ` - ${this.titleData.document}`;
+        }
+        if (this.titleData.isDirty) {
+            title += '*';
+        }
         this.dom.$headTitle.html(title);
+    }
+
+    setTitle(title) {
+        this.titleData.title = title;
+        this.updateTitle();
+    }
+
+    setTitleDocument(titleDocument) {
+        this.titleData.document = titleDocument;
+        this.updateTitle();
+    }
+
+    setTitleDirty(titleIsDirty) {
+        this.titleData.isDirty = titleIsDirty;
+        this.updateTitle();
     }
 
     setContentDOM($rootContentElement) {
@@ -144,6 +173,7 @@ class Window {
         const $currentDOM = component.getDOM();
         component.rebuildDOM();
         $currentDOM.replaceWith(component.getDOM());
+        component.onAfterRebuild();
         this.registerComponentEvents(component);
     }
 
@@ -152,6 +182,10 @@ class Window {
             this.serviceClients[serviceName] = load.instance('classes/serviceclient', serviceName, this);
         }
         return this.serviceClients[serviceName];
+    }
+
+    onShortcut(shortcut, callback) {
+        mousetrap.bind(shortcut, callback);
     }
 
     onError(error) {

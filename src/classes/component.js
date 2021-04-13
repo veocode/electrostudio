@@ -229,7 +229,10 @@ class Component {
 
     rebuildDOM() {
         this.$dom = this.buildDOM();
-        this.onAfterRebuild();
+    }
+
+    onAfterBuild() {
+        // Override in children
     }
 
     onAfterRebuild() {
@@ -239,6 +242,7 @@ class Component {
     getDOM() {
         if (!this.$dom) {
             this.rebuildDOM();
+            this.onAfterBuild();
         }
         return this.$dom;
     }
@@ -441,14 +445,6 @@ class ContainerComponent extends Component {
             $childrenDOM.push(childrenComponent.getDOM());
         }
         this.$dom = this.buildDOM(...$childrenDOM);
-        this.onAfterRebuild();
-    }
-
-    getDOM() {
-        if (!this.$dom) {
-            this.rebuildDOM();
-        }
-        return this.$dom;
     }
 
 }

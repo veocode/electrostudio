@@ -1,4 +1,5 @@
 const Window = load.class('window');
+const path = load.node('path');
 
 class EditorWindow extends Window {
 
@@ -9,6 +10,7 @@ class EditorWindow extends Window {
         this.bindEditorEvents();
 
         const filePath = this.payload.filePath;
+        this.setTitleDocument(path.basename(filePath));
         this.editor.openFile(filePath);
     }
 
@@ -22,6 +24,11 @@ class EditorWindow extends Window {
     bindEditorEvents() {
         this.editor.events.on('file:save', (filePath, content) => {
             this.form.emit('file:save', { filePath, content });
+            this.setTitleDirty(false);
+        });
+
+        this.editor.events.on('file:dirty-changed', (isDirty) => {
+            this.setTitleDirty(isDirty);
         });
     }
 

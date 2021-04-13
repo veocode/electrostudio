@@ -115,20 +115,20 @@ html, body, .view-window {
     outline: none;
 }
 
-.component.button {
+.button.component {
     background: #393939;
     border: none;
     border-radius: 4px;
     color: #AAA;
 }
 
-.component.button:not(:disabled):hover {
+.button.component:not(:disabled):hover {
     background: #444;
     color: #DDD;
     cursor: pointer;
 }
 
-.component.button:disabled {
+.button.component:disabled {
     background:#404040;
 }
 
@@ -143,6 +143,22 @@ html, body, .view-window {
     height:100%;
 }
 
+/*
+* Component: Input
+*/
+
+.input.component {
+    background: #999;
+    border: none;
+    border-radius: 4px;
+    box-shadow: none;
+    height:30px;
+    outline: none;
+}
+
+.input.component:focus {
+    background: #EEE;
+}
 
 /*
 * Component: ToolPanel
@@ -154,7 +170,7 @@ html, body, .view-window {
     flex-direction: row;
 }
 
-.toolpanel > .component.button {
+.toolpanel > .button.component {
     height: 100% !important;
     border: solid 1px #2B2B2B;
     background: #333333;
@@ -164,39 +180,39 @@ html, body, .view-window {
     border-radius: 0;
 }
 
-.toolpanel > .component.button > i {
+.toolpanel > .button.component > i {
     font-size:18px;
 }
 
-.toolpanel > .component.button:not(.selected) {
+.toolpanel > .button.component:not(.selected) {
     outline: none;
 }
 
-.toolpanel > .component.button:hover {
+.toolpanel > .button.component:hover {
     background: #555555;
 }
 
-.toolpanel > .component.button:active {
+.toolpanel > .button.component:active {
     background: #777;
 }
 
-.toolpanel > .component.button:first-child {
+.toolpanel > .button.component:first-child {
     border-radius: 5px 0 0 5px;
 }
 
-.toolpanel > .component.button:last-child {
+.toolpanel > .button.component:last-child {
     border-radius: 0 5px 5px 0;
 }
 
-.toolpanel > .component.button:first-child:last-child {
+.toolpanel > .button.component:first-child:last-child {
     border-radius: 5px;
 }
 
-.toolpanel > .component.button:not(:last-child) {
+.toolpanel > .button.component:not(:last-child) {
     border-right: none;
 }
 
-.toolpanel > .component.button.active {
+.toolpanel > .button.component.active {
     background:#3498db;
 }
 

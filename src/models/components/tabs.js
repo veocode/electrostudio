@@ -119,6 +119,10 @@ class Tabs extends ContainerComponent {
         super.addChildren(...paneComponents);
     }
 
+    onAfterBuild() {
+        this.selectTab();
+    }
+
     onAfterRebuild() {
         this.selectTab();
     }

@@ -11,6 +11,10 @@ class Project {
 
     #isDirty = false;
 
+    getName() {
+        return this.meta.name;
+    }
+
     getFolder() {
         return this.folder;
     }

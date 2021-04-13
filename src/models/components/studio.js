@@ -56,6 +56,7 @@ class InspectorPropertyEditor extends Component {
             const $valueInput = prop.buildInput(currentValue, {
                 result: newValue => {
                     this.onInputResult(prop, currentValue, newValue);
+                    $valueInput.blur();
                 },
                 error: message => {
                     this.onInputError(prop, currentValue, message);
@@ -154,12 +155,8 @@ class InspectorEventEditor extends Component {
             $valueInput.on('keydown', event => {
                 if (event.keyCode == 13) {
                     const newValue = $valueInput.val();
-                    if (!newValue) {
-                        this.onInputError(t('Bad value'));
-                        $valueInput.val(currentValue);
-                        return;
-                    }
-                    this.onInputResult(eventName, currentValue, newValue);
+                    this.onInputResult(eventName, currentValue, newValue || null);
+                    $valueInput.blur();
                 }
             });
 
@@ -195,6 +192,9 @@ class CodeEditor extends Component {
     #editor;
     #fileToOpen;
     #openedFilePath;
+    #lastSavedVersionId;
+
+    #isDirty = false;
 
     static isInternal() {
         return true;
@@ -256,6 +256,10 @@ class CodeEditor extends Component {
                 this.saveFile();
             });
 
+            this.#editor.getModel().onDidChangeContent(() => {
+                this.setDirty(this.#lastSavedVersionId != this.#editor.getModel().getAlternativeVersionId());
+            });
+
             if (this.#fileToOpen) {
                 this.openFile(this.#fileToOpen);
                 this.#fileToOpen = null;
@@ -271,6 +275,7 @@ class CodeEditor extends Component {
 
         const content = await load.read(filePath);
         this.#editor.getModel().setValue(content);
+        this.resetDirty();
         this.#openedFilePath = filePath;
         this.events.emit('file:loaded', filePath);
     }
@@ -279,6 +284,7 @@ class CodeEditor extends Component {
         const filePath = this.#openedFilePath;
         const content = this.#editor.getModel().getValue();
         this.events.emit('file:save', filePath, content);
+        this.resetDirty();
     }
 
     getValue() {
@@ -289,6 +295,18 @@ class CodeEditor extends Component {
     setValue(value) {
         if (!this.#editor) { return; }
         this.#editor.getModel().setValue(value);
+    }
+
+    resetDirty() {
+        this.#isDirty = false;
+        this.#lastSavedVersionId = this.#editor.getModel().getAlternativeVersionId();
+    }
+
+    setDirty(isDirty) {
+        if (this.#isDirty != isDirty) {
+            this.events.emit('file:dirty-changed', isDirty);
+        }
+        this.#isDirty = isDirty;
     }
 
 }

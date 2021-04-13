@@ -53,10 +53,12 @@ class Form {
     buildComponentsFromSchemaList(schemaList) {
         this.#isListeningComponentEvents = false;
         let children = [];
-        for (let childrenSchema of schemaList) {
-            const childrenComponent = this.createComponent(childrenSchema.className);
-            childrenComponent.setSchema(childrenSchema, this);
-            children.push(childrenComponent);
+        if (schemaList) {
+            for (let childrenSchema of schemaList) {
+                const childrenComponent = this.createComponent(childrenSchema.className);
+                childrenComponent.setSchema(childrenSchema, this);
+                children.push(childrenComponent);
+            }
         }
         if (children.length) {
             this.removeChildren();

@@ -27,7 +27,8 @@ module.exports = {
         dependencies: {
             'electron-store': '^7.0.2',
             'electron-unhandled': '^3.0.2',
-            'interactjs': '^1.10.8'
+            'interactjs': '^1.10.8',
+            'mousetrap': '^1.6.5'
         }
     },
 

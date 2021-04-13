@@ -15,7 +15,14 @@ class DesignerWindow extends Window {
 
     async start() {
         this.bindEvents();
+        this.bindShortcuts();
         await this.displayActiveProjectForm();
+    }
+
+    bindShortcuts() {
+        this.onShortcut(['ctrl+s', 'command+s'], () => {
+            this.form.emit('project:save');
+        });
     }
 
     bindEvents() {
