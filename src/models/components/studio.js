@@ -242,6 +242,11 @@ class CodeEditor extends Component {
         });
 
         amdRequire(['vs/editor/editor.main'], () => {
+            monaco.languages.typescript.javascriptDefaults.setCompilerOptions({
+                target: monaco.languages.typescript.ScriptTarget.ES6,
+                allowNonTsExtensions: true
+            });
+
             this.#editor = monaco.editor.create($container.get(0), {
                 value: 'return;',
                 language: 'javascript',
@@ -255,6 +260,8 @@ class CodeEditor extends Component {
             this.#editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KEY_S, () => {
                 this.saveFile();
             });
+
+            this.resetDirty();
 
             this.#editor.getModel().onDidChangeContent(() => {
                 this.setDirty(this.#lastSavedVersionId != this.#editor.getModel().getAlternativeVersionId());

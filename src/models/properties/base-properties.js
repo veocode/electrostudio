@@ -144,7 +144,7 @@ module.exports = {
         validate(value) {
             return (
                 (!this.isRequired && value == '') ||
-                value == 'none' ||
+                ['auto', 'none'].includes(value) ||
                 value.match(/^#([0-9a-f]{3}|[0-9a-f]{6})$/i)
             );
         }

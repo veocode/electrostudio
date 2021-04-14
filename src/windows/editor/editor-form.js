@@ -13,6 +13,7 @@ class EditorForm extends Form {
             resizable: true,
             maximizable: true,
             minimizable: true,
+            backgroundColor: '#1e1e1e',
             // isDebug: true
         };
     }

@@ -151,6 +151,7 @@ class Controller {
             maximizable: options.maximizable,
             minimizable: options.minimizable,
             modal: options.modal,
+            backgroundColor: options.backgroundColor,
             webPreferences: {
                 webSecurity: true,
                 contextIsolation: false,

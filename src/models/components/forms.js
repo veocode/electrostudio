@@ -14,7 +14,8 @@ class Form extends ContainerComponent {
             new Traits.TitleTrait(),
             new Traits.SizeTrait(),
             new Traits.PositionTrait(),
-            new Traits.FormTrait()
+            new Traits.FormTrait(),
+            new Traits.BackgroundColorTrait()
         ]);
     }
 
@@ -26,6 +27,7 @@ class Form extends ContainerComponent {
         this.center = true;
         this.modal = false;
         this.title = t('Form');
+        this.backgroundColor = '#5B5B5B';
     }
 
     buildDOM(...$childrenDOM) {
