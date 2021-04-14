@@ -155,7 +155,7 @@ module.exports = {
             ]
         }
         appendAttributes(attributes, values) {
-            values.backgroundColor && ['auto', 'none'].includes(values.backgroundColor) && attributes.add('style', `background: ${values.backgroundColor}`);
+            values.backgroundColor && !['auto', 'none'].includes(values.backgroundColor) && attributes.add('style', `background: ${values.backgroundColor}`);
         }
     },
 
