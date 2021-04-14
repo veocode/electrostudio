@@ -316,12 +316,12 @@ class CodeEditor extends Component {
         this.#editor.setPosition({ column, lineNumber });
     }
 
-    selectLine(lineNumber) {
+    selectLine(lineNumber, startColumn = 1, endColumn = 70) {
         this.#editor.setSelection({
             startLineNumber: lineNumber,
             endLineNumber: lineNumber,
-            startColumn: 3,
-            endColumn: 70
+            startColumn,
+            endColumn
         })
     }
 

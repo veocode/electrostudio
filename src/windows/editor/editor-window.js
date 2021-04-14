@@ -59,7 +59,7 @@ class EditorWindow extends Window {
         if (match) {
             const updatedCode = code.replace(match[0], insertReplace);
             this.editor.setValue(updatedCode);
-            this.editor.selectLine(this.editor.getLineCount() - 5);
+            this.editor.selectLine(this.editor.getLineCount() - 5, 3);
         }
     }
 
