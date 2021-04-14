@@ -148,12 +148,13 @@ html, body, .view-window {
 */
 
 .input.component {
-    background: #999;
+    background: #DDD;
     border: none;
     border-radius: 4px;
     box-shadow: none;
     height:30px;
     outline: none;
+    padding:0 10px;
 }
 
 .input.component:focus {

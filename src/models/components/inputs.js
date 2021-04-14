@@ -13,6 +13,7 @@ class Input extends Component {
             new Traits.AlignmentTrait(),
             new Traits.PositionTrait(),
             new Traits.SizeTrait(),
+            new Traits.TextAlignTrait(),
             new Traits.InputTrait(),
         ]);
     }
