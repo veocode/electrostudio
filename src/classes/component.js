@@ -4,7 +4,9 @@ class Component {
 
     static EventNames = {
         Focus: ['focus', 'blur'],
-        Mouse: ['click', 'dblclick', 'mousedown', 'mouseup', 'mouseenter', 'mouseleave', 'mousemove', 'mouseover']
+        Mouse: ['click', 'dblclick', 'mousedown', 'mouseup', 'mouseenter', 'mouseleave', 'mousemove', 'mouseover'],
+        Keyboard: ['keyup', 'keydown', 'keypress'],
+        Input: ['change']
     };
 
     isVirtual = false;
@@ -119,12 +121,17 @@ class Component {
         return this.eventHandlerNames;
     }
 
-    getTraits() {
-        return [];
+    getDefaultEventName() {
+        return this.eventNames[0] ?? 'click';
     }
 
-    setDefaults() {
-        // Override in children to set default property values
+    registerEventHandler(eventName, handlerCallback) {
+        const $dom = this.getDOM();
+        $dom.on(eventName, handlerCallback);
+    }
+
+    getTraits() {
+        return [];
     }
 
     getTraitsAttributes(startingAttributes = {}) {
@@ -201,6 +208,10 @@ class Component {
 
     hasProperty(name) {
         return name in this.properties;
+    }
+
+    setDefaults() {
+        // Override in children to set default property values
     }
 
     buildDOM() {

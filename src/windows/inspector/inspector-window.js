@@ -40,14 +40,8 @@ class InspectorWindow extends Window {
             alert(`${t('Validation Error')}: ${message}`);
         });
 
-        this.eventEditor.events.on('input-auto', (componentName, eventName, previousHandlerName) => {
-            const autoEventHandlerName = Utils.joinAsCamelCase(['on', componentName, eventName]);
-            this.eventEditor.setEventHandlerName(eventName, autoEventHandlerName);
-            this.form.emit('component:event-created', {
-                eventName,
-                previousHandlerName,
-                handlerName: autoEventHandlerName
-            });
+        this.eventEditor.events.on('input-auto', (componentName, eventName) => {
+            this.form.emit('component:event-auto-create', { componentName, eventName });
         });
     }
 
@@ -60,12 +54,16 @@ class InspectorWindow extends Window {
             if (parentComponentSchema !== null) {
                 this.propEditor.setParentSchema(parentComponentSchema);
             }
-        });
+        })
 
         this.form.on('component:hide', (payload) => {
             this.propEditor.clearSchema();
             this.eventEditor.clearSchema();
-        });
+        })
+
+        this.form.on('component:event-updated', (payload) => {
+            this.eventEditor.setEventHandlerName(payload.eventName, payload.handlerName);
+        })
     }
 
     buildActionButtons(actions) {

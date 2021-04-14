@@ -84,7 +84,7 @@ class Window {
         for (const [eventName, handlerName] of Object.entries(eventHandlerNames)) {
             if (!handlerName) { continue; }
 
-            $componentDOM.on(eventName, (event) => {
+            component.registerEventHandler(eventName, (event) => {
                 this.callMethod(handlerName, event, component);
             });
         }

@@ -6,7 +6,8 @@ class EditorWindow extends Window {
     studioService = this.getService('studio/studio');
 
     start() {
-        this.bindEvents();
+        this.bindFormEvents();
+        this.bindWindowEvents();
         this.bindEditorEvents();
 
         const filePath = this.payload.filePath;
@@ -14,10 +15,16 @@ class EditorWindow extends Window {
         this.editor.openFile(filePath);
     }
 
-    bindEvents() {
+    bindFormEvents() {
         this.form.on('file:method-add', payload => {
             const { methodName, methodArgs, methodBody } = payload;
             this.insertMethod(methodName, methodArgs, methodBody);
+        });
+    }
+
+    bindWindowEvents() {
+        window.addEventListener('focus', () => {
+            this.editor.setFocus();
         });
     }
 
@@ -52,6 +59,7 @@ class EditorWindow extends Window {
         if (match) {
             const updatedCode = code.replace(match[0], insertReplace);
             this.editor.setValue(updatedCode);
+            this.editor.selectLine(this.editor.getLineCount() - 5);
         }
     }
 

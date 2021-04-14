@@ -308,6 +308,27 @@ class CodeEditor extends Component {
         this.#isDirty = isDirty;
     }
 
+    getLineCount() {
+        return this.#editor.getModel().getLineCount();
+    }
+
+    setCursorPosition(lineNumber, column) {
+        this.#editor.setPosition({ column, lineNumber });
+    }
+
+    selectLine(lineNumber) {
+        this.#editor.setSelection({
+            startLineNumber: lineNumber,
+            endLineNumber: lineNumber,
+            startColumn: 3,
+            endColumn: 70
+        })
+    }
+
+    setFocus() {
+        this.#editor.focus();
+    }
+
 }
 
 module.exports = {

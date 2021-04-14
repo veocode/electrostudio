@@ -1,4 +1,5 @@
 const Window = load.class('window');
+const Utils = load.class('utils');
 
 class MainWindow extends Window {
 
@@ -83,6 +84,11 @@ class MainWindow extends Window {
             this.deselectComponentClass();
         });
 
+        this.designerForm.on('component:event-auto-create', (payload) => {
+            const { componentName, eventName } = payload;
+            this.onComponentEventAutoCreate(componentName, eventName);
+        });
+
         this.designerForm.on('form:updated', schema => {
             this.setProjectDirty(true);
             this.projectService.updateActiveForm(schema);
@@ -109,14 +115,9 @@ class MainWindow extends Window {
             this.designerForm.send('component:event-updated', payload);
         });
 
-        this.inspectorForm.on('component:event-created', (payload) => {
-            this.designerForm.send('component:event-updated', payload);
-            this.editorForm.send('file:method-add', {
-                methodName: payload.handlerName,
-                methodArgs: 'event, sender',
-                methodBody: '// TODO: Add Implementation'
-            });
-            this.editorForm.showWindow();
+        this.inspectorForm.on('component:event-auto-create', (payload) => {
+            const { componentName, eventName } = payload;
+            this.onComponentEventAutoCreate(componentName, eventName);
         });
 
         this.inspectorForm.on('component:parent-selected', (name) => {
@@ -186,6 +187,28 @@ class MainWindow extends Window {
     selectComponentClass(componentClass) {
         this.selectedComponentClass = componentClass;
         this.designerForm.send('component:class-selected', componentClass);
+    }
+
+    onComponentEventAutoCreate(componentName, eventName) {
+        const handlerName = Utils.joinAsCamelCase(['on', componentName, eventName]);
+
+        this.inspectorForm.send('component:event-updated', {
+            eventName,
+            handlerName
+        });
+
+        this.designerForm.send('component:event-updated', {
+            eventName,
+            handlerName
+        });
+
+        this.editorForm.send('file:method-add', {
+            methodName: handlerName,
+            methodArgs: 'event, sender',
+            methodBody: '// TODO: Add Implementation'
+        });
+
+        this.editorForm.showWindow();
     }
 
 }

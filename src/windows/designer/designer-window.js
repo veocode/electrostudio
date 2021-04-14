@@ -139,6 +139,12 @@ class DesignerWindow extends Window {
                 event.stopImmediatePropagation();
             })
 
+            $componentDOM.on('dblclick', event => {
+                event.preventDefault();
+                event.stopImmediatePropagation();
+                this.onComponentDoubleClick(component, event.offsetX, event.offsetY);
+            })
+
             $componentDOM.on('mousedown', event => {
                 event.preventDefault();
                 event.stopImmediatePropagation();
@@ -258,6 +264,15 @@ class DesignerWindow extends Window {
         }
         this.deselectComponent();
         this.selectComponent(component);
+    }
+
+    onComponentDoubleClick(component, x, y) {
+        if (this.isAddingComponent()) { return; }
+
+        this.form.emit('component:event-auto-create', {
+            componentName: component.name,
+            eventName: component.getDefaultEventName()
+        });
     }
 
     deselectComponent() {

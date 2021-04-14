@@ -24,9 +24,15 @@ class Input extends Component {
 
     getEventNames() {
         return [].concat(
+            Component.EventNames.Input,
             Component.EventNames.Mouse,
             Component.EventNames.Focus,
+            Component.EventNames.Keyboard
         )
+    }
+
+    getDefaultEventName() {
+        return 'change';
     }
 
     buildDOM() {
