@@ -15,12 +15,6 @@ class ProjectRunTask extends Task {
     }
 
     getSteps() {
-        if (this.isProjectPackageCompiled) {
-            return [
-                this.stepRunApplication,
-            ];
-        }
-
         return [
             this.stepVerifyNPM,
             this.stepInitProject,
