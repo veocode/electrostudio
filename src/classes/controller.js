@@ -177,6 +177,9 @@ class Controller {
             browserWindow.setContentSize(size.width, size.height);
             browserWindow.webContents.executeJavaScript('window.handler.boot()').then(() => {
                 browserWindow.show();
+                if (options.isDebug) {
+                    browserWindow.webContents.openDevTools();
+                }
             })
         });
 
@@ -190,10 +193,6 @@ class Controller {
 
             this.dispatchFormEvent(formName, 'closed');
         });
-
-        if (options.isDebug) {
-            browserWindow.webContents.openDevTools();
-        }
 
         if (!options.menu) {
             browserWindow.setMenu(null);

@@ -140,6 +140,7 @@ module.exports = {
 
     ColorProperty: class extends Property {
         defaultValue = '#FFFFFF';
+        $inputGroup;
 
         validate(value) {
             return (
@@ -147,6 +148,45 @@ module.exports = {
                 ['auto', 'none'].includes(value) ||
                 value.match(/^#([0-9a-f]{3}|[0-9a-f]{6})$/i)
             );
+        }
+
+        buildInput(value, callbacks) {
+            this.$inputGroup = $('<div/>', { class: 'prop-input-group' });
+
+            this.$input = $('<input/>', { class: 'prop-input', type: 'text', value }).appendTo(this.$inputGroup);
+            this.$colorInput = $('<input/>', { class: 'prop-input-color', type: 'color', value }).appendTo(this.$inputGroup);
+
+            const inputChangeCallback = (newValue) => {
+                if ('result' in callbacks) {
+                    newValue = this.sanitize(newValue);
+                    if (!this.validate(newValue)) {
+                        if ('error' in callbacks) {
+                            callbacks.error(this.getValidationError());
+                        }
+                        return;
+                    }
+                    this.setInputValue(newValue);
+                    callbacks.result(newValue);
+                }
+            }
+
+            this.$input.on('change', event => {
+                inputChangeCallback(this.$input.val());
+            });
+
+            this.$colorInput.on('change', event => {
+                inputChangeCallback(this.$colorInput.val());
+            });
+
+            this.setInputValue(value);
+            return this.$inputGroup;
+        }
+
+        setInputValue(value) {
+            if (this.$inputGroup) {
+                this.$input.val(value);
+                this.$colorInput.val(value);
+            }
         }
     },
 

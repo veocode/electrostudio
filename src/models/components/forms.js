@@ -31,12 +31,11 @@ class Form extends ContainerComponent {
     }
 
     buildDOM(...$childrenDOM) {
-        const attributes = new AttributesList({ 'class': 'form-body' });
-        let $dom = $('<div></div>');
+        let $dom = $('<div></div>', { 'class': 'form-body' });
         $childrenDOM.forEach(($childDOM) => {
             $dom.append($childDOM);
         });
-        attributes.applyToDOM($dom);
+        $dom.css('background', this.backgroundColor);
         return $dom;
     }
 

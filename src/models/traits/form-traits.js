@@ -11,6 +11,7 @@ module.exports = {
                 new Props.BooleanProperty('minimizable'),
                 new Props.BooleanProperty('maximizable'),
                 new Props.BooleanProperty('modal'),
+                new Props.BooleanProperty('isDebug', false, false),
             ]
         }
     }
