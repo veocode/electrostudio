@@ -37,7 +37,7 @@ class Input extends Component {
 
     buildDOM() {
         const $input = this.buildTagDOM('input', { class: ['component', 'input'] });
-        $input.change(() => {
+        $input.keyup(() => {
             this.assignPropertyValue('value', $input.val());
         })
         return $input;
