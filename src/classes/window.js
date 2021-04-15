@@ -29,6 +29,7 @@ class Window {
         this.form.build();
 
         this.setTitle(this.options.title);
+        this.setBackground(this.options.backgroundColor);
         this.displayForm();
 
         this.registerComponents();
@@ -131,6 +132,10 @@ class Window {
         this.updateTitle();
     }
 
+    setBackground(background) {
+        this.dom.$body.css('background', background);
+    }
+
     setContentDOM($rootContentElement) {
         this.dom.$body.empty().append($rootContentElement);
     }
@@ -189,11 +194,14 @@ class Window {
     }
 
     onError(error) {
+        console.error(error);
+
         if (!(error.constructor.name in errors)) {
-            console.error(error);
             alert([
                 t('An error occured during execution') + ':',
                 `[${error.name}] ${error.message}`,
+                '',
+                t('Check DevTools console for details')
             ].join('\n'));
             return;
         }
@@ -213,7 +221,7 @@ class Window {
     }
 
     onClose() {
-
+        // Override in children
     }
 
 }

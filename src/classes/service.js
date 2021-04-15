@@ -11,8 +11,7 @@ class Service {
             const targetObject = this.getServiceObject();
 
             if (!(methodName in targetObject)) {
-                reject(new errors.ServiceMethodNotExistsException(this.constructor.name, methodName));
-                return;
+                throw new errors.ServiceMethodNotExistsException(this.constructor.name, methodName);
             };
 
             let resultPromiseOrValue;

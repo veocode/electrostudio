@@ -35,7 +35,6 @@ class Form extends ContainerComponent {
         $childrenDOM.forEach(($childDOM) => {
             $dom.append($childDOM);
         });
-        $dom.css('background', this.backgroundColor);
         return $dom;
     }
 

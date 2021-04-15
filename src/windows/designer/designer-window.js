@@ -85,6 +85,7 @@ class DesignerWindow extends Window {
     applyFormSchemaToWindow() {
         const formProps = this.formComponent.getSchema(false).properties;
         this.setTitle(formProps.title);
+        this.setBackground(formProps.backgroundColor);
         this.form.setSize(formProps.width, formProps.height);
         this.form.setResizable(formProps.resizable);
         this.form.setMinimizable(formProps.minimizable);

@@ -4,7 +4,7 @@
 * Base Styles
 */
 
-html, body, .view-window {
+html, body {
     width:100%;
     height:100%;
     padding: 0;
@@ -13,6 +13,7 @@ html, body, .view-window {
     font-family: 'Ubuntu', sans-serif;
     position: relative;
 }
+
 
 /*
 * Window, Title and Frame
@@ -32,13 +33,18 @@ html, body, .view-window {
     left: 0;
 }
 
-.window > .window-frame > .window-view {
+.window > .window-frame > .window-view,
+.window > .window-frame > .window-view > .form-body {
     overflow: auto;
     position: relative;
     width: 100%;
     height: 100%;
+}
+
+.window > .window-frame > .window-view{
     background: #5B5B5B;
 }
+
 
 /*
 * Components Base
