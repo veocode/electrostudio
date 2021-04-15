@@ -45,9 +45,32 @@ class Input extends Component {
 
 }
 
+class TextArea extends Input {
+
+    static getIcon() {
+        return 'form-textarea';
+    }
+
+    setDefaults() {
+        this.width = 320;
+        this.height = 240;
+    }
+
+    buildDOM() {
+        const $input = this.buildTagDOM('textarea', { class: ['component', 'textarea'] });
+        $input.val(this.value);
+        $input.keyup(() => {
+            this.assignPropertyValue('value', $input.val());
+        })
+        return $input;
+    }
+
+}
+
 module.exports = {
-    groupName: t('Inputs'),
+    groupName: t('TextArea'),
     classes: {
-        Input
+        Input,
+        TextArea
     }
 }

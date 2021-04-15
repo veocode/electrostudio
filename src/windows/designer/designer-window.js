@@ -374,6 +374,8 @@ class DesignerWindow extends Window {
 
         const component = this.form.createComponent(className, { left, top });
 
+        component.onFirstTimeCreated(this);
+
         parentComponent.addChildren(component);
         this.registerComponentEvents(component);
         this.rebuildComponent(parentComponent);

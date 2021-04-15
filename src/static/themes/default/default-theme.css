@@ -150,20 +150,26 @@ html, body {
 }
 
 /*
-* Component: Input
+* Component: Input, TextArea
 */
 
-.input.component {
+.input.component,
+.textarea.component {
     background: #DDD;
     border: none;
     border-radius: 4px;
     box-shadow: none;
-    height:30px;
     outline: none;
+    padding:10px;
+}
+
+.input.component {
+    height:30px;
     padding:0 10px;
 }
 
-.input.component:focus {
+.input.component:focus,
+.textarea.component:focus {
     background: #EEE;
 }
 

@@ -13,7 +13,8 @@ class LayoutPane extends ContainerComponent {
             new Traits.BackgroundColorTrait(),
             new Traits.Layouts.OrderIndexTrait(),
             new Traits.Layouts.WeightTrait(),
-            new Traits.Layouts.FixedSizeTrait()
+            new Traits.Layouts.FixedSizeTrait(),
+            new Traits.PaddingTrait(),
         ]);
     }
 
@@ -21,6 +22,7 @@ class LayoutPane extends ContainerComponent {
         this.fixedSize = 0;
         this.weight = 1;
         this.backgroundColor = '#252525';
+        this.padding = 0;
     }
 
     getEventNames() {
@@ -138,8 +140,13 @@ class Layout extends ContainerComponent {
         };
     }
 
-    addPane(window) {
-        const pane = window.form.createComponent('LayoutPane');
+    onFirstTimeCreated(window) {
+        this.addPane(window, { backgroundColor: '#333333' });
+        this.addPane(window, { backgroundColor: '#444444' });
+    }
+
+    addPane(window, ...componentArgs) {
+        const pane = window.form.createComponent('LayoutPane', ...componentArgs);
         this.addChildren(pane);
         window.registerComponents(pane);
         window.rebuildComponent(this);

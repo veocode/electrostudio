@@ -17,6 +17,10 @@ class TaskRunnerForm extends Form {
         };
     }
 
+    runTask(taskName, ...taskArgs) {
+        this.createWindow({ taskName, taskArgs });
+    }
+
     buildComponents() {
         this.buildComponentsFromSchemaList([{
             className: 'Panel',

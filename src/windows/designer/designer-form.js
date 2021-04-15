@@ -13,7 +13,7 @@ class DesignerForm extends Form {
             resizable: true,
             maximizable: true,
             minimizable: true,
-            // isDebug: true,
+            isDebug: true,
         };
     }
 

@@ -50,10 +50,7 @@ class SplashWindow extends Window {
         }
 
         this.hide();
-        this.taskRunnerForm.createWindow({
-            taskName: 'project-create',
-            taskArgs: [folder]
-        });
+        this.taskRunnerForm.runTask('project-create', folder);
     }
 
     async onBtnLastProjectClick() {

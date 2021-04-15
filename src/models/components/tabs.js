@@ -174,6 +174,10 @@ class Tabs extends ContainerComponent {
         };
     }
 
+    onFirstTimeCreated(window) {
+        this.addTab(window);
+    }
+
     addTab(window) {
         const tab = window.form.createComponent('TabPane');
         this.addChildren(tab);

@@ -242,6 +242,10 @@ class Component {
         this.$dom = this.buildDOM();
     }
 
+    onFirstTimeCreated(window) {
+        // Override in children
+    }
+
     onAfterBuild() {
         // Override in children
     }
@@ -256,6 +260,14 @@ class Component {
             this.onAfterBuild();
         }
         return this.$dom;
+    }
+
+    show() {
+        this.getDOM().show();
+    }
+
+    hide() {
+        this.getDOM().hide();
     }
 
     resetCachedDOM() {
@@ -433,6 +445,15 @@ class ContainerComponent extends Component {
         }
     }
 
+    rebuildDOM() {
+        let $childrenDOM = [];
+        for (let childrenComponent of this.getChildren()) {
+            if (childrenComponent.isVirtual) { continue; }
+            $childrenDOM.push(childrenComponent.getDOM());
+        }
+        this.$dom = this.buildDOM(...$childrenDOM);
+    }
+
     buildDOM(...$childrenDOM) {
         // Override in children
     }
@@ -446,15 +467,6 @@ class ContainerComponent extends Component {
         for (let childrenComponent of this.getChildren()) {
             childrenComponent.resetCachedDOM();
         }
-    }
-
-    rebuildDOM() {
-        let $childrenDOM = [];
-        for (let childrenComponent of this.getChildren()) {
-            if (childrenComponent.isVirtual) { continue; }
-            $childrenDOM.push(childrenComponent.getDOM());
-        }
-        this.$dom = this.buildDOM(...$childrenDOM);
     }
 
 }
