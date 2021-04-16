@@ -1,0 +1,13 @@
+.creating-component .container{
+    cursor: crosshair !important;
+}
+
+.creating-component .container:hover {
+    outline: dotted 2px #55efc4 !important;
+    outline-offset: -2px !important;
+}
+
+.component.selected {
+    outline: dotted 2px #0abde3;
+    outline-offset: -1px;
+}

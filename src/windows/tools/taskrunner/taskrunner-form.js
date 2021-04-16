@@ -4,7 +4,7 @@ class TaskRunnerForm extends Form {
 
     getSchema() {
         return {
-            name: 'taskrunner',
+            name: 'tools/taskrunner',
             title: t('Work In Progress') + '...',
             width: 470,
             height: 190,
@@ -85,7 +85,7 @@ class TaskRunnerForm extends Form {
                 metaData: ''
             },
             events: {
-                'click': 'onBtnCancelClick'
+                click: 'onBtnCancelClick'
             }
         }])
     }

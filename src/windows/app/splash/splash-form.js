@@ -4,7 +4,7 @@ class SplashForm extends Form {
 
     getSchema() {
         return {
-            name: 'splash',
+            name: 'app/splash',
             title: 'ElectroStudio',
             width: 310,
             height: 300,

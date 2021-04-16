@@ -27,11 +27,18 @@ class Form extends ContainerComponent {
         this.center = true;
         this.modal = false;
         this.title = t('Form');
-        this.backgroundColor = '#5B5B5B';
+    }
+
+    isDraggable() {
+        return false;
+    }
+
+    isResizable() {
+        return false;
     }
 
     buildDOM(...$childrenDOM) {
-        let $dom = $('<div></div>', { 'class': 'form-body' });
+        let $dom = $('<div></div>', { 'class': 'form-body container' });
         $childrenDOM.forEach(($childDOM) => {
             $dom.append($childDOM);
         });

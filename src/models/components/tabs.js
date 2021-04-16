@@ -18,7 +18,6 @@ class TabPane extends ContainerComponent {
 
     setDefaults() {
         this.label = 'Tab';
-        this.backgroundColor = '#333333';
     }
 
     getEventNames() {
@@ -174,7 +173,7 @@ class Tabs extends ContainerComponent {
         };
     }
 
-    onFirstTimeCreated(window) {
+    onCreatedByDesigner(window) {
         this.addTab(window);
     }
 

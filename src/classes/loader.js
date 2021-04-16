@@ -61,11 +61,15 @@ class Loader {
     }
 
     form(name, ...constructorArgs) {
-        return this.instance(`windows/${name}/${name}-form`, ...constructorArgs);
+        const formDirectory = name;
+        const formName = path.basename(name);
+        return this.instance(`windows/${formDirectory}/${formName}-form`, ...constructorArgs);
     }
 
     window(name, ...args) {
-        return this.instance(`windows/${name}/${name}-window`, name, ...args);
+        const windowDirectory = name;
+        const windowName = path.basename(name);
+        return this.instance(`windows/${windowDirectory}/${windowName}-window`, name, ...args);
     }
 
     service(name) {

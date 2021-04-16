@@ -4,7 +4,7 @@ class InspectorForm extends Form {
 
     getSchema() {
         return {
-            name: 'inspector',
+            name: 'app/inspector',
             title: t('Object Inspector'),
             left: 0,
             top: 120,

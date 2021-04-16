@@ -7,7 +7,7 @@ class MainWindow extends Window {
     studioService = this.getService('studio/studio');
     projectService = this.getService('studio/project');
 
-    taskRunnerForm = load.form('taskrunner');
+    taskRunnerForm = load.form('tools/taskrunner');
 
     inspectorForm;
     designerForm;
@@ -42,9 +42,9 @@ class MainWindow extends Window {
         if (this.inspectorForm) { this.inspectorForm.closeWindow(); }
         if (this.designerForm) { this.designerForm.closeWindow(); }
 
-        this.inspectorForm = load.form('inspector');
-        this.designerForm = load.form('designer');
-        this.editorForm = load.form('editor');
+        this.inspectorForm = load.form('app/inspector');
+        this.designerForm = load.form('app/designer');
+        this.editorForm = load.form('app/editor');
 
         this.bindInspectorEvents();
         this.bindDesignerEvents();

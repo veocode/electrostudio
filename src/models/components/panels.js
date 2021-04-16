@@ -20,7 +20,6 @@ class Panel extends ContainerComponent {
 
     setDefaults() {
         this.width = this.height = 200;
-        this.backgroundColor = '#252525';
     }
 
     getEventNames() {
@@ -49,7 +48,6 @@ class ToolPanel extends Panel {
     setDefaults() {
         this.width = 300;
         this.height = 60;
-        this.backgroundColor = '#252525';
     }
 
     bindToggleOnClick() {

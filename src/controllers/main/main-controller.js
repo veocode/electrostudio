@@ -5,7 +5,7 @@ class MainController extends Controller {
 
     async start() {
         await Studio.start();
-        this.createFormWindow('splash');
+        this.createFormWindow('app/splash');
     }
 
 }

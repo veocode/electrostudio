@@ -23,8 +23,6 @@ class Label extends Component {
 
     setDefaults() {
         this.label = t('Label');
-        this.color = '#000000';
-        this.backgroundColor = 'none';
     }
 
     getEventNames() {

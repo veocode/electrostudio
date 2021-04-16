@@ -27,8 +27,6 @@ class ProgressBar extends Component {
         this.value = 50;
         this.maxValue = 100;
         this.minValue = 0;
-        this.foregroundColor = '#3498DB';
-        this.backgroundColor = '#2B2B2B';
     }
 
     getEventNames() {

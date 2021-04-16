@@ -4,111 +4,8 @@
 * Base Styles
 */
 
-html, body {
-    width:100%;
-    height:100%;
-    padding: 0;
-    margin: 0;
-    background: #2B2B2B;
-    font-family: 'Ubuntu', sans-serif;
-    position: relative;
-}
-
-
-/*
-* Window, Title and Frame
-*/
-
-.window {
-    overflow: hidden;
-}
-
-.window > .window-frame {
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    position: absolute;
-    z-index: 0;
-    top: 0;
-    left: 0;
-}
-
-.window > .window-frame > .window-view,
-.window > .window-frame > .window-view > .form-body {
-    overflow: auto;
-    position: relative;
-    width: 100%;
-    height: 100%;
-}
-
-.window > .window-frame > .window-view{
+html, body, .window > .window-frame > .window-view{
     background: #5B5B5B;
-}
-
-
-/*
-* Components Base
-*/
-
-.component {
-    position: absolute;
-    overflow: hidden;
-    box-sizing: border-box;
-}
-
-.component.container,
-.component .container {
-    overflow: hidden;
-}
-
-
-/*
-* Components Alignment
-*/
-
-.align-client,
-.align-top,
-.align-bottom,
-.align-left,
-.align-right {
-    position: absolute;
-}
-
-.align-client {
-    width:100% !important;
-    height:100% !important;
-    left: 0 !important;
-    top: 0 !important;
-    right: 0 !important;
-    bottom: 0 !important;
-}
-
-.align-top {
-    top:0 !important;
-    left:0 !important;
-    bottom:auto !important;
-    width:100% !important;
-}
-
-.align-bottom {
-    bottom:0 !important;
-    left:0 !important;
-    top:auto !important;
-    width:100% !important;
-}
-
-.align-left {
-    top:0 !important;
-    left:0 !important;
-    right:auto !important;
-    height:100% !important;
-}
-
-.align-right {
-    top:0 !important;
-    right:0 !important;
-    left:auto !important;
-    height:100% !important;
 }
 
 
@@ -143,11 +40,16 @@ html, body {
 * Component: Panel
 */
 
-.panel .panel-body {
+.panel.component {
+    background: #252525;
+}
+
+.panel.component .panel-body {
     position:absolute;
     width:100%;
     height:100%;
 }
+
 
 /*
 * Component: Input, TextArea
@@ -161,6 +63,7 @@ html, body {
     box-shadow: none;
     outline: none;
     padding:10px;
+    resize: none;
 }
 
 .input.component {
@@ -173,14 +76,16 @@ html, body {
     background: #EEE;
 }
 
+
 /*
 * Component: ToolPanel
 */
 
-.toolpanel{
+.toolpanel.component{
     padding:10px;
     display: flex;
     flex-direction: row;
+    background: #2B2B2B;
 }
 
 .toolpanel > .button.component {
@@ -236,6 +141,7 @@ html, body {
 
 .layout-pane{
     position: relative;
+    background: #252525;
 }
 
 .layout-pane > .pane-body {
@@ -248,6 +154,10 @@ html, body {
 /*
 * Component: Layout
 */
+
+.layout {
+    background:#555555;
+}
 
 .layout > .panes {
     display: flex;
@@ -300,6 +210,7 @@ html, body {
     animation: anim-progress-background 2s linear infinite;
 }
 
+
 /*
 * Component: Tabs
 */
@@ -348,9 +259,14 @@ html, body {
     display: block;
 }
 
+
 /*
 * Component: TabPane
 */
+
+.tab-pane {
+    background: #333;
+}
 
 .tab-pane,
 .tab-pane > .tab-pane-body {

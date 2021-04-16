@@ -21,7 +21,6 @@ class LayoutPane extends ContainerComponent {
     setDefaults() {
         this.fixedSize = 0;
         this.weight = 1;
-        this.backgroundColor = '#252525';
         this.padding = 0;
     }
 
@@ -88,7 +87,6 @@ class Layout extends ContainerComponent {
     setDefaults() {
         this.width = 200;
         this.height = 200;
-        this.backgroundColor = '#555555';
     }
 
     getEventNames() {
@@ -140,7 +138,7 @@ class Layout extends ContainerComponent {
         };
     }
 
-    onFirstTimeCreated(window) {
+    onCreatedByDesigner(window) {
         this.addPane(window, { backgroundColor: '#333333' });
         this.addPane(window, { backgroundColor: '#444444' });
     }

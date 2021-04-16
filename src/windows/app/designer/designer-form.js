@@ -4,7 +4,7 @@ class DesignerForm extends Form {
 
     getSchema() {
         return {
-            name: 'designer',
+            name: 'app/designer',
             title: t('Form Designer'),
             left: 400,
             top: 120,

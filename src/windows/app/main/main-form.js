@@ -5,7 +5,7 @@ class MainForm extends Form {
 
     getSchema() {
         return {
-            name: 'main',
+            name: 'app/main',
             title: config.appTitle,
             left: 0,
             top: 0,

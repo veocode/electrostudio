@@ -1,5 +1,6 @@
 const ipc = load.electron('ipcRenderer');
 const fs = load.node('fs');
+const path = load.node('path');
 const mousetrap = load.node('mousetrap');
 
 class Window {
@@ -35,7 +36,9 @@ class Window {
         this.registerComponents();
         this.registerFormEvents();
 
-        const windowStylesPath = load.path('windows', this.name, `${this.name}-window.css`);
+        const windowDirectory = this.name;
+        const windowName = path.basename(this.name);
+        const windowStylesPath = load.path('windows', windowDirectory, `${windowName}-window.css`);
         if (fs.existsSync(windowStylesPath)) {
             this.addCSS(windowStylesPath);
         }

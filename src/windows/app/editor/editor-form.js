@@ -4,7 +4,7 @@ class EditorForm extends Form {
 
     getSchema() {
         return {
-            name: 'editor',
+            name: 'app/editor',
             title: t('Code Editor'),
             left: 440,
             top: 160,

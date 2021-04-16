@@ -242,7 +242,7 @@ class Component {
         this.$dom = this.buildDOM();
     }
 
-    onFirstTimeCreated(window) {
+    onCreatedByDesigner(window) {
         // Override in children
     }
 

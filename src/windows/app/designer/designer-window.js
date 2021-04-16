@@ -9,9 +9,10 @@ class DesignerWindow extends Window {
 
     projectService = this.getService('studio/project');
 
-    formComponent = null;
-    selectedComponent = null;
-    selectedComponentClassToCreate = null;
+    formComponent;
+    selectedComponent;
+    selectedComponentClassToCreate;
+    copiedComponentSchema;
 
     async start() {
         this.bindEvents();
@@ -24,7 +25,13 @@ class DesignerWindow extends Window {
             this.form.emit('project:save');
         });
         this.onShortcut(['ctrl+d', 'command+d'], () => {
+            this.duplicateSelectedComponent();
+        });
+        this.onShortcut(['ctrl+c', 'command+c'], () => {
             this.copySelectedComponent();
+        });
+        this.onShortcut(['ctrl+v', 'command+v'], () => {
+            this.pasteComponent();
         });
     }
 
@@ -56,8 +63,7 @@ class DesignerWindow extends Window {
         });
 
         this.form.on('component:class-selected', className => {
-            this.deselectComponent();
-            this.selectedComponentClassToCreate = className;
+            this.startComponentCreating(className);
         });
 
         this.form.on('component:class-deselected', () => {
@@ -153,16 +159,16 @@ class DesignerWindow extends Window {
             })
 
             if (component.isDraggable()) {
-                this.bindComponentDraggable(component);
+                this.makeComponentDraggable(component);
             }
 
             if (component.isResizable()) {
-                this.bindComponentResizable(component);
+                this.makeComponentResizable(component);
             }
         }
     }
 
-    bindComponentResizable(component) {
+    makeComponentResizable(component) {
         const snapSize = DesignerWindow.SnapSize;
         const minSize = DesignerWindow.MinSize;
         const $componentDOM = component.getDOM();
@@ -212,7 +218,7 @@ class DesignerWindow extends Window {
         })
     }
 
-    bindComponentDraggable(component) {
+    makeComponentDraggable(component) {
         const snapSize = DesignerWindow.SnapSize;
         const $componentDOM = component.getDOM();
 
@@ -369,26 +375,57 @@ class DesignerWindow extends Window {
         if (!this.selectedComponentClassToCreate) { return; }
 
         const className = this.selectedComponentClassToCreate;
-        const left = Utils.snap(x, DesignerWindow.snapSize);
-        const top = Utils.snap(y, DesignerWindow.snapSize);
 
-        const component = this.form.createComponent(className, { left, top });
+        let props = {
+            left: Utils.snap(x, DesignerWindow.snapSize),
+            top: Utils.snap(y, DesignerWindow.snapSize)
+        };
 
-        component.onFirstTimeCreated(this);
+        let events = {};
 
+        if (this.copiedComponentSchema) {
+            props = Object.assign({}, this.copiedComponentSchema.properties, props);
+            events = this.copiedComponentSchema.events;
+        }
+
+        const component = this.form.createComponent(className, props, events);
         parentComponent.addChildren(component);
+
+        component.onCreatedByDesigner(this);
+
         this.registerComponentEvents(component);
         this.rebuildComponent(parentComponent);
-        this.finishComponentAdding();
+        this.finishComponentCreating();
         this.selectComponent(component);
     }
 
-    finishComponentAdding() {
+    startComponentCreating(className) {
+        this.deselectComponent();
+        this.selectedComponentClassToCreate = className;
+        this.dom.$body.addClass('creating-component');
+    }
+
+    finishComponentCreating() {
         this.selectedComponentClassToCreate = null;
+        this.dom.$body.removeClass('creating-component');
         this.form.emit('component:added');
     }
 
     copySelectedComponent() {
+        if (!this.isComponentSelected()) { return; }
+        if (this.isFormSelected()) { return; }
+
+        this.copiedComponentSchema = this.selectedComponent.getSchema();
+        delete this.copiedComponentSchema.properties.name;
+    }
+
+    pasteComponent() {
+        if (!this.copiedComponentSchema) { return; }
+
+        this.startComponentCreating(this.copiedComponentSchema.className);
+    }
+
+    duplicateSelectedComponent() {
         if (!this.isComponentSelected()) { return; }
         if (this.isFormSelected()) { return; }
 

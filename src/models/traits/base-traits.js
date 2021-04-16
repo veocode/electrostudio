@@ -132,7 +132,7 @@ module.exports = {
     TextColorTrait: class extends ComponentTrait {
         getProps() {
             return [
-                new Props.ColorProperty('color'),
+                new Props.ColorProperty('color', 'auto', false),
             ]
         }
         appendAttributes(attributes, values) {
@@ -143,7 +143,7 @@ module.exports = {
     ForegroundColorTrait: class extends ComponentTrait {
         getProps() {
             return [
-                new Props.ColorProperty('foregroundColor'),
+                new Props.ColorProperty('foregroundColor', 'auto', false),
             ]
         }
     },
@@ -151,7 +151,7 @@ module.exports = {
     BackgroundColorTrait: class extends ComponentTrait {
         getProps() {
             return [
-                new Props.ColorProperty('backgroundColor'),
+                new Props.ColorProperty('backgroundColor', 'auto', false),
             ]
         }
         appendAttributes(attributes, values) {

@@ -139,7 +139,7 @@ module.exports = {
     },
 
     ColorProperty: class extends Property {
-        defaultValue = '#FFFFFF';
+        defaultValue = 'auto';
         $inputGroup;
 
         validate(value) {

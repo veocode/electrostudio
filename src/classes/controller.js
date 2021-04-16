@@ -1,3 +1,5 @@
+const path = load.node('path');
+
 class Controller {
 
     ipc = load.electron('ipcMain');
@@ -167,8 +169,8 @@ class Controller {
             settings.center = true;
         }
 
-        if (formName != 'main' && this.#windows.main) {
-            settings.parent = this.#windows.main;
+        if (path.basename(formName) != 'main' && (this.#windows['main'] || this.#windows['app/main'])) {
+            settings.parent = this.#windows['main'] ?? this.#windows['app/main'];
         }
 
         const browserWindow = this.#windows[formName] = new BrowserWindow(settings);

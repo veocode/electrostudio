@@ -7,7 +7,7 @@ class SplashWindow extends Window {
     dialogService = this.getService('dialogs');
     studioService = this.getService('studio/studio');
 
-    taskRunnerForm = load.form('taskrunner');
+    taskRunnerForm = load.form('tools/taskrunner');
 
     start() {
         this.initTaskRunner();
@@ -80,7 +80,7 @@ class SplashWindow extends Window {
         this.selectedProjectFolder = folder;
         try {
             await this.studioService.loadProject(folder);
-            await load.form('main').createWindow();
+            await load.form('app/main').createWindow();
             settings.set('lastProjectFolder', folder);
             this.close();
         } catch (error) {

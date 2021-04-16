@@ -8,6 +8,9 @@
     "pack": "electron-builder --dir",
     "dist": "electron-builder"
   },
+  "build": {
+    "appId": "ru.veocode.electrostudio"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
