@@ -41,7 +41,7 @@ class ProjectRunTask extends Task {
         this.runner.setStepTitle(`${stepTitle}...`);
 
         this.compilerService.initProject(this.projectFolderPath).then(
-            () => { resolve(); },
+            () => { setTimeout(() => resolve(), 1000); },
             () => { reject(stepError); }
         )
     }

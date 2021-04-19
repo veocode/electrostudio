@@ -3,10 +3,11 @@ const Props = load.models.properties();
 
 module.exports = {
 
-    TabsTrait: class extends ComponentTrait {
+    ListBoxTrait: class extends ComponentTrait {
         getProps() {
             return [
-                new Props.IntegerProperty('activeTabIndex'),
+                new Props.ObjectProperty('schema'),
+                new Props.ObjectListProperty('items'),
             ]
         }
     }

@@ -88,7 +88,13 @@ class Component {
     }
 
     static isInternal() {
+        // Override in children
         return false;
+    }
+
+    static getEventHandlerArguments(eventName) {
+        // Override in children
+        return [];
     }
 
     callAction(methodName, ...actionArgs) {
@@ -278,9 +284,13 @@ class Component {
         return false;
     }
 
+    getClassName() {
+        return this.constructor.name;
+    }
+
     getSchema() {
         let schema = {
-            className: this.constructor.name,
+            className: this.getClassName(),
             properties: Object.assign({}, this.propertyValues),
             events: Object.assign({}, this.eventHandlerNames)
         }

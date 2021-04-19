@@ -1,5 +1,6 @@
 const Window = load.class('window');
 const Utils = load.class('utils');
+const { ComponentFactory } = load.class('factories');
 
 class MainWindow extends Window {
 
@@ -85,8 +86,8 @@ class MainWindow extends Window {
         });
 
         this.designerForm.on('component:event-auto-create', (payload) => {
-            const { componentName, eventName } = payload;
-            this.onComponentEventAutoCreate(componentName, eventName);
+            const { componentName, className, eventName } = payload;
+            this.onComponentEventAutoCreate(componentName, className, eventName);
         });
 
         this.designerForm.on('form:updated', schema => {
@@ -116,8 +117,8 @@ class MainWindow extends Window {
         });
 
         this.inspectorForm.on('component:event-auto-create', (payload) => {
-            const { componentName, eventName } = payload;
-            this.onComponentEventAutoCreate(componentName, eventName);
+            const { componentName, className, eventName } = payload;
+            this.onComponentEventAutoCreate(componentName, className, eventName);
         });
 
         this.inspectorForm.on('component:parent-selected', (name) => {
@@ -189,8 +190,8 @@ class MainWindow extends Window {
         this.designerForm.send('component:class-selected', componentClass);
     }
 
-    onComponentEventAutoCreate(componentName, eventName) {
-        const handlerName = Utils.joinAsCamelCase(['on', componentName, eventName]);
+    onComponentEventAutoCreate(componentName, className, eventName) {
+        const handlerName = Utils.joinAsCamelCase(['on', componentName, Utils.nameToClassName(eventName)]);
 
         this.inspectorForm.send('component:event-updated', {
             eventName,
@@ -202,9 +203,13 @@ class MainWindow extends Window {
             handlerName
         });
 
+        const eventHandlerArguments = ['event', 'sender'].concat(
+            ComponentFactory.Library[className].getEventHandlerArguments(eventName)
+        ).join(', ');
+
         this.editorForm.send('file:method-add', {
             methodName: handlerName,
-            methodArgs: 'event, sender',
+            methodArgs: eventHandlerArguments,
             methodBody: '// TODO: Add Implementation'
         });
 

@@ -88,8 +88,8 @@ class Window {
         for (const [eventName, handlerName] of Object.entries(eventHandlerNames)) {
             if (!handlerName) { continue; }
 
-            component.registerEventHandler(eventName, (event) => {
-                this.callMethod(handlerName, event, component);
+            component.registerEventHandler(eventName, (event, ...eventArgs) => {
+                this.callMethod(handlerName, event, component, ...eventArgs);
             });
         }
     }

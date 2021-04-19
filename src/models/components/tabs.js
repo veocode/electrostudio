@@ -77,14 +77,14 @@ class Tabs extends ContainerComponent {
             new Traits.AlignmentTrait(),
             new Traits.PositionTrait(),
             new Traits.SizeTrait(),
-            new Traits.TabsTrait()
+            new Traits.ActiveIndexTrait()
         ]);
     }
 
     setDefaults() {
         this.width = 300;
         this.height = 200;
-        this.activeTabIndex = 0;
+        this.activeIndex = 0;
     }
 
     getEventNames() {
@@ -128,9 +128,9 @@ class Tabs extends ContainerComponent {
 
     selectTab(index = null) {
         if (index == null) {
-            index = this.activeTabIndex
+            index = this.activeIndex
         } else {
-            this.assignPropertyValue('activeTabIndex', index);
+            this.assignPropertyValue('activeIndex', index);
         }
         const $dom = this.getDOM();
         const $panes = $dom.find('.tab-pane');

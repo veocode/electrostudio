@@ -107,7 +107,6 @@ class DesignerWindow extends Window {
         if (this.selectedComponent == component) {
             this.toggleComponentSelection(true);
         }
-        this.updateFormInProject();
     }
 
     registerFormEvents() {
@@ -278,6 +277,7 @@ class DesignerWindow extends Window {
 
         this.form.emit('component:event-auto-create', {
             componentName: component.name,
+            className: component.getClassName(),
             eventName: component.getDefaultEventName()
         });
     }
@@ -341,13 +341,17 @@ class DesignerWindow extends Window {
             return;
         }
 
-        this.rebuildComponent(component);
+        if (component.isRebuildOnPropertyUpdate(propertyName, value)) {
+            this.rebuildComponent(component);
+        }
 
         if (component.hasChildren() && component.isRebuildChildrenOnPropertyUpdate(propertyName, value)) {
             for (let childrenComponent of component.getChildren()) {
                 this.rebuildComponent(childrenComponent);
             }
         }
+
+        this.updateFormInProject();
     }
 
     updateSelectedComponentEventValue(eventName, previousHandlerName, handlerName) {

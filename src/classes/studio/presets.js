@@ -2,7 +2,7 @@ module.exports = {
 
     FileNames: {
         Ignore: '.esignore',
-        Meta: 'es.project.json',
+        Meta: 'esproject.json',
         Manifest: 'package.json',
         Config: 'config.js'
     },
@@ -39,7 +39,7 @@ module.exports = {
         baseWindowView: ['windows', 'base', 'base-window.html'],
     },
 
-    DefaultMeta: {
+    DefaultProjectMeta: {
         name: "Untitled Project",
         version: "1.0.0",
         description: "My Electron Application",

@@ -204,4 +204,12 @@ module.exports = {
         }
     },
 
+    ActiveIndexTrait: class extends ComponentTrait {
+        getProps() {
+            return [
+                new Props.IntegerProperty('activeIndex'),
+            ]
+        }
+    }
+
 }

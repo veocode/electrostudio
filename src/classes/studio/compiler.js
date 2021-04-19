@@ -7,7 +7,7 @@ const Presets = load.class('studio/presets');
 class Compiler {
 
     initProject(folder) {
-        let meta = Object.assign({}, Presets.DefaultMeta);
+        let meta = Object.assign({}, Presets.DefaultProjectMeta);
         let config = Object.assign({}, Presets.DefaultConfig);
 
         meta.name = config.appTitle = path.basename(folder);
