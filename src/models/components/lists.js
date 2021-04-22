@@ -29,18 +29,18 @@ class ListBox extends Component {
         this.height = 300;
         this.activeIndex = -1;
 
-        this.schema = {
-            id: {
-                title: t('ID'),
-                type: 'string',
-                visible: false
-            },
-            title: {
-                title: t('Title'),
-                type: 'string',
-                visible: true
-            }
-        };
+        this.fields = [{
+            name: 'id',
+            title: t('ID'),
+            type: 'string',
+            visible: false
+        },
+        {
+            name: 'title',
+            title: t('Title'),
+            type: 'string',
+            visible: true
+        }];
 
         this.items = [{
             id: 'first',
@@ -131,11 +131,11 @@ class ListBox extends Component {
 
     buildItemsDOM() {
         const items = this.getPropertyValue('items');
-        const schema = this.getPropertyValue('schema');
+        const fields = this.getPropertyValue('fields');
 
         const $wrap = $('<table/>', { class: 'items' });
         for (const [index, item] of Object.entries(items)) {
-            const $item = this.buildItemDOM(schema, item, index);
+            const $item = this.buildItemDOM(fields, item, index);
             $item.appendTo($wrap);
         }
 
@@ -143,13 +143,13 @@ class ListBox extends Component {
         return $wrap;
     }
 
-    buildItemDOM(schema, item, index) {
+    buildItemDOM(fields, item, index) {
         const $item = $('<tr/>', { class: 'item' });
 
-        for (let [propName, propMeta] of Object.entries(schema)) {
-            if (!propMeta.visible) { continue; }
+        for (let listField of fields) {
+            if (!listField.visible) { continue; }
             const $cell = $('<td/>', { class: 'cell' });
-            const value = item[propName] ?? '';
+            const value = item[listField.name] ?? '';
             $cell.html(value).appendTo($item);
         }
 

@@ -6,7 +6,7 @@ module.exports = {
     ListBoxTrait: class extends ComponentTrait {
         getProps() {
             return [
-                new Props.ObjectProperty('schema'),
+                new Props.ObjectListProperty('fields'),
                 new Props.ObjectListProperty('items'),
             ]
         }
