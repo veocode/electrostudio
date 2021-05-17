@@ -58,20 +58,18 @@ module.exports = {
         buildDOM() {
             const $inputGroup = $('<div/>', { class: 'prop-input-group' });
 
-            this.$input = $('<input/>', { class: 'prop-input', type: 'text' }).appendTo($inputGroup);
+            this.$textInput = $('<input/>', { class: 'prop-input', type: 'text' }).appendTo($inputGroup);
             this.$colorInput = $('<input/>', { class: 'prop-input-color', type: 'color' }).appendTo($inputGroup);
 
             this.$textInput.val(this.getValue());
             this.$colorInput.val(this.getValue());
 
             this.$textInput.on('change', () => {
-                const value = this.$textInput.val();
-                this.setValue(value);
+                this.setValue(this.$textInput.val());
             });
 
             this.$colorInput.on('change', () => {
-                const value = this.$colorInput.val();
-                this.setValue(value);
+                this.setValue(this.$colorInput.val());
             });
 
             return $inputGroup;
