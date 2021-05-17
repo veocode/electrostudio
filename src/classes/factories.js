@@ -8,6 +8,17 @@ class ComponentFactory {
 
 }
 
+class InputFactory {
+
+    static Library = load.models.inputs();
+
+    static Create(className, ...inputArgs) {
+        return new InputFactory.Library[className](...inputArgs);
+    }
+
+}
+
 module.exports = {
-    ComponentFactory
+    ComponentFactory,
+    InputFactory
 }

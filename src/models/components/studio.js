@@ -42,8 +42,10 @@ class InspectorPropertyEditor extends Component {
     }
 
     buildEditor() {
-        const props = this.getComponentProps(this.#schema.className);
         const values = this.#schema.properties;
+        const events = this.#schema.events;
+        const component = this.getComponentInstance(this.#schema.className, values, events);
+        const props = component.getProperties();
 
         this.$dom.empty();
 
@@ -53,18 +55,23 @@ class InspectorPropertyEditor extends Component {
             const $valueCell = $('<div/>', { class: 'cell value' }).appendTo($row);
             const currentValue = values[prop.name];
 
-            const $valueInput = prop.buildInput(currentValue, {
-                result: newValue => {
-                    this.onInputResult(prop, currentValue, newValue);
-                    $valueInput.blur();
-                },
-                error: message => {
-                    this.onInputError(prop, currentValue, message);
+            const input = prop.getInput(currentValue, values);
+
+            input.on('result', (previousValue, value) => {
+                const sanitizedValue = prop.sanitize(value);
+                if (!prop.validate(sanitizedValue)) {
+                    this.events.emit('input-error', prop.getValidationError());
+                    input.resetValue();
+                    return;
                 }
-            });
+
+                this.events.emit('input-result', prop, previousValue, sanitizedValue);
+                input.displayValue(sanitizedValue);
+                input.blur();
+            })
 
             $titleCell.html(prop.name);
-            $valueCell.append($valueInput);
+            $valueCell.append(input.getDOM());
         }
     }
 
@@ -81,19 +88,9 @@ class InspectorPropertyEditor extends Component {
         });
     }
 
-    getComponentProps(componentClassName) {
+    getComponentInstance(componentClassName, ...componentArgs) {
         const { ComponentFactory } = load.class('factories');
-        const component = ComponentFactory.Create(componentClassName);
-        return component.getProperties();
-    }
-
-    onInputResult(prop, previousValue, value) {
-        this.events.emit('input-result', prop, previousValue, value);
-    }
-
-    onInputError(prop, previousValue, message) {
-        this.events.emit('input-error', message);
-        prop.setInputValue(previousValue);
+        return ComponentFactory.Create(componentClassName, ...componentArgs);
     }
 
 }
@@ -178,7 +175,6 @@ class InspectorEventEditor extends Component {
 
     onInputError(message, previousValue) {
         this.events.emit('input-error', message);
-        prop.setInputValue(previousValue);
     }
 
     onInputAutoGenerateValue(eventName, previousValue) {

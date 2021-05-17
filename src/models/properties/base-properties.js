@@ -18,35 +18,9 @@ module.exports = {
             return Boolean(value);
         }
 
-        buildInput(value, callbacks) {
-            this.$input = $('<select/>', { class: 'prop-input prop-list' });
-
-            for (let item of ['true', 'false']) {
-                $('<option/>', { value: item }).html(item).appendTo(this.$input);
-            }
-
-            this.$input.on('change', event => {
-                if ('result' in callbacks) {
-                    const value = this.sanitize(this.$input.val());
-                    if (!this.validate(value)) {
-                        if ('error' in callbacks) {
-                            callbacks.error(this.getValidationError());
-                        }
-                        return;
-                    }
-                    this.setInputValue(value);
-                    callbacks.result(value);
-                }
-            });
-
-            this.setInputValue(value);
-            return this.$input;
-        }
-
-        setInputValue(value) {
-            if (this.$input) {
-                this.$input.val(value ? 'true' : 'false');
-            }
+        makeInputInstance(value) {
+            const { InputFactory } = load.class('factories');
+            return InputFactory.Create('ListInput', value, ['true', 'false']);
         }
     },
 
@@ -113,34 +87,14 @@ module.exports = {
             return this.items.includes(value);
         }
 
-        buildInput(value, callbacks) {
-            this.$input = $('<select/>', { class: 'prop-input prop-list' });
-
-            for (let item of this.items) {
-                $('<option/>', { value: item }).html(item).appendTo(this.$input);
-            }
-
-            this.$input.on('change', event => {
-                if ('result' in callbacks) {
-                    const value = this.sanitize(this.$input.val());
-                    if (!this.validate(value)) {
-                        if ('error' in callbacks) {
-                            callbacks.error(this.getValidationError());
-                        }
-                        return;
-                    }
-                    callbacks.result(value);
-                }
-            });
-
-            this.setInputValue(value);
-            return this.$input;
+        makeInputInstance(value) {
+            const { InputFactory } = load.class('factories');
+            return InputFactory.Create('ListInput', value, this.items);
         }
     },
 
     ColorProperty: class extends Property {
         defaultValue = 'auto';
-        $inputGroup;
 
         validate(value) {
             return (
@@ -150,43 +104,9 @@ module.exports = {
             );
         }
 
-        buildInput(value, callbacks) {
-            this.$inputGroup = $('<div/>', { class: 'prop-input-group' });
-
-            this.$input = $('<input/>', { class: 'prop-input', type: 'text', value }).appendTo(this.$inputGroup);
-            this.$colorInput = $('<input/>', { class: 'prop-input-color', type: 'color', value }).appendTo(this.$inputGroup);
-
-            const inputChangeCallback = (newValue) => {
-                if ('result' in callbacks) {
-                    newValue = this.sanitize(newValue);
-                    if (!this.validate(newValue)) {
-                        if ('error' in callbacks) {
-                            callbacks.error(this.getValidationError());
-                        }
-                        return;
-                    }
-                    this.setInputValue(newValue);
-                    callbacks.result(newValue);
-                }
-            }
-
-            this.$input.on('change', event => {
-                inputChangeCallback(this.$input.val());
-            });
-
-            this.$colorInput.on('change', event => {
-                inputChangeCallback(this.$colorInput.val());
-            });
-
-            this.setInputValue(value);
-            return this.$inputGroup;
-        }
-
-        setInputValue(value) {
-            if (this.$inputGroup) {
-                this.$input.val(value);
-                this.$colorInput.val(value);
-            }
+        makeInputInstance(value) {
+            const { InputFactory } = load.class('factories');
+            return InputFactory.Create('ColorInput', value);
         }
     },
 

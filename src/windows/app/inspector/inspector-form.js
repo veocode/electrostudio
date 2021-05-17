@@ -13,7 +13,7 @@ class InspectorForm extends Form {
             resizable: true,
             maximizable: false,
             minimizable: false,
-            // isDebug: true
+            isDebug: true
         };
     }
 
