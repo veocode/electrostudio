@@ -7,6 +7,19 @@ class ListBox extends Component {
     $itemsDOM;
     itemClickCallback;
 
+    static FieldSchema = [{
+        name: 'id',
+        title: t('ID'),
+        type: 'string',
+        visible: false
+    },
+    {
+        name: 'title',
+        title: t('Title'),
+        type: 'string',
+        visible: true
+    }];
+
     static getIcon() {
         return 'view-list-outline';
     }
@@ -19,7 +32,7 @@ class ListBox extends Component {
             new Traits.SizeTrait(),
             new Traits.MetaDataTrait(),
             new Traits.MetaDataTrait(),
-            new Traits.ListBoxTrait(),
+            new Traits.ListBoxTrait(ListBox.FieldSchema),
             new Traits.ActiveIndexTrait(),
         ]);
     }
@@ -28,19 +41,6 @@ class ListBox extends Component {
         this.width = 200;
         this.height = 300;
         this.activeIndex = -1;
-
-        this.fields = [{
-            name: 'id',
-            title: t('ID'),
-            type: 'string',
-            visible: false
-        },
-        {
-            name: 'title',
-            title: t('Title'),
-            type: 'string',
-            visible: true
-        }];
 
         this.items = [{
             id: 'first',
@@ -131,22 +131,22 @@ class ListBox extends Component {
 
     buildItemsDOM() {
         const items = this.getPropertyValue('items');
-        const fields = this.getPropertyValue('fields');
 
         const $wrap = $('<table/>', { class: 'items' });
         for (const [index, item] of Object.entries(items)) {
-            const $item = this.buildItemDOM(fields, item, index);
+            const $item = this.buildItemDOM(item, index);
             $item.appendTo($wrap);
         }
 
         this.highlightActiveItem();
+
         return $wrap;
     }
 
-    buildItemDOM(fields, item, index) {
+    buildItemDOM(item, index) {
         const $item = $('<tr/>', { class: 'item' });
 
-        for (let listField of fields) {
+        for (let listField of ListBox.FieldSchema) {
             if (!listField.visible) { continue; }
             const $cell = $('<td/>', { class: 'cell' });
             const value = item[listField.name] ?? '';
@@ -189,7 +189,7 @@ class ListBox extends Component {
     }
 
     selectItemById(id) {
-        if (!this.$itemsDOM) { return; }
+        if (!('$itemsDOM' in this) || !this.$itemsDOM) { return; }
         const items = this.getPropertyValue('items');
         for (const [index, item] of Object.entries(items)) {
             if (item.id == id) {
@@ -200,7 +200,7 @@ class ListBox extends Component {
     }
 
     highlightActiveItem() {
-        if (!this.$itemsDOM) { return; }
+        if (!('$itemsDOM' in this) || !this.$itemsDOM) { return; }
         const index = this.getPropertyValue('activeIndex');
         this.$itemsDOM.find('.item.active').removeClass('active');
         if (index >= 0) {
@@ -209,7 +209,7 @@ class ListBox extends Component {
     }
 
     rebuildItemsDOM() {
-        if (!this.$itemsDOM) { return; }
+        if (!('$itemsDOM' in this) || !this.$itemsDOM) { return; }
         const $currentDOM = this.$itemsDOM;
         this.$itemsDOM = this.buildItemsDOM();
         $currentDOM.replaceWith(this.$itemsDOM);

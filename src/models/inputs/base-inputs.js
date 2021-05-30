@@ -40,6 +40,51 @@ module.exports = {
 
     },
 
+    ObjectListInput: class extends Input {
+
+        $textInput;
+        $buttonInput;
+
+        #fieldSchema = [];
+
+        getFormattedValue(value) {
+            const list = value || this.getValue();
+            if (list.length) {
+                return list.length;
+            }
+            return '---';
+        }
+
+        displayValue(value) {
+            this.$textInput.val(this.getFormattedValue(value));
+        }
+
+        blur() {
+            this.$textInput.blur();
+            this.$buttonInput.blur();
+        }
+
+        buildDOM() {
+            const $inputGroup = $('<div/>', { class: 'prop-input-group' });
+
+            this.$textInput = $('<input/>', { class: 'prop-input', type: 'text' }).prop('readonly', true).appendTo($inputGroup);
+            this.$buttonInput = $('<button/>', { class: 'prop-input-button' }).appendTo($inputGroup);
+
+            this.$textInput.val(this.getFormattedValue());
+
+            this.$buttonInput.on('click', () => {
+                alert(JSON.stringify(this.#fieldSchema));
+            });
+
+            return $inputGroup;
+        }
+
+        setFieldSchema(fieldSchema) {
+            this.#fieldSchema = fieldSchema;
+        }
+
+    },
+
     ColorInput: class extends Input {
 
         $textInput;

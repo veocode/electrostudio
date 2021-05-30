@@ -22,10 +22,13 @@ class Component {
     parent;
     $dom;
     proxy;
+    traits = [];
     meta = {};
 
     constructor(presetPropertyValues = null, presetEventHandlers = null) {
-        for (let trait of this.getTraits()) {
+        this.traits = this.getTraits();
+
+        for (let trait of this.traits) {
             this.addTrait(trait);
         }
 
@@ -142,7 +145,7 @@ class Component {
 
     getTraitsAttributes(startingAttributes = {}) {
         let attributes = new AttributesList(startingAttributes);
-        for (let trait of this.getTraits()) {
+        for (let trait of this.traits) {
             trait.appendAttributes(attributes, this.propertyValues, this);
         }
         return attributes;
@@ -165,6 +168,7 @@ class Component {
 
     getPropertyValue(name) {
         if (!this.hasProperty(name)) {
+            console.log(this, name);
             throw new errors.PropertyInvalidException(name);
         }
 
@@ -305,7 +309,7 @@ class Component {
     }
 
     isResizable() {
-        for (let trait of this.getTraits()) {
+        for (let trait of this.traits) {
             if (!trait.isAllowComponentResizing(this.propertyValues)) {
                 return false;
             }
@@ -314,7 +318,7 @@ class Component {
     }
 
     isDraggable() {
-        for (let trait of this.getTraits()) {
+        for (let trait of this.traits) {
             if (!trait.isAllowComponentDragging(this.propertyValues)) {
                 return false;
             }
