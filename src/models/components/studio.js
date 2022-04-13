@@ -178,7 +178,7 @@ class InspectorEventEditor extends Component {
     }
 
     onInputAutoGenerateValue(eventName, previousValue) {
-        this.events.emit('input-auto', this.#schema.properties.name, eventName, previousValue);
+        this.events.emit('input-auto', this.#schema.properties.name, this.#schema.className, eventName, previousValue);
     }
 
 }

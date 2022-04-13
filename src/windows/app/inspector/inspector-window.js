@@ -40,8 +40,8 @@ class InspectorWindow extends Window {
             alert(`${t('Validation Error')}: ${message}`);
         });
 
-        this.eventEditor.events.on('input-auto', (componentName, eventName) => {
-            this.form.emit('component:event-auto-create', { componentName, eventName });
+        this.eventEditor.events.on('input-auto', (componentName, className, eventName) => {
+            this.form.emit('component:event-auto-create', { componentName, className, eventName });
         });
     }
 

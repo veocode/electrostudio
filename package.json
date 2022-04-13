@@ -15,14 +15,14 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "electron": "^11.3.0",
-    "electron-builder": "^22.9.1"
+    "electron": "^11.5.0",
+    "electron-builder": "^22.14.13"
   },
   "dependencies": {
-    "electron-store": "^7.0.2",
+    "electron-store": "^7.0.3",
     "electron-unhandled": "^3.0.2",
-    "interactjs": "^1.10.8",
-    "js-beautify": "^1.13.5",
+    "interactjs": "^1.10.11",
+    "js-beautify": "^1.14.3",
     "monaco-editor": "^0.23.0",
     "mousetrap": "^1.6.5"
   }
